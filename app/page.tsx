@@ -33,7 +33,7 @@ export default function Home() {
         <main
           className={cn(
             "flex flex-col items-end flex-1 min-h-0",
-            "min-h-[31.25rem] px-4 md:px-[var(--app-spacing,1rem)]",
+            "min-h-[31.25rem] px-8 md:px-[var(--app-spacing,1rem)]",
             "gap-2.5"
           )}
         >

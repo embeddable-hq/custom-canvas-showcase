@@ -15,10 +15,15 @@
   
   /* EM Core Border Radius */
   --em-core-border-radius-200: 0.5rem;
+  --em-core-border-radius-500: 624.9375rem;
+  
+  /* EM Core Border Width */
+  --em-core-border-width-050: 2px;
   
   /* EM Semantic Colors */
   --em-sem-chart-color-1: #FF5400;
   --em-sem-text-default: #212129;
+  --em-sem-background-subtle: #E4E4EA;
   
   /* EM Button Colors */
   --em-btn-pr-background-default: #5C5C66;
@@ -36,6 +41,14 @@
   --em-action-icon-size-height: 2rem;
   --em-action-icon-padding-top-bottom: 0.5rem;
   --em-action-icon-padding-left-right: 0.125rem;
+  
+  /* User Colors */
+  --user-color-background-1: #C5E4FF;
+  --user-color-background-2: #E8D7FF;
+  --user-color-background-3: #CFEFCF;
+  --user-color-text-1: #1768AF;
+  --user-color-text-2: #5B17B2;
+  --user-color-text-3: #277A27;
 }
 
 html,
