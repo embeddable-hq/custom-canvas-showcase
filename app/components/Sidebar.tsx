@@ -254,7 +254,7 @@ export default function Sidebar({
           "flex flex-col items-end",
           "w-[14.875rem] min-w-[var(--min-width-sidenav,15.5rem)]",
           "h-[66.0625rem] md:h-full",
-          "pl-[calc(var(--app-spacing,1rem)*2)]",
+          "p-[var(--app-spacing,1rem)] md:p-0 md:pl-[2rem]",
           "gap-[var(--app-spacing,1rem)]",
           "bg-white transition-transform",
           "fixed md:relative left-0 top-0 z-[1000]",
