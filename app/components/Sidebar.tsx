@@ -1,10 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { cn, classes } from "../lib/utils";
-import { IconButton } from "@embeddable.com/remarkable-ui";
 import { IconX, IconDotsVertical } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
+
+// Dynamically import IconButton to avoid SSR issues with navigator
+const IconButton = dynamic(
+  () => import("@embeddable.com/remarkable-ui").then((mod) => ({ default: mod.IconButton })),
+  { ssr: false }
+);
 
 interface SidebarProps {
   isOpen: boolean;
@@ -72,7 +78,9 @@ function UserAvatar({
   const [showPopup, setShowPopup] = useState(false);
 
   const isLarge = size === "large";
-  const sizeClass = isLarge ? "w-7 h-7" : "w-4 h-4";
+  const innerSize = isLarge 
+    ? "var(--em-core-size-600, 1.5rem)" 
+    : "1rem";
   const fontSize = isLarge ? "1.02rem" : "0.58331rem";
   const lineHeight = isLarge ? "1.17rem" : "0.66669rem";
   const borderRadius = isLarge 
@@ -81,36 +89,91 @@ function UserAvatar({
 
   return (
     <div className="relative">
-      <div
-        className={cn(
-          "flex justify-center items-center",
-          "cursor-pointer",
-          sizeClass
-        )}
-        style={{
-          background: user.bgColor,
-          borderRadius: borderRadius,
-          border: selected && isLarge
-            ? `var(--em-core-border-width-050, 2px) solid ${user.textColor}` 
-            : 'none',
-        }}
-        onMouseEnter={() => showTooltip && setShowPopup(true)}
-        onMouseLeave={() => setShowPopup(false)}
-      >
-        <span
-          className="text-center font-bold"
+      {isLarge ? (
+        // Large avatars: always have padding for consistent size, border only on selected/hover
+        <div
+          className={cn(
+            "flex justify-center items-center",
+            "cursor-pointer",
+            "inline-flex",
+            "transition-all"
+          )}
           style={{
-            color: user.textColor,
-            fontFamily: "Inter, sans-serif",
-            fontSize: fontSize,
-            fontStyle: "normal",
-            fontWeight: "var(--em-font-weight-bold, 700)",
-            lineHeight: lineHeight,
+            padding: "var(--em-core-spacing-100, 0.25rem)",
+            borderRadius: borderRadius,
+            border: selected
+              ? `var(--em-core-border-width-050, 2px) solid ${user.textColor}`
+              : 'transparent',
+          }}
+          onMouseEnter={(e) => {
+            if (!selected) {
+              e.currentTarget.style.border = `var(--em-core-border-width-050, 2px) solid ${user.textColor}`;
+            }
+            if (showTooltip) setShowPopup(true);
+          }}
+          onMouseLeave={(e) => {
+            if (!selected) {
+              e.currentTarget.style.border = 'transparent';
+            }
+            setShowPopup(false);
           }}
         >
-          {user.name[0]}
-        </span>
-      </div>
+          {/* Inner circle: fixed size with background */}
+          <div
+            className="flex justify-center items-center"
+            style={{
+              width: "var(--em-core-size-600, 1.5rem)",
+              height: "var(--em-core-size-600, 1.5rem)",
+              background: user.bgColor,
+              borderRadius: borderRadius,
+            }}
+          >
+            <span
+              className="text-center font-bold"
+              style={{
+                color: user.textColor,
+                fontFamily: "Inter, sans-serif",
+                fontSize: fontSize,
+                fontStyle: "normal",
+                fontWeight: "var(--em-font-weight-bold, 700)",
+                lineHeight: lineHeight,
+              }}
+            >
+              {user.name[0]}
+            </span>
+          </div>
+        </div>
+      ) : (
+        // Small avatars: simple circle without ring
+        <div
+          className={cn(
+            "flex justify-center items-center",
+            "cursor-pointer"
+          )}
+          style={{
+            width: innerSize,
+            height: innerSize,
+            background: user.bgColor,
+            borderRadius: borderRadius,
+          }}
+          onMouseEnter={() => showTooltip && setShowPopup(true)}
+          onMouseLeave={() => setShowPopup(false)}
+        >
+          <span
+            className="text-center font-bold"
+            style={{
+              color: user.textColor,
+              fontFamily: "Inter, sans-serif",
+              fontSize: fontSize,
+              fontStyle: "normal",
+              fontWeight: "var(--em-font-weight-bold, 700)",
+              lineHeight: lineHeight,
+            }}
+          >
+            {user.name[0]}
+          </span>
+        </div>
+      )}
       {showPopup && showTooltip && (
         <div
           className={cn(
@@ -278,12 +341,12 @@ export default function Sidebar({
             <span className={cn("text-sm pl-2", classes.textForegroundMuted)}>
               Switch users:
             </span>
-            <div className="flex gap-2">
+            <div className="flex items-center justify-center">
               {users.map((user) => (
                 <div
                   key={user.id}
                   onClick={() => setSelectedUserId(user.id)}
-                  className="cursor-pointer"
+                  className="cursor-pointer flex items-center justify-center"
                 >
                   <UserAvatar 
                     user={user} 

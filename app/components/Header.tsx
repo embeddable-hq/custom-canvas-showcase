@@ -19,34 +19,58 @@ function UserAvatar({
 
   return (
     <div className="relative">
+      {/* Always have padding for consistent size, border only on selected/hover */}
       <div
         className={cn(
-          "flex w-7 h-7 justify-center items-center",
+          "flex justify-center items-center",
           "rounded-[var(--em-core-border-radius-500,624.9375rem)]",
-          "cursor-pointer"
+          "cursor-pointer",
+          "inline-flex",
+          "transition-all"
         )}
         style={{
-          background: user.bgColor,
-          border: selected 
-            ? `var(--em-core-border-width-050, 2px) solid ${user.textColor}` 
-            : 'none',
+          padding: "var(--em-core-spacing-100, 0.25rem)",
+          border: selected
+            ? `var(--em-core-border-width-050, 2px) solid ${user.textColor}`
+            : 'transparent',
         }}
-        onMouseEnter={() => showTooltip && setShowPopup(true)}
-        onMouseLeave={() => setShowPopup(false)}
+        onMouseEnter={(e) => {
+          if (!selected) {
+            e.currentTarget.style.border = `var(--em-core-border-width-050, 2px) solid ${user.textColor}`;
+          }
+          if (showTooltip) setShowPopup(true);
+        }}
+        onMouseLeave={(e) => {
+          if (!selected) {
+            e.currentTarget.style.border = 'transparent';
+          }
+          setShowPopup(false);
+        }}
       >
-        <span
-          className="text-center font-bold"
+        {/* Inner circle: fixed size with background */}
+        <div
+          className="flex justify-center items-center"
           style={{
-            color: user.textColor,
-            fontFamily: "Inter, sans-serif",
-            fontSize: "1.02rem",
-            fontStyle: "normal",
-            fontWeight: "var(--em-font-weight-bold, 700)",
-            lineHeight: "1.17rem",
+            width: "var(--em-core-size-600, 1.5rem)",
+            height: "var(--em-core-size-600, 1.5rem)",
+            background: user.bgColor,
+            borderRadius: "var(--em-core-border-radius-500, 624.9375rem)",
           }}
         >
-          {user.name[0]}
-        </span>
+          <span
+            className="text-center font-bold"
+            style={{
+              color: user.textColor,
+              fontFamily: "Inter, sans-serif",
+              fontSize: "1.02rem",
+              fontStyle: "normal",
+              fontWeight: "var(--em-font-weight-bold, 700)",
+              lineHeight: "1.17rem",
+            }}
+          >
+            {user.name[0]}
+          </span>
+        </div>
       </div>
       {showPopup && showTooltip && (
         <div
@@ -135,12 +159,12 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
           <span className={cn('text-sm', classes.textForegroundMuted)}>
             Switch users:
           </span>
-          <div className="flex pl-1 gap-1">
+          <div className="flex pl-1 items-center justify-center">
             {users.map((user) => (
               <div 
                 key={user.id}
                 onClick={() => setSelectedUserId(user.id)}
-                className="cursor-pointer"
+                className="cursor-pointer flex items-center justify-center"
               >
                 <UserAvatar 
                   user={user} 

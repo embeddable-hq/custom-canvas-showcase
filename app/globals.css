@@ -12,6 +12,10 @@
   /* EM Core Spacing */
   --em-core-spacing-400: 1rem;
   --em-core-spacing-300: 0.75rem;
+  --em-core-spacing-100: 0.25rem;
+  
+  /* EM Core Size */
+  --em-core-size-600: 1.5rem;
   
   /* EM Core Border Radius */
   --em-core-border-radius-200: 0.5rem;
