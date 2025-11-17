@@ -34,7 +34,9 @@ export default function Home() {
             </p>
           </div>
           <footer className={cn(
-            'w-full text-center py-4 text-sm mt-auto',
+            'flex justify-center items-center self-stretch mt-auto',
+            'gap-2.5 text-sm',
+            classes.appPadding,
             classes.textForegroundMuted
           )}>
             © 2025  TMD Technology Limited. All rights reserved.
