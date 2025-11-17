@@ -120,18 +120,18 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
           <button
             key={item}
             className={cn(
-              'text-sm font-medium transition-opacity',
+              'text-sm font-medium',
               item === selectedItem
                 ? cn(
                     'flex items-center',
                     'h-6 p-[var(--em-core-spacing-300,0.75rem)]',
                     'gap-2.5 rounded-[var(--em-core-border-radius-200,0.5rem)]',
                     'bg-[var(--em-sem-chart-color-1,#FF5400)]',
-                    'text-white opacity-100 font-semibold'
+                    'text-white font-semibold'
                   )
                 : cn(
                     classes.textForeground,
-                    'opacity-60 hover:opacity-80 disabled:cursor-default px-4 py-2'
+                    'disabled:cursor-default px-4 py-2'
                   )
             )}
             disabled={item !== selectedItem}

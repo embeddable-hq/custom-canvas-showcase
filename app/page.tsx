@@ -39,7 +39,7 @@ export default function Home() {
         >
           <div className="w-full max-w-full">
             <h1 className="text-3xl font-semibold mb-4">Analytics Dashboard</h1>
-            <p className="opacity-70 mb-8">
+            <p className="mb-8">
               This is the main content area for the showcase application.
             </p>
           </div>
