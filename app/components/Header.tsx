@@ -5,87 +5,7 @@ import { cn, classes } from '../lib/utils';
 import Image from 'next/image';
 import { users, type UserId } from './Sidebar';
 import Dropdown from './Dropdown';
-
-function UserAvatar({ 
-  user, 
-  showTooltip = false,
-  selected = false
-}: { 
-  user: typeof users[0]; 
-  showTooltip?: boolean;
-  selected?: boolean;
-}) {
-  const [showPopup, setShowPopup] = useState(false);
-
-  return (
-    <div className="relative">
-      {/* Always have padding for consistent size, border only on selected/hover */}
-      <div
-        className={cn(
-          "flex justify-center items-center",
-          "rounded-[var(--em-core-border-radius-500,624.9375rem)]",
-          "cursor-pointer",
-          "inline-flex",
-          "transition-all"
-        )}
-        style={{
-          padding: "var(--em-core-spacing-100, 0.25rem)",
-          border: selected
-            ? `var(--em-core-border-width-050, 2px) solid ${user.textColor}`
-            : 'transparent',
-        }}
-        onMouseEnter={(e) => {
-          if (!selected) {
-            e.currentTarget.style.border = `var(--em-core-border-width-050, 2px) solid ${user.textColor}`;
-          }
-          if (showTooltip) setShowPopup(true);
-        }}
-        onMouseLeave={(e) => {
-          if (!selected) {
-            e.currentTarget.style.border = 'transparent';
-          }
-          setShowPopup(false);
-        }}
-      >
-        {/* Inner circle: fixed size with background */}
-        <div
-          className="flex justify-center items-center"
-          style={{
-            width: "var(--em-core-size-600, 1.5rem)",
-            height: "var(--em-core-size-600, 1.5rem)",
-            background: user.bgColor,
-            borderRadius: "var(--em-core-border-radius-500, 624.9375rem)",
-          }}
-        >
-          <span
-            className="text-center font-bold"
-            style={{
-              color: user.textColor,
-              fontFamily: "Inter, sans-serif",
-              fontSize: "1.02rem",
-              fontStyle: "normal",
-              fontWeight: "var(--em-font-weight-bold, 700)",
-              lineHeight: "1.17rem",
-            }}
-          >
-            {user.name[0]}
-          </span>
-        </div>
-      </div>
-      {showPopup && showTooltip && (
-        <div
-          className={cn(
-            "absolute bottom-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2",
-            "bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-[1000]"
-          )}
-        >
-          {user.name}
-          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-        </div>
-      )}
-    </div>
-  );
-}
+import UserAvatar from './UserAvatar';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -169,6 +89,7 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
                 <UserAvatar 
                   user={user} 
                   showTooltip={true}
+                  size="large"
                   selected={user.id === selectedUserId}
                 />
               </div>
