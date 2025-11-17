@@ -11,10 +11,14 @@
   --em-sem-chart-color-1: #FF5400;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background: #ffffff;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
 }

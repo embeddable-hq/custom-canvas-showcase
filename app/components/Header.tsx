@@ -34,7 +34,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   return (
     <header className={cn(
       'flex justify-between items-center self-stretch',
-      'bg-white border-b sticky top-0 z-[100]',
+      'bg-white border-b',
       classes.appPadding,
       classes.borderDivider
     )}>

@@ -20,7 +20,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         className={cn(
           'flex w-[15.5rem] min-w-[var(--min-width-sidenav,15.5rem)] flex-col items-start',
           'bg-white border-r transition-transform',
-          'fixed md:relative left-0 top-0 h-screen z-[1000]',
+          'fixed md:relative left-0 top-0 h-screen md:h-full z-[1000]',
           'shadow-lg md:shadow-none',
           classes.appPaddingL,
           'gap-[var(--em-core-spacing-400,1rem)]',

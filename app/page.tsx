@@ -19,16 +19,19 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen w-full bg-white">
       <Header onMenuClick={toggleSidebar} />
-      <div className="flex flex-1 min-w-0">
+      <div className="flex flex-1 min-w-0 min-h-0">
         <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
         <main className={cn(
-          'flex min-h-[31.25rem] flex-col items-end gap-2.5 flex-1',
+          'flex flex-col items-end gap-2.5 flex-1 min-h-0',
           classes.appPaddingX
         )}>
           <div className="w-full max-w-full">
             <h1 className="text-3xl font-semibold mb-4">
               Analytics Dashboard
             </h1>
+            <p className="opacity-70 mb-8">
+              This is the main content area for the showcase application.
+            </p>
             <p className="opacity-70 mb-8">
               This is the main content area for the showcase application.
             </p>
