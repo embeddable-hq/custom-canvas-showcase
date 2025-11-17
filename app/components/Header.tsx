@@ -65,11 +65,19 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <button
             key={item}
             className={cn(
-              'text-sm font-medium px-4 py-2 transition-opacity',
-              classes.textForeground,
+              'text-sm font-medium transition-opacity',
               item === selectedItem
-                ? 'opacity-100 font-semibold border-b-2 border-[var(--foreground)] pb-1.5'
-                : 'opacity-60 hover:opacity-80 disabled:cursor-default'
+                ? cn(
+                    'flex items-center',
+                    'h-6 p-[var(--em-core-spacing-300,0.75rem)]',
+                    'gap-2.5 rounded-[var(--em-core-border-radius-200,0.5rem)]',
+                    'bg-[var(--em-sem-chart-color-1,#FF5400)]',
+                    'text-white opacity-100 font-semibold'
+                  )
+                : cn(
+                    classes.textForeground,
+                    'opacity-60 hover:opacity-80 disabled:cursor-default px-4 py-2'
+                  )
             )}
             disabled={item !== selectedItem}
           >
@@ -79,11 +87,15 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
       </nav>
 
       <div className="flex items-center gap-6">
-        <div className="hidden md:flex items-center gap-3">
+        <div className={cn(
+          'hidden md:flex',
+          'justify-between items-center self-stretch',
+          classes.appPadding
+        )}>
           <span className={cn('text-sm', classes.textForegroundMuted)}>
             Switch users:
           </span>
-          <div className="flex gap-2">
+          <div className="flex pl-1">
             <div className={userAvatarClass}></div>
             <div className={userAvatarClass}></div>
             <div className={userAvatarClass}></div>
@@ -126,9 +138,9 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           onClick={onMenuClick}
           aria-label="Toggle menu"
         >
-          <span className={cn('w-6 h-0.5 transition-all', classes.textForeground)}></span>
-          <span className={cn('w-6 h-0.5 transition-all', classes.textForeground)}></span>
-          <span className={cn('w-6 h-0.5 transition-all', classes.textForeground)}></span>
+          <span className={cn('w-6 h-0.5 transition-all bg-[var(--foreground)]')}></span>
+          <span className={cn('w-6 h-0.5 transition-all bg-[var(--foreground)]')}></span>
+          <span className={cn('w-6 h-0.5 transition-all bg-[var(--foreground)]')}></span>
         </button>
       </div>
     </header>

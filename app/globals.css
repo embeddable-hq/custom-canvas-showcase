@@ -6,6 +6,9 @@
   --app-spacing: 2rem;
   --min-width-sidenav: 15.5rem;
   --em-core-spacing-400: 1rem;
+  --em-core-spacing-300: 0.75rem;
+  --em-core-border-radius-200: 0.5rem;
+  --em-sem-chart-color-1: #FF5400;
 }
 
 body {
