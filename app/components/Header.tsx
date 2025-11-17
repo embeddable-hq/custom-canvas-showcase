@@ -4,7 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import { cn, classes } from '../lib/utils';
 import Image from 'next/image';
 
-export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
+interface HeaderProps {
+  onMenuClick: () => void;
+  navItems: string[];
+  selectedItem: string;
+}
+
+export default function Header({ onMenuClick, navItems, selectedItem }: HeaderProps) {
   const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
   const helpContainerRef = useRef<HTMLDivElement>(null);
 
@@ -27,15 +33,12 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
     };
   }, [helpDropdownOpen]);
 
-  const navItems = ['Shop', 'Gift cards', 'Analytics', 'Profile', 'About'];
-  const selectedItem = 'Analytics';
-
   const userAvatarClass = 'w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-white';
 
   return (
     <header className={cn(
       'flex justify-between items-center self-stretch',
-      'bg-white border-b',
+      'bg-white',
       classes.appPadding,
       classes.borderDivider
     )}>
@@ -96,7 +99,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
             <div className={userAvatarClass}></div>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3">
           <div className="relative" ref={helpContainerRef}>
             <button
               className={cn(
@@ -129,13 +132,11 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           </div>
         </div>
         <button
-          className="md:hidden flex flex-col gap-1 bg-transparent border-none cursor-pointer p-2"
+          className="md:hidden flex flex-col gap-1 bg-[var(--em-btn-pr-background-default,#5C5C66)] border-none cursor-pointer rounded-full px-[var(--em-btn-pr-padding-top-bottom-small,0.375rem)] py-[var(--em-btn-pr-padding-left-right-small,0.375rem)]"
           onClick={onMenuClick}
           aria-label="Toggle menu"
         >
-          <span className={cn('w-6 h-0.5 transition-all bg-[var(--foreground)]')}></span>
-          <span className={cn('w-6 h-0.5 transition-all bg-[var(--foreground)]')}></span>
-          <span className={cn('w-6 h-0.5 transition-all bg-[var(--foreground)]')}></span>
+          <Image src="/hamburger.svg" alt="Menu" width={16} height={16} />
         </button>
       </div>
     </header>

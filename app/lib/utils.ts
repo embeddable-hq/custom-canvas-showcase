@@ -11,10 +11,10 @@ export const classes = {
   textForegroundMuted: 'text-[var(--foreground)] opacity-70',
   
   // Spacing
-  appPadding: 'p-[var(--app-spacing,2rem)]',
-  appPaddingX: 'px-[var(--app-spacing,2rem)]',
-  appPaddingY: 'py-[var(--app-spacing,2rem)]',
-  appPaddingL: 'pl-[var(--app-spacing,2rem)]',
+  appPadding: 'p-[var(--app-spacing,1rem)]',
+  appPaddingX: 'px-[var(--app-spacing,1rem)]',
+  appPaddingY: 'py-[var(--app-spacing,1rem)]',
+  appPaddingL: 'pl-[var(--app-spacing,1rem)]',
   
   // Borders
   borderDivider: 'border-black/10',

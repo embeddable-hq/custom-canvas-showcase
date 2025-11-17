@@ -7,6 +7,9 @@ import Sidebar from "./components/Sidebar";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const navItems = ['Shop', 'Gift cards', 'Analytics', 'Profile', 'About'];
+  const selectedItem = 'Analytics';
+  const userAvatarClass = 'w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-white';
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -18,13 +21,20 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-white">
-      <Header onMenuClick={toggleSidebar} />
+      <Header onMenuClick={toggleSidebar} navItems={navItems} selectedItem={selectedItem} />
       <div className="flex flex-1 min-w-0 min-h-0">
-        <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={closeSidebar}
+          navItems={navItems}
+          selectedItem={selectedItem}
+          userAvatarClass={userAvatarClass}
+        />
         <main
           className={cn(
-            "flex flex-col items-end gap-2.5 flex-1 min-h-0",
-            classes.appPaddingX
+            "flex flex-col items-end flex-1 min-h-0",
+            "min-h-[31.25rem] px-4 md:px-[var(--app-spacing,1rem)]",
+            "gap-2.5"
           )}
         >
           <div className="w-full max-w-full">

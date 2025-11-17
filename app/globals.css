@@ -6,7 +6,7 @@
   --foreground: #171717;
   
   /* App Spacing */
-  --app-spacing: 2rem;
+  --app-spacing: 1rem;
   --min-width-sidenav: 15.5rem;
   
   /* EM Core Spacing */
@@ -25,8 +25,17 @@
   
   /* EM Typography */
   --em-font-size-md: 1rem;
+  --em-font-size-sm: 0.875rem;
   --em-font-weight-bold: 700;
+  --em-font-weight-medium: 500;
   --em-line-height-l: 1.1875rem;
+  --em-line-height-md: 1rem;
+  
+  /* EM Action Icon */
+  --em-action-icon-size-width: 1.25rem;
+  --em-action-icon-size-height: 2rem;
+  --em-action-icon-padding-top-bottom: 0.5rem;
+  --em-action-icon-padding-left-right: 0.125rem;
 }
 
 html,
