@@ -44,7 +44,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
          <Image src="/logo.svg" alt="Logo" width={24} height={24} />
          <span
            style={{
-             color: 'var(--em-sem-text-default, #212129)',
+             color: 'var(--em-sem-text-default,#212129)',
              fontFamily: 'Inter, sans-serif',
              fontSize: 'var(--em-font-size-md, 1rem)',
              fontWeight: 'var(--em-font-weight-bold, 700)',
@@ -82,11 +82,10 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
         ))}
       </nav>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4">
         <div className={cn(
           'hidden md:flex',
           'justify-between items-center self-stretch',
-          classes.appPadding
         )}>
           <span className={cn('text-sm', classes.textForegroundMuted)}>
             Switch users:
@@ -101,7 +100,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <div className="relative" ref={helpContainerRef}>
             <button
               className={cn(
-                'w-10 h-10 rounded-full bg-[var(--foreground)] text-white',
+                'w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white',
                 'flex items-center justify-center text-lg font-semibold',
                 'transition-transform hover:scale-105'
               )}

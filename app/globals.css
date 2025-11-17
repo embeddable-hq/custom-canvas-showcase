@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import "@embeddable.com/remarkable-ui/dist/remarkable-ui.css";
 :root {
   /* App Colors */
   --background: #ffffff;
@@ -19,6 +19,9 @@
   /* EM Semantic Colors */
   --em-sem-chart-color-1: #FF5400;
   --em-sem-text-default: #212129;
+  
+  /* EM Button Colors */
+  --em-btn-pr-background-default: #5C5C66;
   
   /* EM Typography */
   --em-font-size-md: 1rem;
