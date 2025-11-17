@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { cn, classes } from "../lib/utils";
 import { IconButton } from "@embeddable.com/remarkable-ui";
 import { IconX, IconDotsVertical } from "@tabler/icons-react";
+import Dropdown from "./Dropdown";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -126,27 +127,6 @@ function UserAvatar({
 }
 
 function DashboardItemComponent({ item }: { item: DashboardItem }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node)
-      ) {
-        setMenuOpen(false);
-      }
-    };
-
-    if (menuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuOpen]);
 
   const itemUsers = item.users
     .map((userId) => users.find((u) => u.id === userId))
@@ -186,28 +166,23 @@ function DashboardItemComponent({ item }: { item: DashboardItem }) {
           ))}
         </div>
       )}
-      <div className="relative" ref={menuRef}>
-        <button
-          className="cursor-pointer p-1 rounded"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="More options"
-        >
-          <IconDotsVertical className="w-4 h-4" />
-        </button>
-        {menuOpen && (
-          <div
-            className={cn(
-              "absolute top-[calc(100%+0.5rem)] right-0",
-              "bg-white border rounded-lg shadow-lg min-w-[10rem] z-[1000] overflow-hidden",
-              classes.borderDivider
-            )}
+      <Dropdown
+        trigger={
+          <button
+            className="cursor-pointer p-1 rounded"
+            aria-label="More options"
           >
-            <button className={classes.dropdownItem}>Edit</button>
-            <button className={classes.dropdownItem}>Share</button>
-            <button className={classes.dropdownItem}>Delete</button>
-          </div>
-        )}
-      </div>
+            <IconDotsVertical className="w-4 h-4" />
+          </button>
+        }
+        items={[
+          { label: "Edit" },
+          { label: "Share" },
+          { label: "Delete" },
+        ]}
+        position="bottom"
+        align="end"
+      />
     </div>
   );
 }
@@ -218,28 +193,13 @@ export default function Sidebar({
   navItems,
   selectedItem,
 }: SidebarProps) {
-  const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
-  const helpContainerRef = useRef<HTMLDivElement>(null);
   const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        helpContainerRef.current &&
-        !helpContainerRef.current.contains(event.target as Node)
-      ) {
-        setHelpDropdownOpen(false);
-      }
-    };
-
-    if (helpDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [helpDropdownOpen]);
+  const helpItems = [
+    { label: "Documentation" },
+    { label: "Support" },
+    { label: "Feedback" },
+  ];
 
   return (
     <>
@@ -345,34 +305,23 @@ export default function Sidebar({
             </nav>
           </div>
           <div className="mt-auto pb-8">
-            <div className="relative" ref={helpContainerRef}>
-              <button
-                className={cn(
-                  "w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white",
-                  "flex items-center justify-center text-lg font-semibold",
-                  "transition-transform hover:scale-105"
-                )}
-                onClick={() => setHelpDropdownOpen(!helpDropdownOpen)}
-                aria-label="Help"
-              >
-                <span>?</span>
-              </button>
-              {helpDropdownOpen && (
-                <div
+            <Dropdown
+              trigger={
+                <button
                   className={cn(
-                    "absolute bottom-[calc(100%+0.5rem)] left-0",
-                    "bg-white border rounded-lg shadow-lg min-w-[10rem] z-[1000] overflow-hidden",
-                    classes.borderDivider
+                    "w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white",
+                    "flex items-center justify-center text-lg font-semibold",
+                    "transition-transform hover:scale-105"
                   )}
+                  aria-label="Help"
                 >
-                  <button className={classes.dropdownItem}>
-                    Documentation
-                  </button>
-                  <button className={classes.dropdownItem}>Support</button>
-                  <button className={classes.dropdownItem}>Feedback</button>
-                </div>
-              )}
-            </div>
+                  <span>?</span>
+                </button>
+              }
+              items={helpItems}
+              position="top"
+              align="start"
+            />
           </div>
         </div>
       </aside>

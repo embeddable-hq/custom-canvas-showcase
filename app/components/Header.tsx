@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { cn, classes } from '../lib/utils';
 import Image from 'next/image';
 import { users, type UserId } from './Sidebar';
+import Dropdown from './Dropdown';
 
 function UserAvatar({ 
   user, 
@@ -69,28 +70,13 @@ interface HeaderProps {
 }
 
 export default function Header({ onMenuClick, navItems, selectedItem }: HeaderProps) {
-  const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
-  const helpContainerRef = useRef<HTMLDivElement>(null);
   const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        helpContainerRef.current &&
-        !helpContainerRef.current.contains(event.target as Node)
-      ) {
-        setHelpDropdownOpen(false);
-      }
-    };
-
-    if (helpDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [helpDropdownOpen]);
+  const helpItems = [
+    { label: "Documentation" },
+    { label: "Support" },
+    { label: "Feedback" },
+  ];
 
   return (
     <header className={cn(
@@ -166,36 +152,23 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
           </div>
         </div>
         <div className="hidden md:flex items-center gap-3">
-          <div className="relative" ref={helpContainerRef}>
-            <button
-              className={cn(
-                'w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white',
-                'flex items-center justify-center text-lg font-semibold',
-                'transition-transform hover:scale-105'
-              )}
-              onClick={() => setHelpDropdownOpen(!helpDropdownOpen)}
-              aria-label="Help"
-            >
-              <span>?</span>
-            </button>
-            {helpDropdownOpen && (
-              <div className={cn(
-                'absolute top-[calc(100%+0.5rem)] right-0',
-                'bg-white border rounded-lg shadow-lg min-w-[10rem] z-[1000] overflow-hidden',
-                classes.borderDivider
-              )}>
-                <button className={classes.dropdownItem}>
-                  Documentation
-                </button>
-                <button className={classes.dropdownItem}>
-                  Support
-                </button>
-                <button className={classes.dropdownItem}>
-                  Feedback
-                </button>
-              </div>
-            )}
-          </div>
+          <Dropdown
+            trigger={
+              <button
+                className={cn(
+                  'w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white',
+                  'flex items-center justify-center text-lg font-semibold',
+                  'transition-transform hover:scale-105'
+                )}
+                aria-label="Help"
+              >
+                <span>?</span>
+              </button>
+            }
+            items={helpItems}
+            position="bottom"
+            align="end"
+          />
         </div>
         <button
           className="md:hidden flex flex-col gap-1 bg-[var(--em-btn-pr-background-default,#5C5C66)] border-none cursor-pointer rounded-full px-[var(--em-btn-pr-padding-top-bottom-small,0.375rem)] py-[var(--em-btn-pr-padding-left-right-small,0.375rem)]"
