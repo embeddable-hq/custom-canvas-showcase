@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { cn, classes } from './lib/utils';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 
@@ -16,20 +17,26 @@ export default function Home() {
   };
 
   return (
-    <div className="app-container">
-      <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
-      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-        <Header onMenuClick={toggleSidebar} />
-        <main className="main-content">
-          <div style={{ width: '100%', maxWidth: '100%' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '1rem' }}>
+    <div className="flex flex-col min-h-screen w-full bg-white">
+      <Header onMenuClick={toggleSidebar} />
+      <div className="flex flex-1 min-w-0">
+        <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+        <main className={cn(
+          'flex min-h-[31.25rem] flex-col items-end gap-2.5 flex-1',
+          classes.appPaddingX
+        )}>
+          <div className="w-full max-w-full">
+            <h1 className="text-3xl font-semibold mb-4">
               Analytics Dashboard
             </h1>
-            <p style={{ opacity: 0.7, marginBottom: '2rem' }}>
+            <p className="opacity-70 mb-8">
               This is the main content area for the showcase application.
             </p>
           </div>
-          <footer className="main-footer">
+          <footer className={cn(
+            'w-full text-center py-4 text-sm mt-auto',
+            classes.textForegroundMuted
+          )}>
             © 2025  TMD Technology Limited. All rights reserved.
           </footer>
         </main>
