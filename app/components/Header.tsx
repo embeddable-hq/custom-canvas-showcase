@@ -3,6 +3,64 @@
 import { useState, useEffect, useRef } from 'react';
 import { cn, classes } from '../lib/utils';
 import Image from 'next/image';
+import { users, type UserId } from './Sidebar';
+
+function UserAvatar({ 
+  user, 
+  showTooltip = false,
+  selected = false
+}: { 
+  user: typeof users[0]; 
+  showTooltip?: boolean;
+  selected?: boolean;
+}) {
+  const [showPopup, setShowPopup] = useState(false);
+
+  return (
+    <div className="relative">
+      <div
+        className={cn(
+          "flex w-7 h-7 justify-center items-center",
+          "rounded-[var(--em-core-border-radius-500,624.9375rem)]",
+          "cursor-pointer"
+        )}
+        style={{
+          background: user.bgColor,
+          border: selected 
+            ? `var(--em-core-border-width-050, 2px) solid ${user.textColor}` 
+            : 'none',
+        }}
+        onMouseEnter={() => showTooltip && setShowPopup(true)}
+        onMouseLeave={() => setShowPopup(false)}
+      >
+        <span
+          className="text-center font-bold"
+          style={{
+            color: user.textColor,
+            fontFamily: "Inter, sans-serif",
+            fontSize: "1.02rem",
+            fontStyle: "normal",
+            fontWeight: "var(--em-font-weight-bold, 700)",
+            lineHeight: "1.17rem",
+          }}
+        >
+          {user.name[0]}
+        </span>
+      </div>
+      {showPopup && showTooltip && (
+        <div
+          className={cn(
+            "absolute bottom-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2",
+            "bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-[1000]"
+          )}
+        >
+          {user.name}
+          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -13,6 +71,7 @@ interface HeaderProps {
 export default function Header({ onMenuClick, navItems, selectedItem }: HeaderProps) {
   const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
   const helpContainerRef = useRef<HTMLDivElement>(null);
+  const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,13 +92,10 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
     };
   }, [helpDropdownOpen]);
 
-  const userAvatarClass = 'w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-white';
-
   return (
     <header className={cn(
       'flex justify-between items-center self-stretch',
-      'bg-white',
-      classes.appPadding,
+      'bg-white', 'p-8',
       classes.borderDivider
     )}>
       <div className="flex items-center">
@@ -93,10 +149,20 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
           <span className={cn('text-sm', classes.textForegroundMuted)}>
             Switch users:
           </span>
-          <div className="flex pl-1">
-            <div className={userAvatarClass}></div>
-            <div className={userAvatarClass}></div>
-            <div className={userAvatarClass}></div>
+          <div className="flex pl-1 gap-1">
+            {users.map((user) => (
+              <div 
+                key={user.id}
+                onClick={() => setSelectedUserId(user.id)}
+                className="cursor-pointer"
+              >
+                <UserAvatar 
+                  user={user} 
+                  showTooltip={true}
+                  selected={user.id === selectedUserId}
+                />
+              </div>
+            ))}
           </div>
         </div>
         <div className="hidden md:flex items-center gap-3">

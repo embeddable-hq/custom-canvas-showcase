@@ -3,14 +3,213 @@
 import { useState, useEffect, useRef } from "react";
 import { cn, classes } from "../lib/utils";
 import { IconButton } from "@embeddable.com/remarkable-ui";
-import { IconX } from "@tabler/icons-react";
+import { IconX, IconDotsVertical } from "@tabler/icons-react";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
   navItems: string[];
   selectedItem: string;
-  userAvatarClass: string;
+  userAvatarClass?: string; // Kept for backward compatibility but not used
+}
+
+export type UserId = "denis" | "karl" | "erin";
+
+export interface User {
+  id: UserId;
+  name: string;
+  bgColor: string;
+  textColor: string;
+}
+
+export const users: User[] = [
+  {
+    id: "denis",
+    name: "Denis",
+    bgColor: "var(--user-color-background-1, #C5E4FF)",
+    textColor: "var(--user-color-text-1, #1768AF)",
+  },
+  {
+    id: "karl",
+    name: "Karl",
+    bgColor: "var(--user-color-background-2, #E8D7FF)",
+    textColor: "var(--user-color-text-2, #5B17B2)",
+  },
+  {
+    id: "erin",
+    name: "Erin",
+    bgColor: "var(--user-color-background-3, #CFEFCF)",
+    textColor: "var(--user-color-text-3, #277A27)",
+  },
+];
+
+interface DashboardItem {
+  id: string;
+  name: string;
+  users: UserId[];
+  selected?: boolean;
+}
+
+const dashboardItems: DashboardItem[] = [
+  { id: "1", name: "Dashboard 1", users: ["denis", "karl"], selected: false },
+  { id: "2", name: "Dashboard 2", users: ["denis", "karl", "erin"], selected: true },
+  { id: "3", name: "Dashboard 3", users: ["erin"], selected: false },
+  { id: "4", name: "Dashboard 4", users: ["denis", "erin"], selected: false },
+];
+
+function UserAvatar({ 
+  user, 
+  showTooltip = false, 
+  size = "small",
+  selected = false
+}: { 
+  user: User; 
+  showTooltip?: boolean;
+  size?: "small" | "large";
+  selected?: boolean;
+}) {
+  const [showPopup, setShowPopup] = useState(false);
+
+  const isLarge = size === "large";
+  const sizeClass = isLarge ? "w-7 h-7" : "w-4 h-4";
+  const fontSize = isLarge ? "1.02rem" : "0.58331rem";
+  const lineHeight = isLarge ? "1.17rem" : "0.66669rem";
+  const borderRadius = isLarge 
+    ? "var(--em-core-border-radius-500,624.9375rem)" 
+    : "416.625rem";
+
+  return (
+    <div className="relative">
+      <div
+        className={cn(
+          "flex justify-center items-center",
+          "cursor-pointer",
+          sizeClass
+        )}
+        style={{
+          background: user.bgColor,
+          borderRadius: borderRadius,
+          border: selected && isLarge
+            ? `var(--em-core-border-width-050, 2px) solid ${user.textColor}` 
+            : 'none',
+        }}
+        onMouseEnter={() => showTooltip && setShowPopup(true)}
+        onMouseLeave={() => setShowPopup(false)}
+      >
+        <span
+          className="text-center font-bold"
+          style={{
+            color: user.textColor,
+            fontFamily: "Inter, sans-serif",
+            fontSize: fontSize,
+            fontStyle: "normal",
+            fontWeight: "var(--em-font-weight-bold, 700)",
+            lineHeight: lineHeight,
+          }}
+        >
+          {user.name[0]}
+        </span>
+      </div>
+      {showPopup && showTooltip && (
+        <div
+          className={cn(
+            "absolute bottom-[calc(100%+0.5rem)] left-1/2 -translate-x-1/2",
+            "bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-[1000]"
+          )}
+        >
+          {user.name}
+          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DashboardItemComponent({ item }: { item: DashboardItem }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuOpen]);
+
+  const itemUsers = item.users
+    .map((userId) => users.find((u) => u.id === userId))
+    .filter((u): u is User => u !== undefined);
+
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-2.5",
+        "p-[var(--em-core-spacing-300,0.75rem)]",
+        "self-stretch",
+        "rounded-[var(--em-core-border-radius-200,0.5rem)]",
+        "transition-colors cursor-pointer",
+        item.selected 
+          ? "bg-[var(--em-sem-background-subtle,#E4E4EA)]"
+          : "hover:bg-black/5"
+      )}
+    >
+      <a 
+        href="#" 
+        className={cn("no-underline flex-1")}
+        style={{
+          color: "var(--em-sem-text-default, #212129)",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "var(--em-font-size-sm, 0.875rem)",
+          fontStyle: "normal",
+          fontWeight: "var(--em-font-weight-medium, 500)",
+          lineHeight: "var(--em-line-height-md, 1rem)",
+        }}
+      >
+        {item.name}
+      </a>
+      {itemUsers.length > 0 && (
+        <div className="flex items-center gap-1">
+          {itemUsers.slice(0, 3).map((user) => (
+            <UserAvatar key={user.id} user={user} showTooltip={true} />
+          ))}
+        </div>
+      )}
+      <div className="relative" ref={menuRef}>
+        <button
+          className="cursor-pointer p-1 rounded"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="More options"
+        >
+          <IconDotsVertical className="w-4 h-4" />
+        </button>
+        {menuOpen && (
+          <div
+            className={cn(
+              "absolute top-[calc(100%+0.5rem)] right-0",
+              "bg-white border rounded-lg shadow-lg min-w-[10rem] z-[1000] overflow-hidden",
+              classes.borderDivider
+            )}
+          >
+            <button className={classes.dropdownItem}>Edit</button>
+            <button className={classes.dropdownItem}>Share</button>
+            <button className={classes.dropdownItem}>Delete</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function Sidebar({
@@ -18,10 +217,10 @@ export default function Sidebar({
   onClose,
   navItems,
   selectedItem,
-  userAvatarClass,
 }: SidebarProps) {
   const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
   const helpContainerRef = useRef<HTMLDivElement>(null);
+  const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -55,7 +254,7 @@ export default function Sidebar({
           "flex flex-col items-end",
           "w-[14.875rem] min-w-[var(--min-width-sidenav,15.5rem)]",
           "h-[66.0625rem] md:h-full",
-          "p-[var(--app-spacing,1rem)]",
+          "pl-[calc(var(--app-spacing,1rem)*2)]",
           "gap-[var(--app-spacing,1rem)]",
           "bg-white transition-transform",
           "fixed md:relative left-0 top-0 z-[1000]",
@@ -69,21 +268,12 @@ export default function Sidebar({
           <IconButton icon={IconX} onClick={onClose} aria-label="Close menu" />
         </div>
 
-        {/* Desktop: Original sidebar content */}
-        <div className="hidden md:block pt-8 w-full">
+        {/* Desktop: Original sidebar dashboard items */}
+        <div className="hidden md:block w-full">
           <nav className="flex flex-col gap-2 w-full">
-            <a href="#" className={classes.sidebarLink}>
-              Dashboard
-            </a>
-            <a href="#" className={classes.sidebarLink}>
-              Settings
-            </a>
-            <a href="#" className={classes.sidebarLink}>
-              Reports
-            </a>
-            <a href="#" className={classes.sidebarLink}>
-              Tools
-            </a>
+            {dashboardItems.map((item) => (
+              <DashboardItemComponent key={item.id} item={item} />
+            ))}
           </nav>
         </div>
 
@@ -129,27 +319,29 @@ export default function Sidebar({
               Switch users:
             </span>
             <div className="flex gap-2">
-              <div className={userAvatarClass}></div>
-              <div className={userAvatarClass}></div>
-              <div className={userAvatarClass}></div>
+              {users.map((user) => (
+                <div
+                  key={user.id}
+                  onClick={() => setSelectedUserId(user.id)}
+                  className="cursor-pointer"
+                >
+                  <UserAvatar 
+                    user={user} 
+                    showTooltip={true} 
+                    size="large"
+                    selected={user.id === selectedUserId}
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Sidebar items */}
+          {/* Sidebar dashboard items */}
           <div className="mb-6">
             <nav className="flex flex-col gap-2 w-full">
-              <a href="#" className={classes.sidebarLink}>
-                Dashboard
-              </a>
-              <a href="#" className={classes.sidebarLink}>
-                Settings
-              </a>
-              <a href="#" className={classes.sidebarLink}>
-                Reports
-              </a>
-              <a href="#" className={classes.sidebarLink}>
-                Tools
-              </a>
+              {dashboardItems.map((item) => (
+                <DashboardItemComponent key={item.id} item={item} />
+              ))}
             </nav>
           </div>
           <div className="mt-auto pb-8">
