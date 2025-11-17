@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { cn, classes } from '../lib/utils';
+import Image from 'next/image';
 
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
   const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
@@ -39,24 +40,19 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
       classes.borderDivider
     )}>
       <div className="flex items-center">
-        <div className="flex items-center justify-center w-6 h-6">
-          {/* Placeholder icon - replace with your icon */}
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className={classes.textForeground}
-          >
-            <rect width="24" height="24" rx="4" fill="currentColor" opacity="0.3" />
-            <path
-              d="M12 8V16M8 12H16"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
+        <div className="flex items-center justify-center gap-[var(--em-core-spacing-300,0.75rem)]">
+         <Image src="/logo.svg" alt="Logo" width={24} height={24} />
+         <span
+           style={{
+             color: 'var(--em-sem-text-default, #212129)',
+             fontFamily: 'Inter, sans-serif',
+             fontSize: 'var(--em-font-size-md, 1rem)',
+             fontWeight: 'var(--em-font-weight-bold, 700)',
+             lineHeight: 'var(--em-line-height-l, 1.1875rem)',
+           }}
+         >
+           Shopocalypse
+         </span>
         </div>
       </div>
 
