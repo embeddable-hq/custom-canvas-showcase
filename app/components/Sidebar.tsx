@@ -14,6 +14,7 @@ interface SidebarProps {
   onClose: () => void;
   navItems: string[];
   selectedItem: string;
+  userAvatarClass?: string;
   onEmbeddableSelect: (embeddableId: string, embeddableName: string) => void;
   selectedEmbeddableId?: string | null;
 }

@@ -13,7 +13,6 @@ export default function Home() {
   const [selectedEmbeddableName, setSelectedEmbeddableName] = useState<string>("");
   const navItems = ['Shop', 'Gift cards', 'Analytics', 'Profile', 'About'];
   const selectedItem = 'Analytics';
-  const userAvatarClass = 'w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 border-2 border-white';
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -36,7 +35,6 @@ export default function Home() {
           onClose={closeSidebar}
           navItems={navItems}
           selectedItem={selectedItem}
-          userAvatarClass={userAvatarClass}
           onEmbeddableSelect={handleEmbeddableSelect}
           selectedEmbeddableId={selectedEmbeddableId}
         />
