@@ -34,7 +34,7 @@ export default function EmbeddableRenderer({ embeddableId }: EmbeddableRendererP
 
   return (
     <div className="w-full h-full">
-      <em-beddable base-url={embeddableBaseUrl} token={token} />
+      <em-beddable base-url={embeddableBaseUrl || ""} token={token} />
     </div>
   );
 }

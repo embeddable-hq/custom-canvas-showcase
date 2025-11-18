@@ -1,19 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
 import { cn, classes } from "../lib/utils";
 import { IconX, IconDotsVertical, IconPlus } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
-
-const IconButton = dynamic(
-  () =>
-    import("@embeddable.com/remarkable-ui").then((mod) => ({
-      default: mod.IconButton,
-    })),
-  { ssr: false }
-);
 
 interface SidebarProps {
   isOpen: boolean;
@@ -241,7 +232,25 @@ export default function Sidebar({
       >
         {/* Close icon - top right */}
         <div className="md:hidden w-full flex justify-end">
-          <IconButton icon={IconX} onClick={onClose} aria-label="Close menu" />
+          <button
+            onClick={onClose}
+            aria-label="Close menu"
+            className={cn(
+              "flex justify-between items-center",
+              "flex-shrink-0",
+              "cursor-pointer",
+              "border-none"
+            )}
+            style={{
+              width: "var(--em-action-icon-size-width, 1.25rem)",
+              height: "var(--em-action-icon-size-height, 2rem)",
+              padding: "var(--em-action-icon-padding-top-bottom, 0.5rem) var(--em-action-icon-padding-left-right, 0.125rem)",
+              borderRadius: "var(--em-action-icon-border-radius-default, 624.9375rem)",
+              background: "var(--em-action-icon-background-default, #EDEDF1)",
+            }}
+          >
+            <IconX className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Desktop: Embeddables list */}

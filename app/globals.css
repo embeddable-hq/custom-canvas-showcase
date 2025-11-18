@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@embeddable.com/remarkable-ui/dist/remarkable-ui.css";
 :root {
   /* App Colors */
   --background: #ffffff;
