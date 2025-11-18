@@ -9,7 +9,7 @@ interface DesktopNavigationProps {
   loading: boolean;
   error: string | null;
   selectedEmbeddableId?: string | null;
-  onEmbeddableSelect: (id: string) => void;
+  onEmbeddableSelect: (id: string, name: string) => void;
 }
 
 export default function DesktopNavigation({

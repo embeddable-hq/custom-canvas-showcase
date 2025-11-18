@@ -14,7 +14,7 @@ interface SidebarProps {
   navItems: string[];
   selectedItem: string;
   userAvatarClass?: string; // Kept for backward compatibility but not used
-  onEmbeddableSelect: (embeddableId: string) => void;
+  onEmbeddableSelect: (embeddableId: string, embeddableName: string) => void;
   selectedEmbeddableId?: string | null;
 }
 
@@ -75,7 +75,7 @@ export function EmbeddableItem({
   isSelected,
 }: {
   embeddable: DashboardItem;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, name: string) => void;
   isSelected?: boolean;
 }) {
   const itemUsers = embeddable.users
@@ -86,7 +86,7 @@ export function EmbeddableItem({
     e.preventDefault();
 
     console.log("handleClick", embeddable.id);
-    onSelect(embeddable.id);
+    onSelect(embeddable.id, embeddable.name);
   };
 
   return (
@@ -199,7 +199,7 @@ export default function Sidebar({
       !selectedEmbeddableId &&
       onEmbeddableSelect
     ) {
-      onEmbeddableSelect(embeddables[0].id);
+      onEmbeddableSelect(embeddables[0].id, embeddables[0].name);
     }
   }, [embeddables, selectedEmbeddableId, onEmbeddableSelect]);
 

@@ -13,7 +13,7 @@ interface MobileNavigationProps {
   error: string | null;
   selectedEmbeddableId?: string | null;
   selectedUserId: UserId;
-  onEmbeddableSelect: (id: string) => void;
+  onEmbeddableSelect: (id: string, name: string) => void;
   onUserSelect: (id: UserId) => void;
   helpItems: { label: string }[];
 }
