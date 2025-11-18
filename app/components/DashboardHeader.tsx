@@ -39,8 +39,9 @@ export default function DashboardHeader({
   };
 
   return (
-    <div className="flex justify-between items-center w-full mb-4">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full mb-4 gap-2 md:gap-0">
+      {/* Dashboard name - hidden on mobile */}
+      <div className="hidden md:flex items-center gap-2">
         {isEditingName ? (
           <input
             type="text"
@@ -67,7 +68,8 @@ export default function DashboardHeader({
           </>
         )}
       </div>
-      <div className="relative">
+      {/* Dropdown - full width on mobile, auto width on desktop */}
+      <div className="relative w-full md:w-auto">
         <Image
           src="/pen.svg"
           alt=""
@@ -76,7 +78,7 @@ export default function DashboardHeader({
           className={`absolute ${selectMenu.iconPosition} top-1/2 -translate-y-1/2 pointer-events-none z-10`}
         />
         <select
-          className={cn(selectMenu.className)}
+          className={cn(selectMenu.className, "w-full md:w-auto")}
           style={{
             ...selectMenu.style,
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
