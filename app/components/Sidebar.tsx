@@ -9,7 +9,10 @@ import UserAvatar from "./UserAvatar";
 
 // Dynamically import IconButton to avoid SSR issues with navigator
 const IconButton = dynamic(
-  () => import("@embeddable.com/remarkable-ui").then((mod) => ({ default: mod.IconButton })),
+  () =>
+    import("@embeddable.com/remarkable-ui").then((mod) => ({
+      default: mod.IconButton,
+    })),
   { ssr: false }
 );
 
@@ -19,6 +22,8 @@ interface SidebarProps {
   navItems: string[];
   selectedItem: string;
   userAvatarClass?: string; // Kept for backward compatibility but not used
+  onEmbeddableSelect: (embeddableId: string) => void;
+  selectedEmbeddableId?: string | null;
 }
 
 export type UserId = "denis" | "karl" | "erin";
@@ -73,27 +78,41 @@ interface EmbeddableApiResponse {
   }[];
 }
 
-function EmbeddableItem({ embeddable }: { embeddable: DashboardItem }) {
-
+function EmbeddableItem({
+  embeddable,
+  onSelect,
+  isSelected,
+}: {
+  embeddable: DashboardItem;
+  onSelect: (id: string) => void;
+  isSelected?: boolean;
+}) {
   const itemUsers = embeddable.users
     .map((userId) => users.find((u) => u.id === userId))
     .filter((u): u is User => u !== undefined);
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    console.log("handleClick", embeddable.id);
+    onSelect(embeddable.id);
+  };
+
   return (
     <div
+      onClick={handleClick}
       className={cn(
         "flex items-center gap-2.5",
         "p-[var(--em-core-spacing-300,0.75rem)]",
         "self-stretch",
         "rounded-[var(--em-core-border-radius-200,0.5rem)]",
         "transition-colors cursor-pointer",
-        embeddable.selected 
+        isSelected
           ? "bg-[var(--em-sem-background-subtle,#E4E4EA)]"
           : "hover:bg-black/5"
       )}
     >
-      <a 
-        href="#" 
+      <div
         className={cn("no-underline flex-1")}
         style={{
           color: "var(--em-sem-text-default, #212129)",
@@ -105,7 +124,7 @@ function EmbeddableItem({ embeddable }: { embeddable: DashboardItem }) {
         }}
       >
         {embeddable.name}
-      </a>
+      </div>
       {itemUsers.length > 0 && (
         <div className="flex items-center gap-1">
           {itemUsers.slice(0, 3).map((user) => (
@@ -122,11 +141,7 @@ function EmbeddableItem({ embeddable }: { embeddable: DashboardItem }) {
             <IconDotsVertical className="w-4 h-4" />
           </button>
         }
-        items={[
-          { label: "Edit" },
-          { label: "Share" },
-          { label: "Delete" },
-        ]}
+        items={[{ label: "Edit" }, { label: "Share" }, { label: "Delete" }]}
         position="bottom"
         align="end"
       />
@@ -139,45 +154,63 @@ export default function Sidebar({
   onClose,
   navItems,
   selectedItem,
+  onEmbeddableSelect,
+  selectedEmbeddableId,
 }: SidebarProps) {
   const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
   const [embeddables, setEmbeddables] = useState<DashboardItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch embeddables from API
   useEffect(() => {
     async function fetchEmbeddables() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch('/api/embeddables');
-        
+        const response = await fetch("/api/embeddables");
+
         if (!response.ok) {
-          throw new Error(`Failed to fetch embeddables: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch embeddables: ${response.statusText}`
+          );
         }
 
         const data: EmbeddableApiResponse = await response.json();
-        
-        // Map API response to DashboardItem format
-        const mappedItems: DashboardItem[] = data.embeddables.map((embeddable, index) => ({
-          id: embeddable.id,
-          name: embeddable.name,
-          users: [], // API doesn't provide users, defaulting to empty array
-          selected: index === 0, // Select the first item by default
-        }));
 
-          setEmbeddables(mappedItems);
+        // Map API response to DashboardItem format
+        const mappedItems: DashboardItem[] = data.embeddables.map(
+          (embeddable) => ({
+            id: embeddable.id,
+            name: embeddable.name,
+            users: [], // API doesn't provide users, defaulting to empty array
+            selected: false, // Selection is now handled by parent component
+          })
+        );
+
+        setEmbeddables(mappedItems);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch embeddables');
-        console.error('Error fetching embeddables:', err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch embeddables"
+        );
+        console.error("Error fetching embeddables:", err);
       } finally {
         setLoading(false);
       }
     }
 
     fetchEmbeddables();
-  }, []);
+  }, []); // Only fetch once on mount
+
+  // Auto-select first embeddable when embeddables are loaded and none is selected
+  useEffect(() => {
+    if (
+      embeddables.length > 0 &&
+      !selectedEmbeddableId &&
+      onEmbeddableSelect
+    ) {
+      onEmbeddableSelect(embeddables[0].id);
+    }
+  }, [embeddables, selectedEmbeddableId, onEmbeddableSelect]);
 
   const helpItems = [
     { label: "Documentation" },
@@ -221,7 +254,12 @@ export default function Sidebar({
               <div className="p-4 text-sm text-red-500">{error}</div>
             ) : (
               embeddables.map((embeddable) => (
-                <EmbeddableItem key={embeddable.id} embeddable={embeddable} />
+                <EmbeddableItem
+                  key={embeddable.id}
+                  embeddable={embeddable}
+                  onSelect={onEmbeddableSelect}
+                  isSelected={embeddable.id === selectedEmbeddableId}
+                />
               ))
             )}
           </nav>
@@ -230,40 +268,41 @@ export default function Sidebar({
         {/* Mobile: Reorganized menu */}
         <div className="md:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
           {/* Header navigation */}
-           <nav className="flex flex-col gap-[var(--app-spacing,1rem)] w-full">
-             {navItems.map((item) => (
-               <div key={item} className="w-full">
-                 <button
-                   className={cn(
-                     "text-left",
-                     "text-sm font-[var(--em-font-weight-medium,500)] leading-4",
-                     "p-[var(--em-core-spacing-300,0.75rem)]",
-                     item === selectedItem
-                       ? cn(
-                           "flex items-center",
-                           "h-6",
-                           "rounded-[var(--em-core-border-radius-200,0.5rem)]",
-                           "bg-[var(--em-sem-chart-color-1,#FF5400)]",
-                           "text-[var(--em-sem-text-inverted,#FFF)] font-semibold",
-                           "w-auto inline-flex"
-                         )
-                       : cn(
-                           "text-[var(--em-sem-text-default,#212129)]",
-                         )
-                   )}
-                   style={{
-                     fontFamily: "Inter, sans-serif",
-                   }}
-                 >
-                   {item}
-                 </button>
-               </div>
-             ))}
-           </nav>
+          <nav className="flex flex-col gap-[var(--app-spacing,1rem)] w-full">
+            {navItems.map((item) => (
+              <div key={item} className="w-full">
+                <button
+                  className={cn(
+                    "text-left",
+                    "text-sm font-[var(--em-font-weight-medium,500)] leading-4",
+                    "p-[var(--em-core-spacing-300,0.75rem)]",
+                    item === selectedItem
+                      ? cn(
+                          "flex items-center",
+                          "h-6",
+                          "rounded-[var(--em-core-border-radius-200,0.5rem)]",
+                          "bg-[var(--em-sem-chart-color-1,#FF5400)]",
+                          "text-[var(--em-sem-text-inverted,#FFF)] font-semibold",
+                          "w-auto inline-flex"
+                        )
+                      : cn("text-[var(--em-sem-text-default,#212129)]")
+                  )}
+                  style={{
+                    fontFamily: "Inter, sans-serif",
+                  }}
+                >
+                  {item}
+                </button>
+              </div>
+            ))}
+          </nav>
 
           {/* Switch users section */}
           <div
-            className={cn("flex", "gap-[var(--em-core-spacing-200,0.5rem)] items-center")}
+            className={cn(
+              "flex",
+              "gap-[var(--em-core-spacing-200,0.5rem)] items-center"
+            )}
           >
             <span className={cn("text-sm pl-2", classes.textForegroundMuted)}>
               Switch users:
@@ -275,9 +314,9 @@ export default function Sidebar({
                   onClick={() => setSelectedUserId(user.id)}
                   className="cursor-pointer flex items-center justify-center"
                 >
-                  <UserAvatar 
-                    user={user} 
-                    showTooltip={true} 
+                  <UserAvatar
+                    user={user}
+                    showTooltip={true}
                     size="large"
                     selected={user.id === selectedUserId}
                   />
@@ -295,7 +334,11 @@ export default function Sidebar({
                 <div className="p-4 text-sm text-red-500">{error}</div>
               ) : (
                 embeddables.map((embeddable) => (
-                  <EmbeddableItem key={embeddable.id} embeddable={embeddable} />
+                  <EmbeddableItem
+                    key={embeddable.id}
+                    embeddable={embeddable}
+                    onSelect={onEmbeddableSelect}
+                  />
                 ))
               )}
             </nav>
