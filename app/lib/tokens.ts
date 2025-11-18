@@ -177,6 +177,26 @@ export const selectMenu = {
   },
 } as const;
 
+// Button Tokens
+export const button = {
+  primary: {
+    // Small button styles (for mobile toggle, etc.)
+    small: [
+      "flex",
+      "border-none",
+      "cursor-pointer",
+      "rounded-full",
+      "justify-center",
+      "items-center",
+      "h-[var(--em-btn-pr-size-height-small,2rem)]",
+      "min-w-[2rem]",
+      "py-[var(--em-btn-pr-padding-top-bottom-small,0.375rem)]",
+      "px-[var(--em-btn-pr-padding-left-right-small,0.375rem)]",
+      colors.button.primaryBackground,
+    ].join(" "),
+  },
+} as const;
+
 // Components - For inline styles that can't be Tailwind classes
 export const components = {
   textStyles: {

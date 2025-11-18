@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { cn, classes } from '../lib/utils';
-import { spacing, borders, colors, components } from '../lib/tokens';
+import { spacing, borders, colors, components, button } from '../lib/tokens';
 import Image from 'next/image';
 import { users, type UserId } from './Sidebar';
 import Dropdown from './Dropdown';
@@ -111,7 +111,7 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
           />
         </div>
         <button
-          className={cn("md:hidden flex flex-col gap-1 border-none cursor-pointer rounded-full", colors.button.primaryBackground, spacing.button.paddingSmall)}
+          className={cn("md:hidden", button.primary.small)}
           onClick={onMenuClick}
           aria-label="Toggle menu"
         >
