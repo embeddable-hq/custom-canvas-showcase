@@ -20,11 +20,9 @@ export default function UserAvatar({
   const [showPopup, setShowPopup] = useState(false);
 
   const isLarge = size === "large";
-  const innerSize = isLarge
-    ? "var(--em-core-size-600, 1.5rem)"
-    : "1rem";
+  const innerSize = isLarge ? "var(--em-core-size-600, 1.5rem)" : "1rem";
   const fontSize = isLarge ? "1.02rem" : "0.58331rem";
-  const lineHeight = isLarge ? "1.17rem" : "0.66669rem";
+  const lineHeight = isLarge ? "1.17rem" : "unset";
   const borderRadius = isLarge
     ? "var(--em-core-border-radius-500,624.9375rem)"
     : "416.625rem";
@@ -88,10 +86,7 @@ export default function UserAvatar({
       ) : (
         // Small avatars: simple circle without ring
         <div
-          className={cn(
-            "flex justify-center items-center",
-            "cursor-pointer"
-          )}
+          className={cn("flex justify-center items-center", "cursor-pointer")}
           style={{
             width: innerSize,
             height: innerSize,
@@ -130,4 +125,3 @@ export default function UserAvatar({
     </div>
   );
 }
-
