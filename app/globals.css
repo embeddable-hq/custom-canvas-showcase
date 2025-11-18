@@ -54,6 +54,37 @@
   --user-color-text-3: #277A27;
 }
 
+@theme {
+  /* Colors */
+  --color-text-default: var(--em-sem-text-default);
+  --color-text-inverted: var(--em-sem-text-inverted);
+  --color-bg-subtle: var(--em-sem-background-subtle);
+  --color-chart-1: var(--em-sem-chart-color-1);
+  --color-btn-primary: var(--em-btn-pr-background-default);
+  
+  /* Font Sizes */
+  --font-size-font-sm: var(--em-font-size-sm);
+  --font-size-font-md: var(--em-font-size-md);
+  
+  /* Font Weights */
+  --font-weight-medium: var(--em-font-weight-medium);
+  --font-weight-bold: var(--em-font-weight-bold);
+  
+  /* Line Heights */
+  --line-height-md: var(--em-line-height-md);
+  --line-height-l: var(--em-line-height-l);
+  
+  /* Spacing */
+  --spacing-core-xs: var(--em-core-spacing-100);
+  --spacing-core-sm: var(--em-core-spacing-200);
+  --spacing-core-md: var(--em-core-spacing-300);
+  --spacing-core-lg: var(--em-core-spacing-400);
+  
+  /* Border Radius */
+  --radius-sm: var(--em-core-border-radius-200);
+  --radius-pill: var(--em-core-border-radius-500);
+}
+
 html,
 body {
   margin: 0;

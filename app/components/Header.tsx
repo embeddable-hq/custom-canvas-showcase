@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { cn, classes } from '../lib/utils';
+import { spacing, borders, colors, components } from '../lib/tokens';
 import Image from 'next/image';
 import { users, type UserId } from './Sidebar';
 import Dropdown from './Dropdown';
@@ -29,17 +30,9 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
       classes.borderDivider
     )}>
       <div className="flex items-center">
-        <div className="flex items-center justify-center gap-[var(--em-core-spacing-300,0.75rem)]">
+        <div className={cn("flex items-center justify-center", spacing.core.mdGap)}>
          <Image src="/logo.svg" alt="Logo" width={24} height={24} />
-         <span
-           style={{
-             color: 'var(--em-sem-text-default,#212129)',
-             fontFamily: 'Inter, sans-serif',
-             fontSize: 'var(--em-font-size-md, 1rem)',
-             fontWeight: 'var(--em-font-weight-bold, 700)',
-             lineHeight: 'var(--em-line-height-l, 1.1875rem)',
-           }}
-         >
+         <span style={components.textStyles.medium}>
            Shopocalypse
          </span>
         </div>
@@ -54,9 +47,11 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
               item === selectedItem
                 ? cn(
                     'flex items-center',
-                    'h-6 p-[var(--em-core-spacing-300,0.75rem)]',
-                    'gap-2.5 rounded-[var(--em-core-border-radius-200,0.5rem)]',
-                    'bg-[var(--em-sem-chart-color-1,#FF5400)]',
+                    'h-6',
+                    spacing.core.md,
+                    'gap-2.5',
+                    borders.radius.sm,
+                    colors.semantic.chartColor1,
                     'text-white font-semibold'
                   )
                 : cn(
@@ -101,7 +96,7 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
             trigger={
               <button
                 className={cn(
-                  'w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white',
+                  `w-10 h-10 rounded-full ${colors.button.primaryBackground} text-white`,
                   'flex items-center justify-center text-lg font-semibold',
                   'transition-transform hover:scale-105'
                 )}
@@ -116,7 +111,7 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
           />
         </div>
         <button
-          className="md:hidden flex flex-col gap-1 bg-[var(--em-btn-pr-background-default,#5C5C66)] border-none cursor-pointer rounded-full px-[var(--em-btn-pr-padding-top-bottom-small,0.375rem)] py-[var(--em-btn-pr-padding-left-right-small,0.375rem)]"
+          className={cn("md:hidden flex flex-col gap-1 border-none cursor-pointer rounded-full", colors.button.primaryBackground, spacing.button.paddingSmall)}
           onClick={onMenuClick}
           aria-label="Toggle menu"
         >

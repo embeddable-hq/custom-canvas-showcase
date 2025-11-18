@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn, classes } from "../lib/utils";
+import { spacing, borders, colors, components } from "../lib/tokens";
 import { IconX, IconDotsVertical } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
@@ -13,7 +14,6 @@ interface SidebarProps {
   onClose: () => void;
   navItems: string[];
   selectedItem: string;
-  userAvatarClass?: string; // Kept for backward compatibility but not used
   onEmbeddableSelect: (embeddableId: string, embeddableName: string) => void;
   selectedEmbeddableId?: string | null;
 }
@@ -94,25 +94,18 @@ export function EmbeddableItem({
       onClick={handleClick}
       className={cn(
         "flex items-center gap-2.5",
-        "p-[var(--em-core-spacing-300,0.75rem)]",
+        spacing.core.md,
         "self-stretch",
-        "rounded-[var(--em-core-border-radius-200,0.5rem)]",
+        borders.radius.sm,
         "transition-colors cursor-pointer",
         isSelected
-          ? "bg-[var(--em-sem-background-subtle,#E4E4EA)]"
+          ? colors.semantic.backgroundSubtle
           : "hover:bg-black/5"
       )}
     >
       <div
         className={cn("no-underline flex-1")}
-        style={{
-          color: "var(--em-sem-text-default, #212129)",
-          fontFamily: "Inter, sans-serif",
-          fontSize: "var(--em-font-size-sm, 0.875rem)",
-          fontStyle: "normal",
-          fontWeight: "var(--em-font-weight-medium, 500)",
-          lineHeight: "var(--em-line-height-md, 1rem)",
-        }}
+        style={components.textStyles.small}
       >
         {embeddable.name}
       </div>

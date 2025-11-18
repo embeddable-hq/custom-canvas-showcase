@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "../lib/utils";
+import { spacing, borders, colors, typography } from "../lib/tokens";
 import { IconPlus } from "@tabler/icons-react";
 import { EmbeddableItem, type DashboardItem } from "./Sidebar";
 
@@ -45,27 +46,26 @@ export default function DesktopNavigation({
           }}
           className={cn(
             "flex justify-center items-center self-stretch",
-            "p-[var(--em-core-spacing-300,0.75rem)]",
-            "rounded-[var(--em-btn-pr-border-radius-default,624.9375rem)]",
-            "bg-[var(--em-btn-pr-background-default,#5C5C66)]",
+            spacing.core.md,
+            borders.radius.button,
+            colors.button.primaryBackground,
             "text-white",
-            "text-[var(--em-font-size-sm,0.875rem)]",
-            "font-[var(--em-font-weight-medium,500)]",
-            "leading-[var(--em-line-height-md,1rem)]",
+            typography.fontSize.sm,
+            typography.fontWeight.medium,
+            typography.lineHeight.md,
             "cursor-pointer",
             "transition-colors",
             "hover:opacity-90",
-            "w-full"
+            "w-full",
+            typography.fontFamily.interPlain
           )}
-          style={{
-            fontFamily: "Inter, sans-serif",
-          }}
         >
           <IconPlus className="w-4 h-4" />
           <span
             className={cn(
               "flex justify-center items-center",
-              "py-0 px-[var(--em-btn-pr-label-padding-default,0.5rem)]",
+              "py-0",
+              spacing.button.labelPadding,
               "gap-2"
             )}
           >
