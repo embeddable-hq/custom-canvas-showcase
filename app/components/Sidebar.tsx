@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { cn, classes } from "../lib/utils";
-import { IconX, IconDotsVertical, IconPlus } from "@tabler/icons-react";
+import { IconX, IconDotsVertical } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
+import DesktopNavigation from "./DesktopNavigation";
+import MobileNavigation from "./MobileNavigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -46,15 +48,14 @@ export const users: User[] = [
   },
 ];
 
-interface DashboardItem {
+export interface DashboardItem {
   id: string;
   name: string;
   users: UserId[];
   selected?: boolean;
 }
 
-// API response types
-interface EmbeddableApiResponse {
+export interface EmbeddableApiResponse {
   embeddables: {
     id: string;
     name: string;
@@ -68,7 +69,7 @@ interface EmbeddableApiResponse {
   }[];
 }
 
-function EmbeddableItem({
+export function EmbeddableItem({
   embeddable,
   onSelect,
   isSelected,
@@ -230,7 +231,7 @@ export default function Sidebar({
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
       >
-        {/* Close icon - top right */}
+        {/* Mobile close button */}
         <div className="md:hidden w-full flex justify-end">
           <button
             onClick={onClose}
@@ -253,161 +254,28 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* Desktop: Embeddables list */}
-        <div className="hidden md:block w-full">
-          <div className="flex flex-col gap-2 w-full">
-            {loading ? (
-              <div className="p-4 text-sm text-gray-500">Loading...</div>
-            ) : error ? (
-              <div className="p-4 text-sm text-red-500">{error}</div>
-            ) : (
-              embeddables.map((embeddable) => (
-                <EmbeddableItem
-                  key={embeddable.id}
-                  embeddable={embeddable}
-                  onSelect={onEmbeddableSelect}
-                  isSelected={embeddable.id === selectedEmbeddableId}
-                />
-              ))
-            )}
-          </div>
-          <div className="mt-2">
-            <button
-              onClick={() => {
-                // TODO: Handle add embeddable
-                console.log("Add new embeddable");
-              }}
-              className={cn(
-                "flex justify-center items-center self-stretch",
-                "p-[var(--em-core-spacing-300,0.75rem)]",
-                "rounded-[var(--em-btn-pr-border-radius-default,624.9375rem)]",
-                "bg-[var(--em-btn-pr-background-default,#5C5C66)]",
-                "text-white",
-                "text-[var(--em-font-size-sm,0.875rem)]",
-                "font-[var(--em-font-weight-medium,500)]",
-                "leading-[var(--em-line-height-md,1rem)]",
-                "cursor-pointer",
-                "transition-colors",
-                "hover:opacity-90",
-                "w-full"
-              )}
-              style={{
-                fontFamily: "Inter, sans-serif",
-              }}
-            >
-              <IconPlus className="w-4 h-4" />
-              <span
-                className={cn(
-                  "flex justify-center items-center",
-                  "py-0 px-[var(--em-btn-pr-label-padding-default,0.5rem)]",
-                  "gap-2"
-                )}
-              >
-                Add new dashboard
-              </span>
-            </button>
-          </div>
-        </div>
+        {/* Desktop Navigation */}
+        <DesktopNavigation
+          embeddables={embeddables}
+          loading={loading}
+          error={error}
+          selectedEmbeddableId={selectedEmbeddableId}
+          onEmbeddableSelect={onEmbeddableSelect}
+        />
 
-        {/* Mobile: Reorganized menu */}
-        <div className="md:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
-          {/* Header navigation */}
-          <nav className="flex flex-col gap-[var(--app-spacing,1rem)] w-full">
-            {navItems.map((item) => (
-              <div key={item} className="w-full">
-                <button
-                  className={cn(
-                    "text-left",
-                    "text-sm font-[var(--em-font-weight-medium,500)] leading-4",
-                    "p-[var(--em-core-spacing-300,0.75rem)]",
-                    item === selectedItem
-                      ? cn(
-                          "flex items-center",
-                          "h-6",
-                          "rounded-[var(--em-core-border-radius-200,0.5rem)]",
-                          "bg-[var(--em-sem-chart-color-1,#FF5400)]",
-                          "text-[var(--em-sem-text-inverted,#FFF)] font-semibold",
-                          "w-auto inline-flex"
-                        )
-                      : cn("text-[var(--em-sem-text-default,#212129)]")
-                  )}
-                  style={{
-                    fontFamily: "Inter, sans-serif",
-                  }}
-                >
-                  {item}
-                </button>
-              </div>
-            ))}
-          </nav>
-
-          {/* Switch users section */}
-          <div
-            className={cn(
-              "flex",
-              "gap-[var(--em-core-spacing-200,0.5rem)] items-center"
-            )}
-          >
-            <span className={cn("text-sm pl-2", classes.textForegroundMuted)}>
-              Switch users:
-            </span>
-            <div className="flex items-center justify-center">
-              {users.map((user) => (
-                <div
-                  key={user.id}
-                  onClick={() => setSelectedUserId(user.id)}
-                  className="cursor-pointer flex items-center justify-center"
-                >
-                  <UserAvatar
-                    user={user}
-                    showTooltip={true}
-                    size="large"
-                    selected={user.id === selectedUserId}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Sidebar dashboard items */}
-          <div className="mb-6">
-            <nav className="flex flex-col gap-2 w-full">
-              {loading ? (
-                <div className="p-4 text-sm text-gray-500">Loading...</div>
-              ) : error ? (
-                <div className="p-4 text-sm text-red-500">{error}</div>
-              ) : (
-                embeddables.map((embeddable) => (
-                  <EmbeddableItem
-                    key={embeddable.id}
-                    embeddable={embeddable}
-                    onSelect={onEmbeddableSelect}
-                    isSelected={embeddable.id === selectedEmbeddableId}
-                  />
-                ))
-              )}
-            </nav>
-          </div>
-          <div className="mt-auto pb-8">
-            <Dropdown
-              trigger={
-                <button
-                  className={cn(
-                    "w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white",
-                    "flex items-center justify-center text-lg font-semibold",
-                    "transition-transform hover:scale-105"
-                  )}
-                  aria-label="Help"
-                >
-                  <span>?</span>
-                </button>
-              }
-              items={helpItems}
-              position="top"
-              align="start"
-            />
-          </div>
-        </div>
+        {/* Mobile Navigation */}
+        <MobileNavigation
+          navItems={navItems}
+          selectedItem={selectedItem}
+          embeddables={embeddables}
+          loading={loading}
+          error={error}
+          selectedEmbeddableId={selectedEmbeddableId}
+          selectedUserId={selectedUserId}
+          onEmbeddableSelect={onEmbeddableSelect}
+          onUserSelect={setSelectedUserId}
+          helpItems={helpItems}
+        />
       </aside>
     </>
   );
