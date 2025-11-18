@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { cn, classes } from "../lib/utils";
 import { IconX, IconDotsVertical } from "@tabler/icons-react";
@@ -58,16 +58,24 @@ interface DashboardItem {
   selected?: boolean;
 }
 
-const dashboardItems: DashboardItem[] = [
-  { id: "1", name: "Dashboard 1", users: ["denis", "karl"], selected: false },
-  { id: "2", name: "Dashboard 2", users: ["denis", "karl", "erin"], selected: true },
-  { id: "3", name: "Dashboard 3", users: ["erin"], selected: false },
-  { id: "4", name: "Dashboard 4", users: ["denis", "erin"], selected: false },
-];
+// API response types
+interface EmbeddableApiResponse {
+  embeddables: {
+    id: string;
+    name: string;
+    tags: string[];
+    lastPublishedAt?: {
+      latest?: string;
+      production?: string;
+      staging?: string;
+      development?: string;
+    };
+  }[];
+}
 
-function DashboardItemComponent({ item }: { item: DashboardItem }) {
+function EmbeddableItem({ embeddable }: { embeddable: DashboardItem }) {
 
-  const itemUsers = item.users
+  const itemUsers = embeddable.users
     .map((userId) => users.find((u) => u.id === userId))
     .filter((u): u is User => u !== undefined);
 
@@ -79,7 +87,7 @@ function DashboardItemComponent({ item }: { item: DashboardItem }) {
         "self-stretch",
         "rounded-[var(--em-core-border-radius-200,0.5rem)]",
         "transition-colors cursor-pointer",
-        item.selected 
+        embeddable.selected 
           ? "bg-[var(--em-sem-background-subtle,#E4E4EA)]"
           : "hover:bg-black/5"
       )}
@@ -96,7 +104,7 @@ function DashboardItemComponent({ item }: { item: DashboardItem }) {
           lineHeight: "var(--em-line-height-md, 1rem)",
         }}
       >
-        {item.name}
+        {embeddable.name}
       </a>
       {itemUsers.length > 0 && (
         <div className="flex items-center gap-1">
@@ -133,6 +141,43 @@ export default function Sidebar({
   selectedItem,
 }: SidebarProps) {
   const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
+  const [embeddables, setEmbeddables] = useState<DashboardItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch embeddables from API
+  useEffect(() => {
+    async function fetchEmbeddables() {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await fetch('/api/embeddables');
+        
+        if (!response.ok) {
+          throw new Error(`Failed to fetch embeddables: ${response.statusText}`);
+        }
+
+        const data: EmbeddableApiResponse = await response.json();
+        
+        // Map API response to DashboardItem format
+        const mappedItems: DashboardItem[] = data.embeddables.map((embeddable, index) => ({
+          id: embeddable.id,
+          name: embeddable.name,
+          users: [], // API doesn't provide users, defaulting to empty array
+          selected: index === 0, // Select the first item by default
+        }));
+
+          setEmbeddables(mappedItems);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch embeddables');
+        console.error('Error fetching embeddables:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEmbeddables();
+  }, []);
 
   const helpItems = [
     { label: "Documentation" },
@@ -170,9 +215,15 @@ export default function Sidebar({
         {/* Desktop: Original sidebar dashboard items */}
         <div className="hidden md:block w-full">
           <nav className="flex flex-col gap-2 w-full">
-            {dashboardItems.map((item) => (
-              <DashboardItemComponent key={item.id} item={item} />
-            ))}
+            {loading ? (
+              <div className="p-4 text-sm text-gray-500">Loading...</div>
+            ) : error ? (
+              <div className="p-4 text-sm text-red-500">{error}</div>
+            ) : (
+              embeddables.map((embeddable) => (
+                <EmbeddableItem key={embeddable.id} embeddable={embeddable} />
+              ))
+            )}
           </nav>
         </div>
 
@@ -238,9 +289,15 @@ export default function Sidebar({
           {/* Sidebar dashboard items */}
           <div className="mb-6">
             <nav className="flex flex-col gap-2 w-full">
-              {dashboardItems.map((item) => (
-                <DashboardItemComponent key={item.id} item={item} />
-              ))}
+              {loading ? (
+                <div className="p-4 text-sm text-gray-500">Loading...</div>
+              ) : error ? (
+                <div className="p-4 text-sm text-red-500">{error}</div>
+              ) : (
+                embeddables.map((embeddable) => (
+                  <EmbeddableItem key={embeddable.id} embeddable={embeddable} />
+                ))
+              )}
             </nav>
           </div>
           <div className="mt-auto pb-8">
