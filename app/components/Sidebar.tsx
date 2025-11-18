@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { cn, classes } from "../lib/utils";
-import { IconX, IconDotsVertical } from "@tabler/icons-react";
+import { IconX, IconDotsVertical, IconPlus } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
 
-// Dynamically import IconButton to avoid SSR issues with navigator
 const IconButton = dynamic(
   () =>
     import("@embeddable.com/remarkable-ui").then((mod) => ({
@@ -245,9 +244,9 @@ export default function Sidebar({
           <IconButton icon={IconX} onClick={onClose} aria-label="Close menu" />
         </div>
 
-        {/* Desktop: Original sidebar dashboard items */}
+        {/* Desktop: Embeddables list */}
         <div className="hidden md:block w-full">
-          <nav className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full">
             {loading ? (
               <div className="p-4 text-sm text-gray-500">Loading...</div>
             ) : error ? (
@@ -262,7 +261,43 @@ export default function Sidebar({
                 />
               ))
             )}
-          </nav>
+          </div>
+          <div className="mt-2">
+            <button
+              onClick={() => {
+                // TODO: Handle add embeddable
+                console.log("Add new embeddable");
+              }}
+              className={cn(
+                "flex justify-center items-center self-stretch",
+                "p-[var(--em-core-spacing-300,0.75rem)]",
+                "rounded-[var(--em-btn-pr-border-radius-default,624.9375rem)]",
+                "bg-[var(--em-btn-pr-background-default,#5C5C66)]",
+                "text-white",
+                "text-[var(--em-font-size-sm,0.875rem)]",
+                "font-[var(--em-font-weight-medium,500)]",
+                "leading-[var(--em-line-height-md,1rem)]",
+                "cursor-pointer",
+                "transition-colors",
+                "hover:opacity-90",
+                "w-full"
+              )}
+              style={{
+                fontFamily: "Inter, sans-serif",
+              }}
+            >
+              <IconPlus className="w-4 h-4" />
+              <span
+                className={cn(
+                  "flex justify-center items-center",
+                  "py-0 px-[var(--em-btn-pr-label-padding-default,0.5rem)]",
+                  "gap-2"
+                )}
+              >
+                Add new dashboard
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Mobile: Reorganized menu */}
@@ -338,6 +373,7 @@ export default function Sidebar({
                     key={embeddable.id}
                     embeddable={embeddable}
                     onSelect={onEmbeddableSelect}
+                    isSelected={embeddable.id === selectedEmbeddableId}
                   />
                 ))
               )}
