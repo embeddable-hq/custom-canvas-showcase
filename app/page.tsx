@@ -3,19 +3,27 @@
 import { useState, useCallback, useRef } from "react";
 import { cn, classes } from "./lib/utils";
 import Header from "./components/Header";
-import Sidebar, { type TDashboardItem, type UserId, users } from "./components/Sidebar";
+import Sidebar, {
+  type TDashboardItem,
+  type UserId,
+  users,
+} from "./components/Sidebar";
 import EmbeddableRenderer from "./components/EmbeddableRenderer";
 import DashboardHeader from "./components/DashboardHeader";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedCustomCanvasState, setSelectedCustomCanvasState] = useState<string>("");
+  const [selectedCustomCanvasState, setSelectedCustomCanvasState] =
+    useState<string>("");
   const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
-  const [selectedDashboardName, setSelectedDashboardName] = useState<string>("");
+  const [selectedDashboardName, setSelectedDashboardName] =
+    useState<string>("");
   // Initialize with first user from users array
-  const [selectedUserId, setSelectedUserId] = useState<UserId>(users[0]?.id || "denis");
-  const navItems = ['Shop', 'Gift cards', 'Analytics', 'Profile', 'About'];
-  const selectedNavItem = 'Analytics';
+  const [selectedUserId, setSelectedUserId] = useState<UserId>(
+    users[0]?.id || "denis"
+  );
+  const navItems = ["Shop", "Gift cards", "Analytics", "Profile", "About"];
+  const selectedNavItem = "Analytics";
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -25,45 +33,57 @@ export default function Home() {
     setSidebarOpen(false);
   };
 
-  const handleSelectDashboard = useCallback((dashboard: TDashboardItem, userEmail: string) => {
-    setSelectedCustomCanvasState(dashboard.state);
-    setSelectedUserEmail(userEmail);
-    setSelectedDashboardName(dashboard.name);
-  }, []);
+  const handleSelectDashboard = useCallback(
+    (dashboard: TDashboardItem, userEmail: string) => {
+      setSelectedCustomCanvasState(dashboard.state);
+      setSelectedUserEmail(userEmail);
+      setSelectedDashboardName(dashboard.name);
+    },
+    []
+  );
 
-  const handleDashboardRename = useCallback((dashboardId: string, newName: string) => {
-    setSelectedDashboardName(newName);
-  }, []);
+  const handleDashboardRename = useCallback(
+    (dashboardId: string, newName: string) => {
+      setSelectedDashboardName(newName);
+    },
+    []
+  );
 
-  const sidebarUpdateNameRef = useRef<((state: string, name: string) => void) | null>(null);
+  const sidebarUpdateNameRef = useRef<
+    ((state: string, name: string) => void) | null
+  >(null);
 
-  const handleNameChangeFromHeader = useCallback((newName: string) => {
-    setSelectedDashboardName(newName);
-    // Update the dashboard in Sidebar
-    if (sidebarUpdateNameRef.current && selectedCustomCanvasState) {
-      sidebarUpdateNameRef.current(selectedCustomCanvasState, newName);
-    }
-  }, [selectedCustomCanvasState]);
+  const handleNameChangeFromHeader = useCallback(
+    (newName: string) => {
+      setSelectedDashboardName(newName);
+      // Update the dashboard in Sidebar
+      if (sidebarUpdateNameRef.current && selectedCustomCanvasState) {
+        sidebarUpdateNameRef.current(selectedCustomCanvasState, newName);
+      }
+    },
+    [selectedCustomCanvasState]
+  );
   return (
-    <div 
+    <div
       className="flex flex-col min-h-screen w-full bg-white"
       style={{
-        maxWidth: 'var(--page-max-width, 100%)',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        maxWidth: "var(--page-max-width, 100%)",
+        marginLeft: "auto",
+        marginRight: "auto",
       }}
     >
-      <Header 
-        onMenuClick={toggleSidebar} 
-        navItems={navItems} 
+      <Header
+        onMenuClick={toggleSidebar}
+        navItems={navItems}
         selectedNavItem={selectedNavItem}
         selectedUserId={selectedUserId}
         onUserSelect={setSelectedUserId}
       />
-      <div 
+      <div
         className="grid flex-1 min-w-0 min-h-0"
         style={{
-          gridTemplateColumns: 'repeat(var(--grid-columns, 4), minmax(0, 1fr))',
+          gridTemplateColumns: "repeat(var(--grid-columns, 4), minmax(0, 1fr))",
+          gap: "var(--app-spacing)",
         }}
       >
         <Sidebar
@@ -86,8 +106,8 @@ export default function Home() {
             "col-span-4 md:col-span-8 lg:col-span-9 [@media(min-width:1200px)]:col-span-10"
           )}
           style={{
-            paddingLeft: 'var(--app-spacing, 1rem)',
-            paddingRight: 'var(--app-spacing, 1rem)',
+            paddingLeft: "var(--app-spacing, 1rem)",
+            paddingRight: "var(--app-spacing, 1rem)",
           }}
         >
           <div className="flex-1 flex flex-col w-full">
@@ -98,7 +118,10 @@ export default function Home() {
               />
             )}
             <div className="flex-1">
-              <EmbeddableRenderer customCanvasState={selectedCustomCanvasState} userEmail={selectedUserEmail} />
+              <EmbeddableRenderer
+                customCanvasState={selectedCustomCanvasState}
+                userEmail={selectedUserEmail}
+              />
             </div>
           </div>
           <footer
