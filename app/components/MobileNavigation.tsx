@@ -3,17 +3,15 @@
 import { cn, classes } from "../lib/utils";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
-import { EmbeddableItem, type DashboardItem, type UserId, users } from "./Sidebar";
+import { DashboardItem, type TDashboardItem, type UserId, users } from "./Sidebar";
 
 interface MobileNavigationProps {
   navItems: string[];
   selectedItem: string;
-  embeddables: DashboardItem[];
-  loading: boolean;
-  error: string | null;
-  selectedEmbeddableId?: string | null;
+  dashboards: TDashboardItem[];
+  selectedCustomCanvasState?: string | null;
   selectedUserId: UserId;
-  onEmbeddableSelect: (id: string, name: string) => void;
+  onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   onUserSelect: (id: UserId) => void;
   helpItems: { label: string }[];
 }
@@ -21,15 +19,14 @@ interface MobileNavigationProps {
 export default function MobileNavigation({
   navItems,
   selectedItem,
-  embeddables,
-  loading,
-  error,
-  selectedEmbeddableId,
+  dashboards,
+  selectedCustomCanvasState,
   selectedUserId,
-  onEmbeddableSelect,
+  onDashboardSelect,
   onUserSelect,
   helpItems,
 }: MobileNavigationProps) {
+
   return (
     <div className="md:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
       {/* Header navigation */}
@@ -93,20 +90,14 @@ export default function MobileNavigation({
       {/* Embeddables list */}
       <div className="mb-6">
         <div className="flex flex-col gap-2 w-full">
-          {loading ? (
-            <div className="p-4 text-sm text-gray-500">Loading...</div>
-          ) : error ? (
-            <div className="p-4 text-sm text-red-500">{error}</div>
-          ) : (
-            embeddables.map((embeddable) => (
-              <EmbeddableItem
-                key={embeddable.id}
-                embeddable={embeddable}
-                onSelect={onEmbeddableSelect}
-                isSelected={embeddable.id === selectedEmbeddableId}
-              />
-            ))
-          )}
+          {dashboards.map((dashboard) => (
+            <DashboardItem
+              key={dashboard.id}
+              dashboard={dashboard}
+              onSelect={onDashboardSelect}
+              isSelected={dashboard.state === selectedCustomCanvasState}
+            />
+          ))}
         </div>
       </div>
 

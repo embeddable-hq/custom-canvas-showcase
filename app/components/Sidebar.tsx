@@ -15,8 +15,8 @@ interface SidebarProps {
   navItems: string[];
   selectedItem: string;
   userAvatarClass?: string;
-  onEmbeddableSelect: (embeddableId: string, embeddableName: string) => void;
-  selectedEmbeddableId?: string | null;
+  selectedCustomCanvasState: string;
+  onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
 }
 
 export type UserId = "denis" | "karl" | "erin";
@@ -49,45 +49,43 @@ export const users: User[] = [
   },
 ];
 
-export interface DashboardItem {
+export interface TDashboardItem {
   id: string;
   name: string;
   users: UserId[];
-  selected?: boolean;
+  state: string;
 }
 
-export interface EmbeddableApiResponse {
-  embeddables: {
-    id: string;
-    name: string;
-    tags: string[];
-    lastPublishedAt?: {
-      latest?: string;
-      production?: string;
-      staging?: string;
-      development?: string;
-    };
-  }[];
-}
+// Helper function to convert UserId to email
+const getEmailFromUserId = (userId: UserId): string => {
+  const emailMap: Record<UserId, string> = {
+    denis: "denis@example.com",
+    karl: "karl@example.com",
+    erin: "erin@example.com",
+  };
+  return emailMap[userId] || "denis@example.com";
+};
 
-export function EmbeddableItem({
-  embeddable,
+export function DashboardItem({
+  dashboard,
   onSelect,
   isSelected,
 }: {
-  embeddable: DashboardItem;
-  onSelect: (id: string, name: string) => void;
+  dashboard: TDashboardItem;
+  onSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   isSelected?: boolean;
 }) {
-  const itemUsers = embeddable.users
+  const itemUsers = dashboard.users
     .map((userId) => users.find((u) => u.id === userId))
     .filter((u): u is User => u !== undefined);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-
-    console.log("handleClick", embeddable.id);
-    onSelect(embeddable.id, embeddable.name);
+    const firstUserId = dashboard.users[0];
+    if (firstUserId) {
+      const userEmail = getEmailFromUserId(firstUserId);
+      onSelect(dashboard, userEmail);
+    }
   };
 
   return (
@@ -108,9 +106,9 @@ export function EmbeddableItem({
         className={cn("no-underline flex-1")}
         style={components.textStyles.small}
       >
-        {embeddable.name}
+        {dashboard.name}
       </div>
-      {itemUsers.length > 0 && (
+      {dashboard.users.length > 0 && (
         <div className="flex items-center gap-1">
           {itemUsers.slice(0, 3).map((user) => (
             <UserAvatar key={user.id} user={user} showTooltip={true} />
@@ -139,63 +137,34 @@ export default function Sidebar({
   onClose,
   navItems,
   selectedItem,
-  onEmbeddableSelect,
-  selectedEmbeddableId,
+  onDashboardSelect,
+  selectedCustomCanvasState,
 }: SidebarProps) {
   const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
-  const [embeddables, setEmbeddables] = useState<DashboardItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
+  const [dashboards, setDashboards] = useState<TDashboardItem[]>([
+    {
+      id: "1",
+      name: "Dashboard 1",
+      users: ["denis", "karl", "erin"],
+      state: "customCanvasState1",
+    },
+  ]);
   useEffect(() => {
-    async function fetchEmbeddables() {
-      try {
-        setLoading(true);
-        setError(null);
-        const response = await fetch("/api/embeddables");
-
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch embeddables: ${response.statusText}`
-          );
-        }
-
-        const data: EmbeddableApiResponse = await response.json();
-
-        // Map API response to DashboardItem format
-        const mappedItems: DashboardItem[] = data.embeddables.map(
-          (embeddable) => ({
-            id: embeddable.id,
-            name: embeddable.name,
-            users: [], // API doesn't provide users, defaulting to empty array
-            selected: false, // Selection is now handled by parent component
-          })
-        );
-
-        setEmbeddables(mappedItems);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch embeddables"
-        );
-        console.error("Error fetching embeddables:", err);
-      } finally {
-        setLoading(false);
-      }
+    if (dashboards.length > 0 && dashboards[0].users.length > 0) {
+      const firstUserId = dashboards[0].users[0];
+      const userEmail = getEmailFromUserId(firstUserId);
+      onDashboardSelect(dashboards[0], userEmail);
     }
+  }, [dashboards, onDashboardSelect]);
 
-    fetchEmbeddables();
-  }, []); // Only fetch once on mount
-
-  // Auto-select first embeddable when embeddables are loaded and none is selected
-  useEffect(() => {
-    if (
-      embeddables.length > 0 &&
-      !selectedEmbeddableId &&
-      onEmbeddableSelect
-    ) {
-      onEmbeddableSelect(embeddables[0].id, embeddables[0].name);
-    }
-  }, [embeddables, selectedEmbeddableId, onEmbeddableSelect]);
+  const onAddDashboard = () => {
+    setDashboards([...dashboards, {
+      id: `${dashboards.length + 1}`,
+      name: `Dashboard ${dashboards.length + 1}`,
+      users: ["denis", "karl", "erin"],
+      state: `customCanvasState${dashboards.length + 1}`,
+    }]);
+  };
 
   const helpItems = [
     { label: "Documentation" },
@@ -250,23 +219,20 @@ export default function Sidebar({
 
         {/* Desktop Navigation */}
         <DesktopNavigation
-          embeddables={embeddables}
-          loading={loading}
-          error={error}
-          selectedEmbeddableId={selectedEmbeddableId}
-          onEmbeddableSelect={onEmbeddableSelect}
+          dashboards={dashboards}
+          selectedCustomCanvasState={selectedCustomCanvasState}
+          onDashboardSelect={onDashboardSelect}
+          onAddDashboard={onAddDashboard}
         />
 
         {/* Mobile Navigation */}
         <MobileNavigation
           navItems={navItems}
           selectedItem={selectedItem}
-          embeddables={embeddables}
-          loading={loading}
-          error={error}
-          selectedEmbeddableId={selectedEmbeddableId}
+          dashboards={dashboards}
+          selectedCustomCanvasState={selectedCustomCanvasState}
           selectedUserId={selectedUserId}
-          onEmbeddableSelect={onEmbeddableSelect}
+          onDashboardSelect={onDashboardSelect}
           onUserSelect={setSelectedUserId}
           helpItems={helpItems}
         />

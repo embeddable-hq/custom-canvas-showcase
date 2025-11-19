@@ -3,14 +3,15 @@
 import { useState, useCallback } from "react";
 import { cn, classes } from "./lib/utils";
 import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
+import Sidebar, { type TDashboardItem } from "./components/Sidebar";
 import EmbeddableRenderer from "./components/EmbeddableRenderer";
 import DashboardHeader from "./components/DashboardHeader";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedEmbeddableId, setSelectedEmbeddableId] = useState<string>("");
-  const [selectedEmbeddableName, setSelectedEmbeddableName] = useState<string>("");
+  const [selectedCustomCanvasState, setSelectedCustomCanvasState] = useState<string>("");
+  const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
+  const [selectedDashboardName, setSelectedDashboardName] = useState<string>("");
   const navItems = ['Shop', 'Gift cards', 'Analytics', 'Profile', 'About'];
   const selectedItem = 'Analytics';
 
@@ -22,21 +23,22 @@ export default function Home() {
     setSidebarOpen(false);
   };
 
-  const handleEmbeddableSelect = useCallback((embeddableId: string, embeddableName: string) => {
-    setSelectedEmbeddableId(embeddableId);
-    setSelectedEmbeddableName(embeddableName);
+  const handleSelectDashboard = useCallback((dashboard: TDashboardItem, userEmail: string) => {
+    setSelectedCustomCanvasState(dashboard.state);
+    setSelectedUserEmail(userEmail);
+    setSelectedDashboardName(dashboard.name);
   }, []);
   return (
     <div className="flex flex-col min-h-screen w-full bg-white">
       <Header onMenuClick={toggleSidebar} navItems={navItems} selectedItem={selectedItem} />
       <div className="flex flex-1 min-w-0 min-h-0">
         <Sidebar
+          selectedCustomCanvasState={selectedCustomCanvasState}
           isOpen={sidebarOpen}
           onClose={closeSidebar}
           navItems={navItems}
           selectedItem={selectedItem}
-          onEmbeddableSelect={handleEmbeddableSelect}
-          selectedEmbeddableId={selectedEmbeddableId}
+          onDashboardSelect={handleSelectDashboard}
         />
         <main
           className={cn(
@@ -46,14 +48,14 @@ export default function Home() {
           )}
         >
           <div className="w-full max-w-full flex-1 flex flex-col">
-            {selectedEmbeddableId && (
+            {selectedCustomCanvasState && (
               <DashboardHeader
-                dashboardName={selectedEmbeddableName}
-                onNameChange={setSelectedEmbeddableName}
+                dashboardName={selectedDashboardName}
+                onNameChange={setSelectedDashboardName}
               />
             )}
             <div className="flex-1">
-              <EmbeddableRenderer embeddableId={selectedEmbeddableId} />
+              <EmbeddableRenderer customCanvasState={selectedCustomCanvasState} userEmail={selectedUserEmail} />
             </div>
           </div>
           <footer

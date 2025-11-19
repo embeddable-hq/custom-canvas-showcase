@@ -3,47 +3,36 @@
 import { cn } from "../lib/utils";
 import { spacing, borders, colors, typography } from "../lib/tokens";
 import { IconPlus } from "@tabler/icons-react";
-import { EmbeddableItem, type DashboardItem } from "./Sidebar";
+import { DashboardItem, type TDashboardItem } from "./Sidebar";
 
 interface DesktopNavigationProps {
-  embeddables: DashboardItem[];
-  loading: boolean;
-  error: string | null;
-  selectedEmbeddableId?: string | null;
-  onEmbeddableSelect: (id: string, name: string) => void;
+  dashboards: TDashboardItem[];
+  selectedCustomCanvasState?: string | null;
+  onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
+  onAddDashboard: () => void;
 }
 
 export default function DesktopNavigation({
-  embeddables,
-  loading,
-  error,
-  selectedEmbeddableId,
-  onEmbeddableSelect,
+  dashboards,
+  selectedCustomCanvasState,
+  onDashboardSelect,
+  onAddDashboard,
 }: DesktopNavigationProps) {
   return (
     <div className="hidden md:block w-full">
       <div className="flex flex-col gap-2 w-full">
-        {loading ? (
-          <div className="p-4 text-sm text-gray-500">Loading...</div>
-        ) : error ? (
-          <div className="p-4 text-sm text-red-500">{error}</div>
-        ) : (
-          embeddables.map((embeddable) => (
-            <EmbeddableItem
-              key={embeddable.id}
-              embeddable={embeddable}
-              onSelect={onEmbeddableSelect}
-              isSelected={embeddable.id === selectedEmbeddableId}
-            />
-          ))
-        )}
+        {dashboards.map((dashboard) => (
+          <DashboardItem
+            key={dashboard.id}
+            dashboard={dashboard}
+            onSelect={onDashboardSelect}
+            isSelected={dashboard.state === selectedCustomCanvasState}
+          />
+        ))}
       </div>
       <div className="mt-2">
         <button
-          onClick={() => {
-            // TODO: Handle add embeddable
-            console.log("Add new embeddable");
-          }}
+          onClick={onAddDashboard}
           className={cn(
             "flex justify-center items-center self-stretch",
             spacing.core.md,
@@ -76,4 +65,3 @@ export default function DesktopNavigation({
     </div>
   );
 }
-

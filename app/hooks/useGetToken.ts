@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useGetToken = (embeddableId: string) => {
+const useGetToken = (customCanvasState: string, userEmail: string) => {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ const useGetToken = (embeddableId: string) => {
       setLoading(true);
       setError(null);
       try {
-        if (!embeddableId) {
+        if (!customCanvasState || !userEmail) {
           setToken(null);
           setError(null);
           setLoading(false);
@@ -22,7 +22,7 @@ const useGetToken = (embeddableId: string) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ embeddableId }),
+          body: JSON.stringify({ customCanvasState, userEmail }),
         });
         
         if (!response.ok) {
@@ -40,7 +40,7 @@ const useGetToken = (embeddableId: string) => {
     }
 
     fetchToken();
-  }, [embeddableId]);
+  }, [customCanvasState, userEmail]);
 
   return [token, error, loading] as const;
 };

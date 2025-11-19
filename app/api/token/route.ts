@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
-import { embeddableApiUrl, userEmail } from "@/utils/constants";
+import { EMBEDDABLE_ID, embeddableApiUrl } from "@/utils/constants";
 
 // Server-side API route to get security token
 // This keeps the API key secure and never exposes it to the client
 export async function POST(request: Request) {
+  const { customCanvasState, userEmail } = await request.json();
+  
+  if (!customCanvasState || !userEmail) {
+    return NextResponse.json(
+      { error: "customCanvasState and userEmail are required" },
+      { status: 400 }
+    );
+  }
+
   if (!process.env.EMBEDDABLE_API_KEY) {
     return NextResponse.json(
       { error: "EMBEDDABLE_API_KEY is not set" },
@@ -18,16 +27,14 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!EMBEDDABLE_ID) {
+    return NextResponse.json(
+      { error: "EMBEDDABLE_ID is not set" },
+      { status: 500 }
+    );
+  }
+
   try {
-    const { embeddableId } = await request.json();
-
-    if (!embeddableId) {
-      return NextResponse.json(
-        { error: "embeddableId is required" },
-        { status: 400 }
-      );
-    }
-
     const response = await fetch(`${embeddableApiUrl}/api/v1/security-token`, {
       method: "POST",
       headers: {
@@ -36,7 +43,8 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${process.env.EMBEDDABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        embeddableId: embeddableId,
+        embeddableId: EMBEDDABLE_ID,     
+        customCanvasState: customCanvasState,
         expiryInSeconds: 60 * 60 * 24 * 7,
         securityContext: {},
         user: userEmail,

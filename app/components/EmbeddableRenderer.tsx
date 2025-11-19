@@ -5,12 +5,16 @@ import useEmbeddableScriptTag from '../hooks/useEmbeddableScriptTag';
 import { embeddableBaseUrl } from '@/utils/constants';
 
 interface EmbeddableRendererProps {
-  embeddableId: string;
+  customCanvasState: string;
+  userEmail: string;
 }
 
-export default function EmbeddableRenderer({ embeddableId }: EmbeddableRendererProps) {
+export default function EmbeddableRenderer({ customCanvasState, userEmail }: EmbeddableRendererProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
-  const [token, tokenError, tokenLoading] = useGetToken(embeddableId);
+  const [token, tokenError, tokenLoading] = useGetToken(
+    customCanvasState || "",
+    userEmail || ""
+  );
 
   if (tokenLoading || !isScriptLoaded) {
     return (
