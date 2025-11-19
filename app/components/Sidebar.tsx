@@ -149,21 +149,31 @@ export default function Sidebar({
       state: "customCanvasState1",
     },
   ]);
+  // Only select the first dashboard on initial mount
   useEffect(() => {
-    if (dashboards.length > 0 && dashboards[0].users.length > 0) {
+    if (dashboards.length > 0 && dashboards[0].users.length > 0 && !selectedCustomCanvasState) {
       const firstUserId = dashboards[0].users[0];
       const userEmail = getEmailFromUserId(firstUserId);
       onDashboardSelect(dashboards[0], userEmail);
     }
-  }, [dashboards, onDashboardSelect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run on mount
 
   const onAddDashboard = () => {
-    setDashboards([...dashboards, {
+    const newDashboard: TDashboardItem = {
       id: `${dashboards.length + 1}`,
       name: `Dashboard ${dashboards.length + 1}`,
       users: ["denis", "karl", "erin"],
       state: `customCanvasState${dashboards.length + 1}`,
-    }]);
+    };
+    setDashboards([...dashboards, newDashboard]);
+    
+    // Select the newly added dashboard
+    if (newDashboard.users.length > 0) {
+      const firstUserId = newDashboard.users[0];
+      const userEmail = getEmailFromUserId(firstUserId);
+      onDashboardSelect(newDashboard, userEmail);
+    }
   };
 
   const helpItems = [
