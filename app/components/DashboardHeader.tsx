@@ -41,8 +41,8 @@ export default function DashboardHeader({
 
   return (
     <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full mb-4 gap-2 md:gap-0">
-      {/* Dashboard name - hidden on mobile */}
-      <div className="hidden md:flex items-center gap-2">
+      {/* Dashboard name - hidden on mobile and tablet, only show on desktop */}
+      <div className="hidden lg:flex items-center gap-2">
         {isEditingName ? (
           <input
             type="text"
@@ -69,8 +69,18 @@ export default function DashboardHeader({
           </>
         )}
       </div>
-      {/* Dropdown - full width on mobile, auto width on desktop */}
-      <div className="w-full md:w-auto">
+      {/* Dropdown - always right-aligned */}
+      <div 
+        className="flex md:ml-auto"
+        style={{
+          height: 'var(--em-sl-menu-size-height-default, 2.5rem)',
+          minWidth: 'var(--em-select-menu-size-width-min-width, 4rem)',
+          maxWidth: 'var(--em-select-menu-size-width-max-width, 25rem)',
+          padding: 'var(--em-sl-menu-padding-default, 0.75rem)',
+          alignItems: 'center',
+          flex: '1 0 0',
+        }}
+      >
         <Select
           leftIcon={{
             src: "/pen.svg",

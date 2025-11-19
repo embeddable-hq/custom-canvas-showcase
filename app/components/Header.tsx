@@ -31,10 +31,14 @@ export default function Header({
 
   return (
     <header className={cn(
-      'flex justify-between items-center self-stretch',
-      'bg-white', 'p-8',
+      'flex justify-between items-center self-stretch w-full',
+      'bg-white',
       classes.borderDivider
-    )}>
+    )}
+    style={{
+      padding: 'var(--app-spacing, 1rem)',
+    }}
+    >
       <div className="flex items-center">
         <div className={cn("flex items-center justify-center", spacing.core.mdGap)}>
          <Image src="/logo.svg" alt="Logo" width={24} height={24} />
@@ -44,7 +48,7 @@ export default function Header({
         </div>
       </div>
 
-      <nav className="hidden md:flex gap-6 items-center">
+      <nav className="hidden lg:flex gap-6 items-center">
         {navItems.map((item) => (
           <button
             key={item}
@@ -74,7 +78,7 @@ export default function Header({
 
       <div className="flex items-center gap-4">
         <div className={cn(
-          'hidden md:flex',
+          'hidden lg:flex',
           'justify-between items-center self-stretch',
         )}>
           <span className={cn('text-sm', classes.textForegroundMuted)}>
@@ -97,7 +101,7 @@ export default function Header({
             ))}
           </div>
         </div>
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-3">
           <Dropdown
             trigger={
               <button
@@ -117,7 +121,7 @@ export default function Header({
           />
         </div>
         <button
-          className={cn("md:hidden", button.primary.small)}
+          className={cn("lg:hidden", button.primary.small)}
           onClick={onMenuClick}
           aria-label="Toggle menu"
         >

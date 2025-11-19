@@ -4,9 +4,14 @@
   --background: #ffffff;
   --foreground: #171717;
   
-  /* App Spacing */
+  /* App Spacing - Default to phone (16px = 1rem) */
   --app-spacing: 1rem;
   --min-width-sidenav: 15.5rem;
+  
+  /* Container and Grid - Default to phone */
+  --container-width: 20rem; /* 320px */
+  --grid-columns: 4;
+  --page-max-width: 100%;
   
   /* EM Core Spacing */
   --em-core-spacing-400: 1rem;
@@ -54,7 +59,40 @@
   --user-color-text-3: #277A27;
 }
 
+/* Tablet breakpoint: >= 768px */
+@media (min-width: 768px) {
+  :root {
+    --container-width: 48rem; /* 768px */
+    --grid-columns: 8;
+    --app-spacing: 1rem; /* 16px */
+    --page-max-width: 100%;
+  }
+}
+
+/* Desktop small breakpoint: >= 1024px */
+@media (min-width: 1024px) {
+  :root {
+    --container-width: 64rem; /* 1024px */
+    --grid-columns: 12;
+    --app-spacing: 2rem; /* 32px */
+    --page-max-width: 87.5rem; /* 1400px */
+  }
+}
+
+/* Desktop large breakpoint: >= 1200px */
+@media (min-width: 1200px) {
+  :root {
+    --container-width: 75rem; /* 1200px */
+    --grid-columns: 12;
+    --app-spacing: 2rem; /* 32px */
+    --page-max-width: 87.5rem; /* 1400px */
+  }
+}
+
 @theme {
+  /* Custom Breakpoints */
+  --breakpoint-desktop-lg: 1200px;
+  
   /* Colors */
   --color-text-default: var(--em-sem-text-default);
   --color-text-inverted: var(--em-sem-text-inverted);

@@ -34,7 +34,7 @@ export default function MobileNavigation({
 }: MobileNavigationProps) {
 
   return (
-    <div className="md:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
+    <div className="lg:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
       {/* Header navigation */}
       <nav className="flex flex-col gap-[var(--app-spacing,1rem)] w-full">
         {navItems.map((item) => (
@@ -112,7 +112,7 @@ export default function MobileNavigation({
       </div>
 
       {/* Help dropdown */}
-      <div className="mt-auto pb-8">
+      <div className="mt-auto" style={{ paddingBottom: 'var(--app-spacing, 1rem)' }}>
         <Dropdown
           trigger={
             <button

@@ -453,7 +453,7 @@ export default function Sidebar({
     <>
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black/50 z-[999]"
+          className="lg:hidden fixed inset-0 bg-black/50 z-[999]"
           onClick={onClose}
         ></div>
       )}
@@ -462,23 +462,24 @@ export default function Sidebar({
           "flex flex-col items-end",
           "w-[14.875rem] min-w-[var(--min-width-sidenav,15.5rem)]",
           "h-[66.0625rem] md:h-full",
-          "p-[var(--app-spacing,1rem)] md:p-0 md:pl-[2rem]",
+          "p-[var(--app-spacing,1rem)] md:p-0 md:pl-[var(--app-spacing,1rem)]",
           "gap-[var(--app-spacing,1rem)]",
           "bg-white transition-transform",
-          "fixed md:relative left-0 top-0 z-[1000]",
-          "shadow-lg md:shadow-none",
+          "fixed lg:relative left-0 top-0 z-[1000]",
+          "shadow-lg lg:shadow-none",
           classes.borderDivider,
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          "lg:col-span-3 [@media(min-width:1200px)]:col-span-2",
+          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Mobile close button */}
-        <div className="md:hidden w-full flex justify-end">
+        <div className="lg:hidden w-full flex justify-end">
           <CloseButton onClick={onClose} ariaLabel="Close menu" />
         </div>
 
         {/* Desktop Navigation */}
         {isLoading ? (
-          <div className="hidden md:flex flex-col w-full gap-4">
+          <div className="hidden lg:flex flex-col w-full gap-4">
             <div className="flex items-center justify-center p-4">
               <div className="text-sm text-gray-500">Loading dashboards...</div>
             </div>
@@ -498,7 +499,7 @@ export default function Sidebar({
 
         {/* Mobile Navigation */}
         {isLoading ? (
-          <div className="md:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
+          <div className="lg:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
             <div className="flex items-center justify-center p-4">
               <div className="text-sm text-gray-500">Loading dashboards...</div>
             </div>

@@ -43,8 +43,8 @@ export default function Modal({
           "bg-[var(--em-sem-background-neutral,#FFF)]"
         )}
         style={{
-          padding: "calc(var(--app-spacing, 1rem) * 2)",
-          gap: "calc(var(--app-spacing, 1rem) * 2)",
+          padding: "var(--app-spacing, 1rem)",
+          gap: "var(--app-spacing, 1rem)",
           boxShadow: "var(--em-core-shadow-default-position-x, 0) var(--em-core-shadow-default-position-y, 1px) var(--em-core-shadow-default-blur, 40px) var(--em-core-shadow-default-spread, 0) var(--em-core-shadow-default-color, rgba(33, 33, 41, 0.25))",
         }}
         onClick={(e) => e.stopPropagation()}

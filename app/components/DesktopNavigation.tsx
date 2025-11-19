@@ -27,7 +27,7 @@ export default function DesktopNavigation({
   onDelete,
 }: DesktopNavigationProps) {
   return (
-    <div className="hidden md:flex flex-col w-full gap-4">
+    <div className="hidden lg:flex flex-col w-full gap-4">
       <div className="flex flex-col gap-2 w-full">
         {dashboards.map((dashboard) => (
           <DashboardItem

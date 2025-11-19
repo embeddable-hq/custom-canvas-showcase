@@ -45,7 +45,14 @@ export default function Home() {
     }
   }, [selectedCustomCanvasState]);
   return (
-    <div className="flex flex-col min-h-screen w-full bg-white">
+    <div 
+      className="flex flex-col min-h-screen w-full bg-white"
+      style={{
+        maxWidth: 'var(--page-max-width, 100%)',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+      }}
+    >
       <Header 
         onMenuClick={toggleSidebar} 
         navItems={navItems} 
@@ -53,7 +60,12 @@ export default function Home() {
         selectedUserId={selectedUserId}
         onUserSelect={setSelectedUserId}
       />
-      <div className="flex flex-1 min-w-0 min-h-0">
+      <div 
+        className="grid flex-1 min-w-0 min-h-0"
+        style={{
+          gridTemplateColumns: 'repeat(var(--grid-columns, 4), minmax(0, 1fr))',
+        }}
+      >
         <Sidebar
           selectedCustomCanvasState={selectedCustomCanvasState}
           isOpen={sidebarOpen}
@@ -68,12 +80,17 @@ export default function Home() {
         />
         <main
           className={cn(
-            "flex flex-col items-end flex-1 min-h-0",
-            "min-h-[31.25rem] px-8 md:px-[var(--app-spacing,1rem)]",
-            "gap-2.5"
+            "flex flex-col min-h-0",
+            "min-h-[31.25rem]",
+            "gap-2.5",
+            "col-span-4 md:col-span-8 lg:col-span-9 [@media(min-width:1200px)]:col-span-10"
           )}
+          style={{
+            paddingLeft: 'var(--app-spacing, 1rem)',
+            paddingRight: 'var(--app-spacing, 1rem)',
+          }}
         >
-          <div className="w-full max-w-full flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col w-full">
             {selectedCustomCanvasState && (
               <DashboardHeader
                 dashboardName={selectedDashboardName}
