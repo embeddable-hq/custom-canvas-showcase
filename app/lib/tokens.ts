@@ -86,6 +86,13 @@ export const spacing = {
     mdGap: "gap-core-md",
   },
   app: "p-[var(--app-spacing,1rem)]",
+  appGap: "gap-[var(--app-spacing)]",
+  sidebar: {
+    padding: "p-[var(--app-spacing,1rem)]",
+    paddingMobile: "p-[var(--app-spacing,1rem)]",
+    paddingDesktop: "p-0 pl-[var(--app-spacing,1rem)]",
+    gap: "gap-[var(--app-spacing,1rem)]",
+  },
   select: {
     padding: "p-[var(--em-sl-menu-padding-default,0.75rem)]",
     paddingLeft: "pl-[calc(var(--em-sl-menu-padding-default,0.75rem)+1.5rem)]",
@@ -137,6 +144,11 @@ export const sizes = {
   actionIcon: {
     width: "w-[var(--em-action-icon-size-width,1.25rem)]",
     height: "h-[var(--em-action-icon-size-height,2rem)]",
+  },
+  sidebar: {
+    width: "w-[var(--sidebar-width,14.875rem)]",
+    minWidth: "min-w-[var(--min-width-sidenav,15.5rem)]",
+    height: "h-[var(--sidebar-height,66.0625rem)]",
   },
 } as const;
 
@@ -195,6 +207,27 @@ export const button = {
       colors.button.primaryBackground,
     ].join(" "),
   },
+} as const;
+
+// Sidebar Tokens
+export const sidebar = {
+  base: [
+    "flex flex-col items-end",
+    "bg-white transition-transform",
+    spacing.sidebar.gap,
+    sizes.sidebar.width,
+    sizes.sidebar.minWidth,
+    sizes.sidebar.height,
+    spacing.sidebar.paddingMobile,
+    "fixed lg:relative left-0 top-0 z-[1000]",
+    "shadow-lg lg:shadow-none",
+    "lg:w-auto lg:max-w-full lg:min-w-[var(--min-width-sidenav,15.5rem)]",
+    "md:h-full",
+    "md:p-0 md:pl-[var(--app-spacing,1rem)]",
+    "lg:col-span-3 [@media(min-width:1400px)]:col-span-2",
+  ].join(" "),
+  translateOpen: "translate-x-0 lg:translate-x-0",
+  translateClosed: "-translate-x-full lg:translate-x-0",
 } as const;
 
 // Components - For inline styles that can't be Tailwind classes

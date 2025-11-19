@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn, classes } from "../lib/utils";
-import { spacing, borders, colors, components } from "../lib/tokens";
+import { spacing, borders, colors, components, sidebar as sidebarTokens } from "../lib/tokens";
 import { IconDotsVertical } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
@@ -459,17 +459,9 @@ export default function Sidebar({
       )}
       <aside
         className={cn(
-          "flex flex-col items-end",
-          "w-[14.875rem] min-w-[var(--min-width-sidenav,15.5rem)]",
-          "h-[66.0625rem] md:h-full",
-          "p-[var(--app-spacing,1rem)] md:p-0 md:pl-[var(--app-spacing,1rem)]",
-          "gap-[var(--app-spacing,1rem)]",
-          "bg-white transition-transform",
-          "fixed lg:relative left-0 top-0 z-[1000]",
-          "shadow-lg lg:shadow-none",
+          sidebarTokens.base,
           classes.borderDivider,
-          "lg:col-span-3 [@media(min-width:1200px)]:col-span-2",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          isOpen ? sidebarTokens.translateOpen : sidebarTokens.translateClosed
         )}
       >
         {/* Mobile close button */}
@@ -499,7 +491,7 @@ export default function Sidebar({
 
         {/* Mobile Navigation */}
         {isLoading ? (
-          <div className="lg:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
+          <div className={cn("lg:hidden flex flex-col h-full w-full", spacing.appGap)}>
             <div className="flex items-center justify-center p-4">
               <div className="text-sm text-gray-500">Loading dashboards...</div>
             </div>

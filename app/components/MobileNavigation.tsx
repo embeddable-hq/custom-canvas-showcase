@@ -1,6 +1,7 @@
 "use client";
 
 import { cn, classes } from "../lib/utils";
+import { spacing } from "../lib/tokens";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
 import { DashboardItem, type TDashboardItem, type UserId, users } from "./Sidebar";
@@ -34,9 +35,9 @@ export default function MobileNavigation({
 }: MobileNavigationProps) {
 
   return (
-    <div className="lg:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
+    <div className={cn("lg:hidden flex flex-col h-full w-full", spacing.appGap)}>
       {/* Header navigation */}
-      <nav className="flex flex-col gap-[var(--app-spacing,1rem)] w-full">
+      <nav className={cn("flex flex-col w-full", spacing.appGap)}>
         {navItems.map((item) => (
           <div key={item} className="w-full">
             <button
