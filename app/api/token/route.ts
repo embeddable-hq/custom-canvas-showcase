@@ -5,7 +5,6 @@ import { EMBEDDABLE_ID, embeddableApiUrl } from "@/utils/constants";
 // This keeps the API key secure and never exposes it to the client
 export async function POST(request: Request) {
   const { customCanvasState, userEmail } = await request.json();
-  
   if (!customCanvasState || !userEmail) {
     return NextResponse.json(
       { error: "customCanvasState and userEmail are required" },

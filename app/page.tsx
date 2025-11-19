@@ -10,6 +10,7 @@ import Sidebar, {
 } from "./components/Sidebar";
 import EmbeddableRenderer from "./components/EmbeddableRenderer";
 import DashboardHeader from "./components/DashboardHeader";
+import { getEmailFromUserId } from "./lib/userUtils";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -63,6 +64,19 @@ export default function Home() {
     },
     [selectedCustomCanvasState]
   );
+
+  // Handle user selection - update email to trigger new token fetch
+  const handleUserSelect = useCallback(
+    (userId: UserId) => {
+      setSelectedUserId(userId);
+      // Update user email immediately to trigger new token fetch
+      if (selectedCustomCanvasState) {
+        const userEmail = getEmailFromUserId(userId);
+        setSelectedUserEmail(userEmail);
+      }
+    },
+    [selectedCustomCanvasState]
+  );
   return (
     <div
       className="flex flex-col min-h-screen w-full bg-white"
@@ -77,7 +91,7 @@ export default function Home() {
         navItems={navItems}
         selectedNavItem={selectedNavItem}
         selectedUserId={selectedUserId}
-        onUserSelect={setSelectedUserId}
+        onUserSelect={handleUserSelect}
       />
       <div
         className="grid flex-1 min-w-0 min-h-0"
@@ -94,7 +108,7 @@ export default function Home() {
           selectedNavItem={selectedNavItem}
           onDashboardSelect={handleSelectDashboard}
           selectedUserId={selectedUserId}
-          onUserSelect={setSelectedUserId}
+          onUserSelect={handleUserSelect}
           onDashboardRename={handleDashboardRename}
           onUpdateDashboardName={sidebarUpdateNameRef}
         />
