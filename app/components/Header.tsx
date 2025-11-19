@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { cn, classes } from '../lib/utils';
 import { spacing, borders, colors, components, button } from '../lib/tokens';
 import Image from 'next/image';
@@ -11,11 +10,18 @@ import UserAvatar from './UserAvatar';
 interface HeaderProps {
   onMenuClick: () => void;
   navItems: string[];
-  selectedItem: string;
+  selectedNavItem: string;
+  selectedUserId: UserId;
+  onUserSelect: (userId: UserId) => void;
 }
 
-export default function Header({ onMenuClick, navItems, selectedItem }: HeaderProps) {
-  const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
+export default function Header({ 
+  onMenuClick, 
+  navItems, 
+  selectedNavItem,
+  selectedUserId,
+  onUserSelect,
+}: HeaderProps) {
 
   const helpItems = [
     { label: "Documentation" },
@@ -44,7 +50,7 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
             key={item}
             className={cn(
               'text-sm font-medium',
-              item === selectedItem
+              item === selectedNavItem
                 ? cn(
                     'flex items-center',
                     'h-6',
@@ -59,7 +65,7 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
                     'disabled:cursor-default px-4 py-2'
                   )
             )}
-            disabled={item !== selectedItem}
+            disabled={item !== selectedNavItem}
           >
             {item}
           </button>
@@ -78,7 +84,7 @@ export default function Header({ onMenuClick, navItems, selectedItem }: HeaderPr
             {users.map((user) => (
               <div 
                 key={user.id}
-                onClick={() => setSelectedUserId(user.id)}
+                onClick={() => onUserSelect(user.id)}
                 className="cursor-pointer flex items-center justify-center"
               >
                 <UserAvatar 

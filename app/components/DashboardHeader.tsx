@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { cn } from "../lib/utils";
-import { components, selectMenu } from "../lib/tokens";
+import { components } from "../lib/tokens";
 import Image from "next/image";
+import Select from "./Select";
 
 interface DashboardHeaderProps {
   dashboardName: string;
@@ -69,22 +70,15 @@ export default function DashboardHeader({
         )}
       </div>
       {/* Dropdown - full width on mobile, auto width on desktop */}
-      <div className="relative w-full md:w-auto">
-        <Image
-          src="/pen.svg"
-          alt=""
-          width={16}
-          height={16}
-          className={`absolute ${selectMenu.iconPosition} top-1/2 -translate-y-1/2 pointer-events-none z-10`}
-        />
-        <select
-          className={cn(selectMenu.className, "w-full md:w-auto")}
-          style={{
-            ...selectMenu.style,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-            backgroundSize: "12px 12px",
-            backgroundRepeat: "no-repeat",
+      <div className="w-full md:w-auto">
+        <Select
+          leftIcon={{
+            src: "/pen.svg",
+            alt: "",
+            width: 16,
+            height: 16,
           }}
+          className="w-full"
           defaultValue=""
         >
           <option value="" disabled>
@@ -93,7 +87,7 @@ export default function DashboardHeader({
           <option value="light">Light</option>
           <option value="dark">Dark</option>
           <option value="auto">Auto</option>
-        </select>
+        </Select>
       </div>
     </div>
   );

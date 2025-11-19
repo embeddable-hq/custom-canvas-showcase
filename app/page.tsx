@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { cn, classes } from "./lib/utils";
 import Header from "./components/Header";
-import Sidebar, { type TDashboardItem } from "./components/Sidebar";
+import Sidebar, { type TDashboardItem, type UserId, users } from "./components/Sidebar";
 import EmbeddableRenderer from "./components/EmbeddableRenderer";
 import DashboardHeader from "./components/DashboardHeader";
 
@@ -12,8 +12,10 @@ export default function Home() {
   const [selectedCustomCanvasState, setSelectedCustomCanvasState] = useState<string>("");
   const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
   const [selectedDashboardName, setSelectedDashboardName] = useState<string>("");
+  // Initialize with first user from users array
+  const [selectedUserId, setSelectedUserId] = useState<UserId>(users[0]?.id || "denis");
   const navItems = ['Shop', 'Gift cards', 'Analytics', 'Profile', 'About'];
-  const selectedItem = 'Analytics';
+  const selectedNavItem = 'Analytics';
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -30,15 +32,23 @@ export default function Home() {
   }, []);
   return (
     <div className="flex flex-col min-h-screen w-full bg-white">
-      <Header onMenuClick={toggleSidebar} navItems={navItems} selectedItem={selectedItem} />
+      <Header 
+        onMenuClick={toggleSidebar} 
+        navItems={navItems} 
+        selectedNavItem={selectedNavItem}
+        selectedUserId={selectedUserId}
+        onUserSelect={setSelectedUserId}
+      />
       <div className="flex flex-1 min-w-0 min-h-0">
         <Sidebar
           selectedCustomCanvasState={selectedCustomCanvasState}
           isOpen={sidebarOpen}
           onClose={closeSidebar}
           navItems={navItems}
-          selectedItem={selectedItem}
+          selectedNavItem={selectedNavItem}
           onDashboardSelect={handleSelectDashboard}
+          selectedUserId={selectedUserId}
+          onUserSelect={setSelectedUserId}
         />
         <main
           className={cn(

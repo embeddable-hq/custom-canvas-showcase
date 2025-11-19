@@ -3,20 +3,25 @@
 import { useState, useEffect } from "react";
 import { cn, classes } from "../lib/utils";
 import { spacing, borders, colors, components } from "../lib/tokens";
-import { IconX, IconDotsVertical } from "@tabler/icons-react";
+import { IconDotsVertical } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
 import DesktopNavigation from "./DesktopNavigation";
 import MobileNavigation from "./MobileNavigation";
+import PermissionsModal, { type Permission } from "./PermissionsModal";
+import { getEmailFromUserId, createDefaultPermissions, ensureCompletePermissions } from "../lib/userUtils";
+import CloseButton from "./CloseButton";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
   navItems: string[];
-  selectedItem: string;
+  selectedNavItem: string;
   userAvatarClass?: string;
   selectedCustomCanvasState: string;
   onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
+  selectedUserId: UserId;
+  onUserSelect: (userId: UserId) => void;
 }
 
 export type UserId = "denis" | "karl" | "erin";
@@ -24,6 +29,7 @@ export type UserId = "denis" | "karl" | "erin";
 export interface User {
   id: UserId;
   name: string;
+  mail: string;
   bgColor: string;
   textColor: string;
 }
@@ -32,58 +38,97 @@ export const users: User[] = [
   {
     id: "denis",
     name: "Denis",
+    mail: "denis@embeddable.de",
     bgColor: "var(--user-color-background-1, #C5E4FF)",
     textColor: "var(--user-color-text-1, #1768AF)",
   },
   {
     id: "karl",
     name: "Karl",
+    mail: "karl@embeddable.de",
     bgColor: "var(--user-color-background-2, #E8D7FF)",
     textColor: "var(--user-color-text-2, #5B17B2)",
   },
   {
     id: "erin",
     name: "Erin",
+    mail: "erin@embeddable.de",
     bgColor: "var(--user-color-background-3, #CFEFCF)",
     textColor: "var(--user-color-text-3, #277A27)",
   },
 ];
+
+/**
+ * Gets all user IDs from the users array
+ */
+export const getAllUserIds = (): UserId[] => {
+  return users.map((user) => user.id);
+};
 
 export interface TDashboardItem {
   id: string;
   name: string;
   users: UserId[];
   state: string;
+  permissions?: Record<UserId, Permission>;
 }
 
-// Helper function to convert UserId to email
-const getEmailFromUserId = (userId: UserId): string => {
-  const emailMap: Record<UserId, string> = {
-    denis: "denis@example.com",
-    karl: "karl@example.com",
-    erin: "erin@example.com",
-  };
-  return emailMap[userId] || "denis@example.com";
-};
 
 export function DashboardItem({
   dashboard,
   onSelect,
   isSelected,
+  selectedUserId,
+  onEditPermissions,
 }: {
   dashboard: TDashboardItem;
   onSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   isSelected?: boolean;
+  selectedUserId?: UserId;
+  onEditPermissions?: (dashboard: TDashboardItem) => void;
 }) {
-  const itemUsers = dashboard.users
-    .map((userId) => users.find((u) => u.id === userId))
-    .filter((u): u is User => u !== undefined);
+  // Filter users based on permissions - only show users with "write" or "readonly" access
+  const getUsersWithAccess = (): User[] => {
+    if (!dashboard.permissions) {
+      // If no permissions set, show all users from dashboard.users
+      return dashboard.users
+        .map((userId) => users.find((u) => u.id === userId))
+        .filter((u): u is User => u !== undefined);
+    }
+
+    // Filter based on permissions
+    return (Object.keys(dashboard.permissions) as UserId[])
+      .filter(
+        (userId) =>
+          dashboard.permissions![userId] === "write" ||
+          dashboard.permissions![userId] === "readonly"
+      )
+      .map((userId) => users.find((u) => u.id === userId))
+      .filter((u): u is User => u !== undefined);
+  };
+
+  const itemUsers = getUsersWithAccess();
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    const firstUserId = dashboard.users[0];
-    if (firstUserId) {
-      const userEmail = getEmailFromUserId(firstUserId);
+    // Use the selectedUserId if provided and has access, otherwise use the first user with access
+    let userIdToUse: UserId | undefined = selectedUserId;
+
+    // Check if selectedUserId has access to this dashboard
+    if (dashboard.permissions && selectedUserId) {
+      const userPermission = dashboard.permissions[selectedUserId];
+      if (userPermission === "no access") {
+        userIdToUse = undefined;
+      }
+    }
+
+    // If no valid user, use the first user with access
+    if (!userIdToUse && itemUsers.length > 0) {
+      userIdToUse = itemUsers[0].id;
+    }
+
+    if (userIdToUse) {
+      const userEmail = getEmailFromUserId(userIdToUse);
       onSelect(dashboard, userEmail);
     }
   };
@@ -97,9 +142,7 @@ export function DashboardItem({
         "self-stretch",
         borders.radius.sm,
         "transition-colors cursor-pointer",
-        isSelected
-          ? colors.semantic.backgroundSubtle
-          : "hover:bg-black/5"
+        isSelected ? colors.semantic.backgroundSubtle : "hover:bg-black/5"
       )}
     >
       <div
@@ -108,7 +151,7 @@ export function DashboardItem({
       >
         {dashboard.name}
       </div>
-      {dashboard.users.length > 0 && (
+      {itemUsers.length > 0 && (
         <div className="flex items-center gap-1">
           {itemUsers.slice(0, 3).map((user) => (
             <UserAvatar key={user.id} user={user} showTooltip={true} />
@@ -124,7 +167,14 @@ export function DashboardItem({
             <IconDotsVertical className="w-4 h-4" />
           </button>
         }
-        items={[{ label: "Edit" }, { label: "Share" }, { label: "Delete" }]}
+        items={[
+          {
+            label: "Edit permissions",
+            onClick: () => onEditPermissions?.(dashboard),
+          },
+          { label: "Share" },
+          { label: "Delete" },
+        ]}
         position="bottom"
         align="end"
       />
@@ -132,48 +182,200 @@ export function DashboardItem({
   );
 }
 
+const STORAGE_KEY = "dashboard-permissions";
+
+const getDefaultDashboards = (): TDashboardItem[] => {
+  const allUserIds = getAllUserIds();
+  const defaultPermissions = createDefaultPermissions();
+  // First user gets write, others get readonly
+  if (allUserIds.length > 0) {
+    defaultPermissions[allUserIds[0]] = "write";
+  }
+  
+  return [
+    {
+      id: "1",
+      name: "Dashboard 1",
+      users: allUserIds,
+      state: "customCanvasState1",
+      permissions: defaultPermissions,
+    },
+  ];
+};
+
+const loadDashboardsFromStorage = (): TDashboardItem[] => {
+  if (typeof window === "undefined") return getDefaultDashboards();
+
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed;
+    }
+  } catch (error) {
+    console.error("Error loading dashboards from session storage:", error);
+  }
+  return getDefaultDashboards();
+};
+
+// Load dashboards synchronously but with a small delay to prevent flash
+const loadDashboardsAsync = (): Promise<TDashboardItem[]> => {
+  return new Promise((resolve) => {
+    // Use requestAnimationFrame to ensure DOM is ready
+    if (typeof window !== "undefined") {
+      requestAnimationFrame(() => {
+        resolve(loadDashboardsFromStorage());
+      });
+    } else {
+      resolve(getDefaultDashboards());
+    }
+  });
+};
+
+const saveDashboardsToStorage = (dashboards: TDashboardItem[]) => {
+  if (typeof window === "undefined") return;
+
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(dashboards));
+  } catch (error) {
+    console.error("Error saving dashboards to session storage:", error);
+  }
+};
+
 export default function Sidebar({
   isOpen,
   onClose,
   navItems,
-  selectedItem,
+  selectedNavItem,
   onDashboardSelect,
   selectedCustomCanvasState,
+  selectedUserId,
+  onUserSelect,
 }: SidebarProps) {
-  const [selectedUserId, setSelectedUserId] = useState<UserId>("denis");
-  const [dashboards, setDashboards] = useState<TDashboardItem[]>([
-    {
-      id: "1",
-      name: "Dashboard 1",
-      users: ["denis", "karl", "erin"],
-      state: "customCanvasState1",
-    },
-  ]);
-  // Only select the first dashboard on initial mount
+  const [dashboards, setDashboards] = useState<TDashboardItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [permissionsModalOpen, setPermissionsModalOpen] = useState(false);
+  const [selectedDashboardForPermissions, setSelectedDashboardForPermissions] =
+    useState<TDashboardItem | null>(null);
+
+  // Load dashboards from storage on mount
   useEffect(() => {
-    if (dashboards.length > 0 && dashboards[0].users.length > 0 && !selectedCustomCanvasState) {
-      const firstUserId = dashboards[0].users[0];
-      const userEmail = getEmailFromUserId(firstUserId);
-      onDashboardSelect(dashboards[0], userEmail);
+    loadDashboardsAsync().then((loadedDashboards) => {
+      setDashboards(loadedDashboards);
+      setIsLoading(false);
+    });
+  }, []);
+
+  // Filter dashboards based on selected user and their permissions
+  const filteredDashboards = dashboards.filter((dashboard) => {
+    // If dashboard has permissions object, check the selected user's permission
+    if (dashboard.permissions) {
+      const userPermission = dashboard.permissions[selectedUserId];
+      // If permission exists and is not "no access", show the dashboard
+      if (userPermission && userPermission !== "no access") {
+        return true;
+      }
+      // If permission is "no access" or doesn't exist, don't show
+      return false;
+    }
+    // If no permissions set, fall back to checking users array
+    return dashboard.users.includes(selectedUserId);
+  });
+
+  // Only select the first dashboard on initial mount after loading completes
+  useEffect(() => {
+    if (
+      !isLoading &&
+      filteredDashboards.length > 0 &&
+      !selectedCustomCanvasState
+    ) {
+      const userEmail = getEmailFromUserId(selectedUserId);
+      onDashboardSelect(filteredDashboards[0], userEmail);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Only run on mount
+  }, [isLoading]); // Run when loading completes
+
+  // When user changes, check if current dashboard is still available
+  // If not, select the first available dashboard
+  useEffect(() => {
+    if (filteredDashboards.length > 0 && selectedCustomCanvasState) {
+      const isCurrentDashboardAvailable = filteredDashboards.some(
+        (d) => d.state === selectedCustomCanvasState
+      );
+
+      // If current dashboard is not in filtered list, select first available
+      if (!isCurrentDashboardAvailable) {
+        const userEmail = getEmailFromUserId(selectedUserId);
+        onDashboardSelect(filteredDashboards[0], userEmail);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUserId]);
 
   const onAddDashboard = () => {
-    const newDashboard: TDashboardItem = {
-      id: `${dashboards.length + 1}`,
-      name: `Dashboard ${dashboards.length + 1}`,
-      users: ["denis", "karl", "erin"],
-      state: `customCanvasState${dashboards.length + 1}`,
+    const defaultPermissions = createDefaultPermissions();
+    const allUserIds = getAllUserIds();
+
+    // Get users with access (not "no access")
+    const usersWithAccess: UserId[] = allUserIds.filter(
+      (userId) => defaultPermissions[userId] !== "no access"
+    );
+
+    // Generate a unique random ID
+    const generateRandomId = (): string => {
+      // Use crypto.randomUUID if available (modern browsers), otherwise fallback to timestamp + random
+      if (typeof crypto !== "undefined" && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     };
-    setDashboards([...dashboards, newDashboard]);
-    
-    // Select the newly added dashboard
-    if (newDashboard.users.length > 0) {
-      const firstUserId = newDashboard.users[0];
-      const userEmail = getEmailFromUserId(firstUserId);
-      onDashboardSelect(newDashboard, userEmail);
-    }
+
+    const randomId = generateRandomId();
+    const dashboardNumber = dashboards.length + 1;
+
+    const newDashboard: TDashboardItem = {
+      id: randomId,
+      name: `Dashboard ${dashboardNumber}`,
+      users: usersWithAccess,
+      state: `customCanvasState${randomId}`,
+      permissions: defaultPermissions,
+    };
+    const updatedDashboards = [...dashboards, newDashboard];
+    setDashboards(updatedDashboards);
+    saveDashboardsToStorage(updatedDashboards);
+
+    // Select the newly added dashboard using the currently selected user
+    const userEmail = getEmailFromUserId(selectedUserId);
+    onDashboardSelect(newDashboard, userEmail);
+  };
+
+  const handleEditPermissions = (dashboard: TDashboardItem) => {
+    setSelectedDashboardForPermissions(dashboard);
+    setPermissionsModalOpen(true);
+  };
+
+  const handleSavePermissions = (
+    dashboard: TDashboardItem,
+    permissions: Record<UserId, Permission>
+  ) => {
+    // Ensure all users are in the permissions object (even if "no access")
+    const completePermissions = ensureCompletePermissions(permissions, "no access");
+
+    // Update users array to only include users with "write" or "readonly" access
+    const allUserIds = getAllUserIds();
+    const usersWithAccess: UserId[] = allUserIds.filter(
+      (userId) => completePermissions[userId] !== "no access"
+    );
+
+    setDashboards((prev) => {
+      const updated = prev.map((d) =>
+        d.id === dashboard.id
+          ? { ...d, permissions: completePermissions, users: usersWithAccess }
+          : d
+      );
+      saveDashboardsToStorage(updated);
+      return updated;
+    });
   };
 
   const helpItems = [
@@ -206,47 +408,60 @@ export default function Sidebar({
       >
         {/* Mobile close button */}
         <div className="md:hidden w-full flex justify-end">
-          <button
-            onClick={onClose}
-            aria-label="Close menu"
-            className={cn(
-              "flex justify-between items-center",
-              "flex-shrink-0",
-              "cursor-pointer",
-              "border-none"
-            )}
-            style={{
-              width: "var(--em-action-icon-size-width, 1.25rem)",
-              height: "var(--em-action-icon-size-height, 2rem)",
-              padding: "var(--em-action-icon-padding-top-bottom, 0.5rem) var(--em-action-icon-padding-left-right, 0.125rem)",
-              borderRadius: "var(--em-action-icon-border-radius-default, 624.9375rem)",
-              background: "var(--em-action-icon-background-default, #EDEDF1)",
-            }}
-          >
-            <IconX className="w-4 h-4" />
-          </button>
+          <CloseButton onClick={onClose} ariaLabel="Close menu" />
         </div>
 
         {/* Desktop Navigation */}
-        <DesktopNavigation
-          dashboards={dashboards}
-          selectedCustomCanvasState={selectedCustomCanvasState}
-          onDashboardSelect={onDashboardSelect}
-          onAddDashboard={onAddDashboard}
-        />
+        {isLoading ? (
+          <div className="hidden md:flex flex-col w-full gap-4">
+            <div className="flex items-center justify-center p-4">
+              <div className="text-sm text-gray-500">Loading dashboards...</div>
+            </div>
+          </div>
+        ) : (
+          <DesktopNavigation
+            dashboards={filteredDashboards}
+            selectedCustomCanvasState={selectedCustomCanvasState}
+            selectedUserId={selectedUserId}
+            onDashboardSelect={onDashboardSelect}
+            onAddDashboard={onAddDashboard}
+            onEditPermissions={handleEditPermissions}
+          />
+        )}
 
         {/* Mobile Navigation */}
-        <MobileNavigation
-          navItems={navItems}
-          selectedItem={selectedItem}
-          dashboards={dashboards}
-          selectedCustomCanvasState={selectedCustomCanvasState}
-          selectedUserId={selectedUserId}
-          onDashboardSelect={onDashboardSelect}
-          onUserSelect={setSelectedUserId}
-          helpItems={helpItems}
-        />
+        {isLoading ? (
+          <div className="md:hidden flex flex-col h-full w-full gap-[var(--app-spacing,1rem)]">
+            <div className="flex items-center justify-center p-4">
+              <div className="text-sm text-gray-500">Loading dashboards...</div>
+            </div>
+          </div>
+        ) : (
+          <MobileNavigation
+            navItems={navItems}
+            selectedItem={selectedNavItem}
+            dashboards={filteredDashboards}
+            selectedCustomCanvasState={selectedCustomCanvasState}
+            selectedUserId={selectedUserId}
+            onDashboardSelect={onDashboardSelect}
+            onUserSelect={onUserSelect}
+            helpItems={helpItems}
+            onEditPermissions={handleEditPermissions}
+          />
+        )}
       </aside>
+
+      {/* Permissions Modal */}
+      <PermissionsModal
+        key={selectedDashboardForPermissions?.id}
+        isOpen={permissionsModalOpen}
+        onClose={() => {
+          setPermissionsModalOpen(false);
+          setSelectedDashboardForPermissions(null);
+        }}
+        dashboard={selectedDashboardForPermissions}
+        onSave={handleSavePermissions}
+      />
     </>
   );
 }
