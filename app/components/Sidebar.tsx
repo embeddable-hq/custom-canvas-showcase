@@ -9,6 +9,7 @@ import UserAvatar from "./UserAvatar";
 import DesktopNavigation from "./DesktopNavigation";
 import MobileNavigation from "./MobileNavigation";
 import PermissionsModal, { type Permission } from "./PermissionsModal";
+import RenameModal from "./RenameModal";
 import { getEmailFromUserId, createDefaultPermissions, ensureCompletePermissions } from "../lib/userUtils";
 import CloseButton from "./CloseButton";
 
@@ -22,6 +23,8 @@ interface SidebarProps {
   onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   selectedUserId: UserId;
   onUserSelect: (userId: UserId) => void;
+  onDashboardRename?: (dashboardId: string, newName: string) => void;
+  onUpdateDashboardName?: React.MutableRefObject<((state: string, name: string) => void) | null>;
 }
 
 export type UserId = "denis" | "karl" | "erin";
@@ -80,12 +83,16 @@ export function DashboardItem({
   isSelected,
   selectedUserId,
   onEditPermissions,
+  onRename,
+  onDelete,
 }: {
   dashboard: TDashboardItem;
   onSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   isSelected?: boolean;
   selectedUserId?: UserId;
   onEditPermissions?: (dashboard: TDashboardItem) => void;
+  onRename?: (dashboard: TDashboardItem) => void;
+  onDelete?: (dashboard: TDashboardItem) => void;
 }) {
   // Filter users based on permissions - only show users with "write" or "readonly" access
   const getUsersWithAccess = (): User[] => {
@@ -172,8 +179,14 @@ export function DashboardItem({
             label: "Edit permissions",
             onClick: () => onEditPermissions?.(dashboard),
           },
-          { label: "Share" },
-          { label: "Delete" },
+          {
+            label: "Rename",
+            onClick: () => onRename?.(dashboard),
+          },
+          {
+            label: "Delete",
+            onClick: () => onDelete?.(dashboard),
+          },
         ]}
         position="bottom"
         align="end"
@@ -251,11 +264,16 @@ export default function Sidebar({
   selectedCustomCanvasState,
   selectedUserId,
   onUserSelect,
+  onDashboardRename,
+  onUpdateDashboardName,
 }: SidebarProps) {
   const [dashboards, setDashboards] = useState<TDashboardItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [permissionsModalOpen, setPermissionsModalOpen] = useState(false);
   const [selectedDashboardForPermissions, setSelectedDashboardForPermissions] =
+    useState<TDashboardItem | null>(null);
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
+  const [selectedDashboardForRename, setSelectedDashboardForRename] =
     useState<TDashboardItem | null>(null);
 
   // Load dashboards from storage on mount
@@ -265,6 +283,19 @@ export default function Sidebar({
       setIsLoading(false);
     });
   }, []);
+
+  // Expose function to update dashboard name by state
+  useEffect(() => {
+    if (onUpdateDashboardName) {
+      onUpdateDashboardName.current = (state: string, name: string) => {
+        const updatedDashboards = dashboards.map((d) =>
+          d.state === state ? { ...d, name } : d
+        );
+        setDashboards(updatedDashboards);
+        saveDashboardsToStorage(updatedDashboards);
+      };
+    }
+  }, [onUpdateDashboardName, dashboards]);
 
   // Filter dashboards based on selected user and their permissions
   const filteredDashboards = dashboards.filter((dashboard) => {
@@ -354,6 +385,40 @@ export default function Sidebar({
     setPermissionsModalOpen(true);
   };
 
+  const handleRename = (dashboard: TDashboardItem) => {
+    setSelectedDashboardForRename(dashboard);
+    setRenameModalOpen(true);
+  };
+
+  const handleSaveRename = (dashboard: TDashboardItem, newName: string) => {
+    const updatedDashboards = dashboards.map((d) =>
+      d.id === dashboard.id ? { ...d, name: newName } : d
+    );
+    setDashboards(updatedDashboards);
+    saveDashboardsToStorage(updatedDashboards);
+    
+    // Notify parent if this is the currently selected dashboard
+    if (dashboard.state === selectedCustomCanvasState) {
+      onDashboardRename?.(dashboard.id, newName);
+    }
+  };
+
+  const handleDelete = (dashboard: TDashboardItem) => {
+    const updatedDashboards = dashboards.filter((d) => d.id !== dashboard.id);
+    setDashboards(updatedDashboards);
+    saveDashboardsToStorage(updatedDashboards);
+
+    // If the deleted dashboard was selected, select the first available dashboard
+    if (dashboard.state === selectedCustomCanvasState) {
+      if (updatedDashboards.length > 0) {
+        const userEmail = getEmailFromUserId(selectedUserId);
+        onDashboardSelect(updatedDashboards[0], userEmail);
+      }
+      // If no dashboards left, the selection will be cleared automatically
+      // when filteredDashboards becomes empty
+    }
+  };
+
   const handleSavePermissions = (
     dashboard: TDashboardItem,
     permissions: Record<UserId, Permission>
@@ -426,6 +491,8 @@ export default function Sidebar({
             onDashboardSelect={onDashboardSelect}
             onAddDashboard={onAddDashboard}
             onEditPermissions={handleEditPermissions}
+            onRename={handleRename}
+            onDelete={handleDelete}
           />
         )}
 
@@ -447,6 +514,8 @@ export default function Sidebar({
             onUserSelect={onUserSelect}
             helpItems={helpItems}
             onEditPermissions={handleEditPermissions}
+            onRename={handleRename}
+            onDelete={handleDelete}
           />
         )}
       </aside>
@@ -461,6 +530,18 @@ export default function Sidebar({
         }}
         dashboard={selectedDashboardForPermissions}
         onSave={handleSavePermissions}
+      />
+
+      {/* Rename Modal */}
+      <RenameModal
+        key={selectedDashboardForRename?.id}
+        isOpen={renameModalOpen}
+        onClose={() => {
+          setRenameModalOpen(false);
+          setSelectedDashboardForRename(null);
+        }}
+        dashboard={selectedDashboardForRename}
+        onSave={handleSaveRename}
       />
     </>
   );

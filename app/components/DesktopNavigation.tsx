@@ -12,6 +12,8 @@ interface DesktopNavigationProps {
   onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   onAddDashboard: () => void;
   onEditPermissions?: (dashboard: TDashboardItem) => void;
+  onRename?: (dashboard: TDashboardItem) => void;
+  onDelete?: (dashboard: TDashboardItem) => void;
 }
 
 export default function DesktopNavigation({
@@ -21,6 +23,8 @@ export default function DesktopNavigation({
   onDashboardSelect,
   onAddDashboard,
   onEditPermissions,
+  onRename,
+  onDelete,
 }: DesktopNavigationProps) {
   return (
     <div className="hidden md:flex flex-col w-full gap-4">
@@ -33,6 +37,8 @@ export default function DesktopNavigation({
             isSelected={dashboard.state === selectedCustomCanvasState}
             selectedUserId={selectedUserId}
             onEditPermissions={onEditPermissions}
+            onRename={onRename}
+            onDelete={onDelete}
           />
         ))}
       </div>

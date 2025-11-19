@@ -15,6 +15,8 @@ interface MobileNavigationProps {
   onUserSelect: (id: UserId) => void;
   helpItems: { label: string }[];
   onEditPermissions?: (dashboard: TDashboardItem) => void;
+  onRename?: (dashboard: TDashboardItem) => void;
+  onDelete?: (dashboard: TDashboardItem) => void;
 }
 
 export default function MobileNavigation({
@@ -27,6 +29,8 @@ export default function MobileNavigation({
   onUserSelect,
   helpItems,
   onEditPermissions,
+  onRename,
+  onDelete,
 }: MobileNavigationProps) {
 
   return (
@@ -100,6 +104,8 @@ export default function MobileNavigation({
               isSelected={dashboard.state === selectedCustomCanvasState}
               selectedUserId={selectedUserId}
               onEditPermissions={onEditPermissions}
+              onRename={onRename}
+              onDelete={onDelete}
             />
           ))}
         </div>

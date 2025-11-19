@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { cn, classes } from "./lib/utils";
 import Header from "./components/Header";
 import Sidebar, { type TDashboardItem, type UserId, users } from "./components/Sidebar";
@@ -30,6 +30,20 @@ export default function Home() {
     setSelectedUserEmail(userEmail);
     setSelectedDashboardName(dashboard.name);
   }, []);
+
+  const handleDashboardRename = useCallback((dashboardId: string, newName: string) => {
+    setSelectedDashboardName(newName);
+  }, []);
+
+  const sidebarUpdateNameRef = useRef<((state: string, name: string) => void) | null>(null);
+
+  const handleNameChangeFromHeader = useCallback((newName: string) => {
+    setSelectedDashboardName(newName);
+    // Update the dashboard in Sidebar
+    if (sidebarUpdateNameRef.current && selectedCustomCanvasState) {
+      sidebarUpdateNameRef.current(selectedCustomCanvasState, newName);
+    }
+  }, [selectedCustomCanvasState]);
   return (
     <div className="flex flex-col min-h-screen w-full bg-white">
       <Header 
@@ -49,6 +63,8 @@ export default function Home() {
           onDashboardSelect={handleSelectDashboard}
           selectedUserId={selectedUserId}
           onUserSelect={setSelectedUserId}
+          onDashboardRename={handleDashboardRename}
+          onUpdateDashboardName={sidebarUpdateNameRef}
         />
         <main
           className={cn(
@@ -61,7 +77,7 @@ export default function Home() {
             {selectedCustomCanvasState && (
               <DashboardHeader
                 dashboardName={selectedDashboardName}
-                onNameChange={setSelectedDashboardName}
+                onNameChange={handleNameChangeFromHeader}
               />
             )}
             <div className="flex-1">
