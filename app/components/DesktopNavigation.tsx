@@ -28,7 +28,7 @@ export default function DesktopNavigation({
 }: DesktopNavigationProps) {
   return (
     <div className="hidden lg:flex flex-col w-full gap-4">
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col w-full">
         {dashboards.map((dashboard) => (
           <DashboardItem
             key={dashboard.id}
