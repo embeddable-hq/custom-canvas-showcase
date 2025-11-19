@@ -19,7 +19,7 @@ export default function DesktopNavigation({
   onAddDashboard,
 }: DesktopNavigationProps) {
   return (
-    <div className="hidden md:block w-full">
+    <div className="hidden md:flex flex-col w-full gap-4">
       <div className="flex flex-col gap-2 w-full">
         {dashboards.map((dashboard) => (
           <DashboardItem
