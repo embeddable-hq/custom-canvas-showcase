@@ -7,13 +7,15 @@ import { embeddableBaseUrl } from '@/utils/constants';
 interface EmbeddableRendererProps {
   customCanvasState: string;
   userEmail: string;
+  customCanvasReadOnly?: boolean;
 }
 
-export default function EmbeddableRenderer({ customCanvasState, userEmail }: EmbeddableRendererProps) {
+export default function EmbeddableRenderer({ customCanvasState, userEmail, customCanvasReadOnly }: EmbeddableRendererProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
   const [token, tokenError, tokenLoading] = useGetToken(
     customCanvasState || "",
-    userEmail || ""
+    userEmail || "",
+    customCanvasReadOnly
   );
 
   if (tokenLoading || !isScriptLoaded) {

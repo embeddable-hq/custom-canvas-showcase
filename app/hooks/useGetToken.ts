@@ -1,11 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-const useGetToken = (customCanvasState: string, userEmail: string) => {
+const useGetToken = (customCanvasState: string, userEmail: string, customCanvasReadOnly?: boolean) => {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Create new AbortController for this request
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
     async function fetchToken() {
       setLoading(true);
       setError(null);
@@ -22,7 +31,8 @@ const useGetToken = (customCanvasState: string, userEmail: string) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ customCanvasState, userEmail }),
+          body: JSON.stringify({ customCanvasState, userEmail, customCanvasReadOnly }),
+          signal: abortController.signal,
         });
         
         if (!response.ok) {
@@ -33,14 +43,24 @@ const useGetToken = (customCanvasState: string, userEmail: string) => {
         const tokenValue = data.token || data.data?.token || data;
         setToken(tokenValue);
       } catch (err) {
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
         setError(err instanceof Error ? err.message : 'Failed to get token');
       } finally {
-        setLoading(false);
+        if (!abortController.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
 
     fetchToken();
-  }, [customCanvasState, userEmail]);
+
+    // Cleanup function to abort request if component unmounts or dependencies change
+    return () => {
+      abortController.abort();
+    };
+  }, [customCanvasState, userEmail, customCanvasReadOnly]);
 
   return [token, error, loading] as const;
 };

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "../lib/utils";
-import { type User } from "./Sidebar";
+import { type User } from "../../utils/constants";
 
 interface UserAvatarProps {
   user: User;

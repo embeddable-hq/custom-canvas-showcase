@@ -5,26 +5,27 @@ import { cn, classes } from "./lib/utils";
 import Header from "./components/Header";
 import Sidebar, {
   type TDashboardItem,
-  type UserId,
-  users,
 } from "./components/Sidebar";
+import { users, type UserId } from "../utils/constants";
 import EmbeddableRenderer from "./components/EmbeddableRenderer";
 import DashboardHeader from "./components/DashboardHeader";
 import { getEmailFromUserId } from "./lib/userUtils";
+import { NAV_ITEMS, DEFAULT_SELECTED_NAV_ITEM } from "../utils/constants";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedCustomCanvasState, setSelectedCustomCanvasState] =
-    useState<string>("");
+  const [selectedDashboard, setSelectedDashboard] = useState<TDashboardItem | null>(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
-  const [selectedDashboardName, setSelectedDashboardName] =
-    useState<string>("");
   // Initialize with first user from users array
   const [selectedUserId, setSelectedUserId] = useState<UserId>(
     users[0]?.id || "denis"
   );
-  const navItems = ["Shop", "Gift cards", "Analytics", "Profile", "About"];
-  const selectedNavItem = "Analytics";
+
+  // Derive state from selectedDashboard
+  const selectedCustomCanvasState = selectedDashboard?.state || "";
+  const selectedDashboardName = selectedDashboard?.name || "";
+  const navItems = NAV_ITEMS;
+  const selectedNavItem = DEFAULT_SELECTED_NAV_ITEM;
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -36,18 +37,31 @@ export default function Home() {
 
   const handleSelectDashboard = useCallback(
     (dashboard: TDashboardItem, userEmail: string) => {
-      setSelectedCustomCanvasState(dashboard.state);
+      setSelectedDashboard(dashboard);
       setSelectedUserEmail(userEmail);
-      setSelectedDashboardName(dashboard.name);
     },
     []
   );
 
   const handleDashboardRename = useCallback(
     (dashboardId: string, newName: string) => {
-      setSelectedDashboardName(newName);
+      // Update the selected dashboard name if it's the current one
+      if (selectedDashboard && selectedDashboard.id === dashboardId) {
+        setSelectedDashboard({ ...selectedDashboard, name: newName });
+      }
     },
-    []
+    [selectedDashboard]
+  );
+
+  const handlePermissionsUpdate = useCallback(
+    (dashboard: TDashboardItem) => {
+      // If the updated dashboard is the currently selected one, update our state
+      // This will trigger a token refresh with the new readonly status
+      if (selectedDashboard && dashboard.id === selectedDashboard.id) {
+        setSelectedDashboard(dashboard);
+      }
+    },
+    [selectedDashboard]
   );
 
   const sidebarUpdateNameRef = useRef<
@@ -56,13 +70,16 @@ export default function Home() {
 
   const handleNameChangeFromHeader = useCallback(
     (newName: string) => {
-      setSelectedDashboardName(newName);
-      // Update the dashboard in Sidebar
-      if (sidebarUpdateNameRef.current && selectedCustomCanvasState) {
-        sidebarUpdateNameRef.current(selectedCustomCanvasState, newName);
+      // Update the selected dashboard name
+      if (selectedDashboard) {
+        setSelectedDashboard({ ...selectedDashboard, name: newName });
+        // Update the dashboard in Sidebar
+        if (sidebarUpdateNameRef.current && selectedDashboard.state) {
+          sidebarUpdateNameRef.current(selectedDashboard.state, newName);
+        }
       }
     },
-    [selectedCustomCanvasState]
+    [selectedDashboard]
   );
 
   // Handle user selection - update email to trigger new token fetch
@@ -70,12 +87,12 @@ export default function Home() {
     (userId: UserId) => {
       setSelectedUserId(userId);
       // Update user email immediately to trigger new token fetch
-      if (selectedCustomCanvasState) {
+      if (selectedDashboard) {
         const userEmail = getEmailFromUserId(userId);
         setSelectedUserEmail(userEmail);
       }
     },
-    [selectedCustomCanvasState]
+    [selectedDashboard]
   );
   return (
     <div
@@ -111,6 +128,7 @@ export default function Home() {
           onUserSelect={handleUserSelect}
           onDashboardRename={handleDashboardRename}
           onUpdateDashboardName={sidebarUpdateNameRef}
+          onPermissionsUpdate={handlePermissionsUpdate}
         />
         <main
           className={cn(
@@ -135,6 +153,9 @@ export default function Home() {
               <EmbeddableRenderer
                 customCanvasState={selectedCustomCanvasState}
                 userEmail={selectedUserEmail}
+                customCanvasReadOnly={
+                  selectedDashboard?.permissions?.[selectedUserId] === "readonly"
+                }
               />
             </div>
           </div>

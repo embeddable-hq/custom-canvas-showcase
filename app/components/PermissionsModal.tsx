@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { cn } from "../lib/utils";
-import { users, type UserId, type TDashboardItem, getAllUserIds } from "./Sidebar";
+import { type TDashboardItem } from "./Sidebar";
+import { users, type UserId, getAllUserIds } from "../../utils/constants";
 import { createDefaultPermissions } from "../lib/userUtils";
 import Select from "./Select";
 import Modal from "./Modal";
@@ -32,7 +33,7 @@ export default function PermissionsModal({
       const permissions: Record<UserId, Permission> = {} as Record<UserId, Permission>;
       
       allUserIds.forEach((userId) => {
-        permissions[userId] = dashboard.permissions?.[userId] || "readonly";
+        permissions[userId] = dashboard.permissions?.[userId] || "write";
       });
       
       return permissions;

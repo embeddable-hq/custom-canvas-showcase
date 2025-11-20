@@ -12,7 +12,7 @@ import PermissionsModal, { type Permission } from "./PermissionsModal";
 import RenameModal from "./RenameModal";
 import { getEmailFromUserId, createDefaultPermissions, ensureCompletePermissions } from "../lib/userUtils";
 import CloseButton from "./CloseButton";
-import { documentationUrl, githubRepositoryUrl, contactEmail } from "../../utils/constants";
+import { documentationUrl, githubRepositoryUrl, contactEmail, STORAGE_KEY_DASHBOARD_PERMISSIONS, users, getAllUserIds, type UserId, type User } from "../../utils/constants";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -26,48 +26,12 @@ interface SidebarProps {
   onUserSelect: (userId: UserId) => void;
   onDashboardRename?: (dashboardId: string, newName: string) => void;
   onUpdateDashboardName?: React.MutableRefObject<((state: string, name: string) => void) | null>;
+  onPermissionsUpdate?: (dashboard: TDashboardItem) => void;
 }
 
-export type UserId = "denis" | "karl" | "erin";
-
-export interface User {
-  id: UserId;
-  name: string;
-  mail: string;
-  bgColor: string;
-  textColor: string;
-}
-
-export const users: User[] = [
-  {
-    id: "denis",
-    name: "Denis",
-    mail: "denis@embeddable.de",
-    bgColor: "var(--user-color-background-1, #C5E4FF)",
-    textColor: "var(--user-color-text-1, #1768AF)",
-  },
-  {
-    id: "karl",
-    name: "Karl",
-    mail: "karl@embeddable.de",
-    bgColor: "var(--user-color-background-2, #E8D7FF)",
-    textColor: "var(--user-color-text-2, #5B17B2)",
-  },
-  {
-    id: "erin",
-    name: "Erin",
-    mail: "erin@embeddable.de",
-    bgColor: "var(--user-color-background-3, #CFEFCF)",
-    textColor: "var(--user-color-text-3, #277A27)",
-  },
-];
-
-/**
- * Gets all user IDs from the users array
- */
-export const getAllUserIds = (): UserId[] => {
-  return users.map((user) => user.id);
-};
+// User types are now exported from constants
+export type { UserId, User } from "../../utils/constants";
+export { users, getAllUserIds } from "../../utils/constants";
 
 export interface TDashboardItem {
   id: string;
@@ -201,15 +165,11 @@ export function DashboardItem({
   );
 }
 
-const STORAGE_KEY = "dashboard-permissions";
 
 const getDefaultDashboards = (): TDashboardItem[] => {
   const allUserIds = getAllUserIds();
   const defaultPermissions = createDefaultPermissions();
-  // First user gets write, others get readonly
-  if (allUserIds.length > 0) {
-    defaultPermissions[allUserIds[0]] = "write";
-  }
+  // All users get write access by default
   
   return [
     {
@@ -226,7 +186,7 @@ const loadDashboardsFromStorage = (): TDashboardItem[] => {
   if (typeof window === "undefined") return getDefaultDashboards();
 
   try {
-    const stored = sessionStorage.getItem(STORAGE_KEY);
+    const stored = sessionStorage.getItem(STORAGE_KEY_DASHBOARD_PERMISSIONS);
     if (stored) {
       const parsed = JSON.parse(stored);
       return parsed;
@@ -255,7 +215,7 @@ const saveDashboardsToStorage = (dashboards: TDashboardItem[]) => {
   if (typeof window === "undefined") return;
 
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(dashboards));
+    sessionStorage.setItem(STORAGE_KEY_DASHBOARD_PERMISSIONS, JSON.stringify(dashboards));
   } catch (error) {
     console.error("Error saving dashboards to session storage:", error);
   }
@@ -272,6 +232,7 @@ export default function Sidebar({
   onUserSelect,
   onDashboardRename,
   onUpdateDashboardName,
+  onPermissionsUpdate,
 }: SidebarProps) {
   const [dashboards, setDashboards] = useState<TDashboardItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -403,7 +364,7 @@ export default function Sidebar({
     setDashboards(updatedDashboards);
     saveDashboardsToStorage(updatedDashboards);
     
-    // Notify parent if this is the currently selected dashboard
+    // Notify parent about rename if this is the currently selected dashboard
     if (dashboard.state === selectedCustomCanvasState) {
       onDashboardRename?.(dashboard.id, newName);
     }
@@ -445,6 +406,13 @@ export default function Sidebar({
           : d
       );
       saveDashboardsToStorage(updated);
+      
+      // Notify parent about permissions update if this is the currently selected dashboard
+      const updatedDashboard = updated.find((d) => d.id === dashboard.id);
+      if (updatedDashboard && updatedDashboard.state === selectedCustomCanvasState) {
+        onPermissionsUpdate?.(updatedDashboard);
+      }
+      
       return updated;
     });
   };

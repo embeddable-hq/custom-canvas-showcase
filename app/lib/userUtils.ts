@@ -1,5 +1,5 @@
 import { Permission } from "../components/PermissionsModal";
-import { users, getAllUserIds, type UserId } from "../components/Sidebar";
+import { users, getAllUserIds, type UserId } from "../../utils/constants";
 
 /**
  * Converts a UserId to its corresponding email address
@@ -12,14 +12,14 @@ export const getEmailFromUserId = (userId: UserId): string => {
 
 /**
  * Creates default permissions object for all users
- * All users get "readonly" by default
+ * All users get "write" by default
  */
 export const createDefaultPermissions = (): Record<UserId, Permission> => {
   const allUserIds = getAllUserIds();
   const permissions: Record<UserId, Permission> = {} as Record<UserId, Permission>;
   
   allUserIds.forEach((userId) => {
-    permissions[userId] = "readonly";
+    permissions[userId] = "write";
   });
   
   return permissions;

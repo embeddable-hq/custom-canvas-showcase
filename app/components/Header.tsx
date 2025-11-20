@@ -3,7 +3,7 @@
 import { cn, classes } from '../lib/utils';
 import { spacing, borders, colors, components, button } from '../lib/tokens';
 import Image from 'next/image';
-import { users, type UserId } from './Sidebar';
+import { users, type UserId } from '../../utils/constants';
 import Dropdown from './Dropdown';
 import UserAvatar from './UserAvatar';
 import { documentationUrl, githubRepositoryUrl, contactEmail } from '../../utils/constants';

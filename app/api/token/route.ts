@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { EMBEDDABLE_ID, embeddableApiUrl } from "@/utils/constants";
+import { EMBEDDABLE_ID, embeddableApiUrl, TOKEN_EXPIRY_SECONDS } from "@/utils/constants";
 
 // Server-side API route to get security token
 // This keeps the API key secure and never exposes it to the client
 export async function POST(request: Request) {
-  const { customCanvasState, userEmail } = await request.json();
+  const { customCanvasState, userEmail, customCanvasReadOnly } = await request.json();
   if (!customCanvasState || !userEmail) {
     return NextResponse.json(
       { error: "customCanvasState and userEmail are required" },
@@ -44,7 +44,8 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         embeddableId: EMBEDDABLE_ID,     
         customCanvasState: customCanvasState,
-        expiryInSeconds: 60 * 60 * 24 * 7,
+        customCanvasReadOnly: customCanvasReadOnly ?? false,
+        expiryInSeconds: TOKEN_EXPIRY_SECONDS,
         securityContext: {},
         user: userEmail,
       }),

@@ -4,7 +4,8 @@ import { cn, classes } from "../lib/utils";
 import { spacing } from "../lib/tokens";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
-import { DashboardItem, type TDashboardItem, type UserId, users } from "./Sidebar";
+import { DashboardItem, type TDashboardItem } from "./Sidebar";
+import { users, type UserId } from "../../utils/constants";
 
 interface MobileNavigationProps {
   navItems: string[];
