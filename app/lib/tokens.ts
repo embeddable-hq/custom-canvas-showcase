@@ -224,7 +224,7 @@ export const sidebar = {
     "lg:w-auto lg:max-w-full lg:min-w-[var(--min-width-sidenav,15.5rem)]",
     "md:h-full",
     "md:p-0 md:pl-[var(--app-spacing,1rem)]",
-    "lg:col-span-3 [@media(min-width:1400px)]:col-span-2",
+    "lg:col-span-3",
   ].join(" "),
   translateOpen: "translate-x-0 lg:translate-x-0",
   translateClosed: "-translate-x-full lg:translate-x-0",

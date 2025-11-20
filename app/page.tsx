@@ -117,7 +117,7 @@ export default function Home() {
             "flex flex-col min-h-0",
             "min-h-[31.25rem]",
             "gap-2.5",
-            "col-span-4 md:col-span-8 lg:col-span-9 [@media(min-width:1400px)]:col-span-10"
+            "col-span-4 md:col-span-8 lg:col-span-9"
           )}
           style={{
             paddingLeft: "var(--app-spacing, 1rem)",
