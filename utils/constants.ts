@@ -4,3 +4,6 @@ export const embeddableBaseUrl = process.env.NEXT_PUBLIC_EMBEDDABLE_BASE_URL;
 export const embeddableScriptUrl = process.env.NEXT_PUBLIC_EMBEDDABLE_SCRIPT_URL;
 export const userEmail = process.env.NEXT_PUBLIC_USER_EMAIL; 
 export const EMBEDDABLE_ID = process.env.EMBEDDABLE_ID;
+export const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+export const githubRepositoryUrl = process.env.NEXT_PUBLIC_GITHUB_REPOSITORY_URL;
+export const documentationUrl = process.env.NEXT_PUBLIC_DOCUMENTATION_URL;

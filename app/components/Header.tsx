@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { users, type UserId } from './Sidebar';
 import Dropdown from './Dropdown';
 import UserAvatar from './UserAvatar';
+import { documentationUrl, githubRepositoryUrl, contactEmail } from '../../utils/constants';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -24,9 +25,21 @@ export default function Header({
 }: HeaderProps) {
 
   const helpItems = [
-    { label: "Documentation" },
-    { label: "Support" },
-    { label: "Feedback" },
+    { 
+      label: "Docs", 
+      href: documentationUrl,
+      icon: "/docs.svg"
+    },
+    { 
+      label: "Github", 
+      href: githubRepositoryUrl,
+      icon: "/github.svg"
+    },
+    { 
+      label: "Contact", 
+      href: contactEmail ? `mailto:${contactEmail}` : undefined,
+      icon: "/contact.svg"
+    },
   ];
 
   return (

@@ -14,7 +14,7 @@ interface MobileNavigationProps {
   selectedUserId: UserId;
   onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   onUserSelect: (id: UserId) => void;
-  helpItems: { label: string }[];
+  helpItems: { label: string; href?: string; icon?: string }[];
   onEditPermissions?: (dashboard: TDashboardItem) => void;
   onRename?: (dashboard: TDashboardItem) => void;
   onDelete?: (dashboard: TDashboardItem) => void;
@@ -94,8 +94,8 @@ export default function MobileNavigation({
         </div>
       </div>
 
-      {/* Embeddables list */}
-      <div className="mb-6">
+      {/* Embeddables list - scrollable */}
+      <div className="flex-1 overflow-y-auto min-h-0">
         <div className="flex flex-col gap-2 w-full">
           {dashboards.map((dashboard) => (
             <DashboardItem
@@ -112,8 +112,8 @@ export default function MobileNavigation({
         </div>
       </div>
 
-      {/* Help dropdown */}
-      <div className="mt-auto" style={{ paddingBottom: 'var(--app-spacing, 1rem)' }}>
+      {/* Help dropdown - fixed at bottom */}
+      <div className="flex-shrink-0" style={{ paddingBottom: 'var(--app-spacing, 1rem)' }}>
         <Dropdown
           trigger={
             <button

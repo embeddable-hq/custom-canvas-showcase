@@ -12,6 +12,7 @@ import PermissionsModal, { type Permission } from "./PermissionsModal";
 import RenameModal from "./RenameModal";
 import { getEmailFromUserId, createDefaultPermissions, ensureCompletePermissions } from "../lib/userUtils";
 import CloseButton from "./CloseButton";
+import { documentationUrl, githubRepositoryUrl, contactEmail } from "../../utils/constants";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -449,9 +450,21 @@ export default function Sidebar({
   };
 
   const helpItems = [
-    { label: "Documentation" },
-    { label: "Support" },
-    { label: "Feedback" },
+    { 
+      label: "Docs", 
+      href: documentationUrl,
+      icon: "/docs.svg"
+    },
+    { 
+      label: "Github", 
+      href: githubRepositoryUrl,
+      icon: "/github.svg"
+    },
+    { 
+      label: "Contact", 
+      href: contactEmail ? `mailto:${contactEmail}` : undefined,
+      icon: "/contact.svg"
+    },
   ];
 
   return (

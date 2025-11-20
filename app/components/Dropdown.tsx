@@ -8,6 +8,7 @@ import Image from "next/image";
 interface DropdownItem {
   label: string;
   onClick?: () => void;
+  href?: string;
   icon?: string;
   className?: string;
   separator?: boolean;
@@ -84,26 +85,52 @@ export default function Dropdown({
               {item.separator && index > 0 && (
                 <div className="border-t border-black/10" />
               )}
-              <button
-                className={cn(classes.dropdownItem, "flex items-center gap-3")}
-                onClick={() => {
-                  item.onClick?.();
-                  setIsOpen(false);
-                }}
-              >
-                {item.icon && (
-                  <Image
-                    src={item.icon}
-                    alt=""
-                    width={16}
-                    height={16}
-                    className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
-                  />
-                )}
-                <span className={cn(classes.dropdownItemText, item.className)}>
-                  {item.label}
-                </span>
-              </button>
+              {item.href ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(classes.dropdownItem, "flex items-center gap-3")}
+                  onClick={() => {
+                    item.onClick?.();
+                    setIsOpen(false);
+                  }}
+                >
+                  {item.icon && (
+                    <Image
+                      src={item.icon}
+                      alt=""
+                      width={16}
+                      height={16}
+                      className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
+                    />
+                  )}
+                  <span className={cn(classes.dropdownItemText, item.className)}>
+                    {item.label}
+                  </span>
+                </a>
+              ) : (
+                <button
+                  className={cn(classes.dropdownItem, "flex items-center gap-3")}
+                  onClick={() => {
+                    item.onClick?.();
+                    setIsOpen(false);
+                  }}
+                >
+                  {item.icon && (
+                    <Image
+                      src={item.icon}
+                      alt=""
+                      width={16}
+                      height={16}
+                      className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
+                    />
+                  )}
+                  <span className={cn(classes.dropdownItemText, item.className)}>
+                    {item.label}
+                  </span>
+                </button>
+              )}
             </div>
           ))}
         </div>
