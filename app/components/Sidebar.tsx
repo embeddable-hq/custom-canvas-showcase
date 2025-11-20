@@ -242,6 +242,7 @@ export default function Sidebar({
   const [renameModalOpen, setRenameModalOpen] = useState(false);
   const [selectedDashboardForRename, setSelectedDashboardForRename] =
     useState<TDashboardItem | null>(null);
+  const [pendingPermissionsUpdate, setPendingPermissionsUpdate] = useState<TDashboardItem | null>(null);
 
   // Load dashboards from storage on mount
   useEffect(() => {
@@ -406,16 +407,27 @@ export default function Sidebar({
           : d
       );
       saveDashboardsToStorage(updated);
-      
-      // Notify parent about permissions update if this is the currently selected dashboard
-      const updatedDashboard = updated.find((d) => d.id === dashboard.id);
-      if (updatedDashboard && updatedDashboard.state === selectedCustomCanvasState) {
-        onPermissionsUpdate?.(updatedDashboard);
-      }
-      
       return updated;
     });
+
+    // Store the updated dashboard to notify parent after render
+    const updatedDashboard: TDashboardItem = {
+      ...dashboard,
+      permissions: completePermissions,
+      users: usersWithAccess,
+    };
+    if (updatedDashboard.state === selectedCustomCanvasState) {
+      setPendingPermissionsUpdate(updatedDashboard);
+    }
   };
+
+  // Notify parent about permissions update after render completes
+  useEffect(() => {
+    if (pendingPermissionsUpdate) {
+      onPermissionsUpdate?.(pendingPermissionsUpdate);
+      setPendingPermissionsUpdate(null);
+    }
+  }, [pendingPermissionsUpdate, onPermissionsUpdate]);
 
   const helpItems = [
     { 
