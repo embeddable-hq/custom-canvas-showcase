@@ -59,3 +59,30 @@ export const users: User[] = [
 export const getAllUserIds = (): UserId[] => {
   return users.map((user) => user.id);
 };
+
+// Help menu items
+export interface HelpItem {
+  label: string;
+  href?: string;
+  icon?: string;
+}
+
+export const getHelpItems = (): HelpItem[] => {
+  return [
+    { 
+      label: "Docs", 
+      href: documentationUrl,
+      icon: "/docs.svg"
+    },
+    { 
+      label: "Github", 
+      href: githubRepositoryUrl,
+      icon: "/github.svg"
+    },
+    { 
+      label: "Contact", 
+      href: contactEmail ? `mailto:${contactEmail}` : undefined,
+      icon: "/contact.svg"
+    },
+  ];
+};

@@ -3,10 +3,9 @@
 import { cn, classes } from '../lib/utils';
 import { spacing, borders, colors, components, button } from '../lib/tokens';
 import Image from 'next/image';
-import { users, type UserId } from '../../utils/constants';
+import { users, type UserId, getHelpItems } from '../../utils/constants';
 import Dropdown from './Dropdown';
 import UserAvatar from './UserAvatar';
-import { documentationUrl, githubRepositoryUrl, contactEmail } from '../../utils/constants';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -24,23 +23,7 @@ export default function Header({
   onUserSelect,
 }: HeaderProps) {
 
-  const helpItems = [
-    { 
-      label: "Docs", 
-      href: documentationUrl,
-      icon: "/docs.svg"
-    },
-    { 
-      label: "Github", 
-      href: githubRepositoryUrl,
-      icon: "/github.svg"
-    },
-    { 
-      label: "Contact", 
-      href: contactEmail ? `mailto:${contactEmail}` : undefined,
-      icon: "/contact.svg"
-    },
-  ];
+  const helpItems = getHelpItems();
 
   return (
     <header className={cn(
