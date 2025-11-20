@@ -473,6 +473,8 @@ export default function Sidebar({
         <div
           className="lg:hidden fixed inset-0 bg-black/50 z-[999]"
           onClick={onClose}
+          role="presentation"
+          aria-hidden="true"
         ></div>
       )}
       <aside
@@ -481,6 +483,7 @@ export default function Sidebar({
           classes.borderDivider,
           isOpen ? sidebarTokens.translateOpen : sidebarTokens.translateClosed
         )}
+        aria-label="Navigation sidebar"
       >
         {/* Mobile close button */}
         <div className="lg:hidden w-full flex justify-end">
