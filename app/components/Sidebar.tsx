@@ -162,7 +162,7 @@ export function DashboardItem({
       {itemUsers.length > 0 && (
         <div className="flex items-center gap-1">
           {itemUsers.slice(0, 3).map((user) => (
-            <UserAvatar key={user.id} user={user} showTooltip={true} />
+            <UserAvatar key={user.id} user={user} showTooltip={false} />
           ))}
         </div>
       )}
