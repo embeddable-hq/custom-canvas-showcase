@@ -16,6 +16,7 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedDashboard, setSelectedDashboard] = useState<TDashboardItem | null>(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
+  const [selectedTheme, setSelectedTheme] = useState<string>("red");
   // Initialize with first user from users array
   const [selectedUserId, setSelectedUserId] = useState<UserId>(
     users[0]?.id || "denis"
@@ -82,6 +83,10 @@ export default function Home() {
     [selectedDashboard]
   );
 
+  const handleThemeChange = useCallback((theme: string) => {
+    setSelectedTheme(theme);
+  }, []);
+
   // Handle user selection - update email to trigger new token fetch
   const handleUserSelect = useCallback(
     (userId: UserId) => {
@@ -147,6 +152,8 @@ export default function Home() {
               <DashboardHeader
                 dashboardName={selectedDashboardName}
                 onNameChange={handleNameChangeFromHeader}
+                selectedTheme={selectedTheme}
+                onThemeChange={handleThemeChange}
               />
             )}
             <div className="flex-1">
@@ -156,6 +163,7 @@ export default function Home() {
                 customCanvasReadOnly={
                   selectedDashboard?.permissions?.[selectedUserId] === "readonly"
                 }
+                theme={selectedTheme}
               />
             </div>
           </div>

@@ -8,9 +8,10 @@ interface EmbeddableRendererProps {
   customCanvasState: string;
   userEmail: string;
   customCanvasReadOnly?: boolean;
+  theme?: string;
 }
 
-export default function EmbeddableRenderer({ customCanvasState, userEmail, customCanvasReadOnly }: EmbeddableRendererProps) {
+export default function EmbeddableRenderer({ customCanvasState, userEmail, customCanvasReadOnly, theme }: EmbeddableRendererProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
   const [token, tokenError, tokenLoading] = useGetToken(
     customCanvasState || "",
@@ -37,10 +38,13 @@ export default function EmbeddableRenderer({ customCanvasState, userEmail, custo
   if (!token) {
     return null;
   }
-
   return (
     <div className="w-full h-full">
-      <em-beddable base-url={embeddableBaseUrl || ""} token={token} />
+      <em-beddable 
+        base-url={embeddableBaseUrl || ""} 
+        token={token} 
+        client-context={theme ? JSON.stringify({ theme }) : undefined}
+      />
     </div>
   );
 }

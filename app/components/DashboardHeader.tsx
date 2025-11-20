@@ -9,11 +9,15 @@ import Select from "./Select";
 interface DashboardHeaderProps {
   dashboardName: string;
   onNameChange: (name: string) => void;
+  selectedTheme: string;
+  onThemeChange: (theme: string) => void;
 }
 
 export default function DashboardHeader({
   dashboardName,
   onNameChange,
+  selectedTheme,
+  onThemeChange,
 }: DashboardHeaderProps) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState<string>("");
@@ -89,14 +93,11 @@ export default function DashboardHeader({
             height: 16,
           }}
           className="w-full"
-          defaultValue=""
+          value={selectedTheme}
+          onChange={(e) => onThemeChange(e.target.value)}
         >
-          <option value="" disabled>
-            Change theme
-          </option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="auto">Auto</option>
+          <option value="red">Red</option>
+          <option value="green">Green</option>
         </Select>
       </div>
     </div>
