@@ -178,14 +178,19 @@ export function DashboardItem({
           {
             label: "Edit permissions",
             onClick: () => onEditPermissions?.(dashboard),
+            icon: "/user.svg",
           },
           {
             label: "Rename",
             onClick: () => onRename?.(dashboard),
+            icon: "/edit.svg",
+            separator: true,
           },
           {
             label: "Delete",
             onClick: () => onDelete?.(dashboard),
+            icon: "/trash.svg",
+            className: "text-[var(--em-sem-status-error-text,#BC1010)]",
           },
         ]}
         position="bottom"

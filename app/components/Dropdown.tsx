@@ -2,10 +2,15 @@
 
 import { useState, useEffect, useRef, ReactNode } from "react";
 import { cn, classes } from "../lib/utils";
+import { sizes } from "../lib/tokens";
+import Image from "next/image";
 
 interface DropdownItem {
   label: string;
   onClick?: () => void;
+  icon?: string;
+  className?: string;
+  separator?: boolean;
 }
 
 interface DropdownProps {
@@ -75,16 +80,31 @@ export default function Dropdown({
           )}
         >
           {items.map((item, index) => (
-            <button
-              key={index}
-              className={classes.dropdownItem}
-              onClick={() => {
-                item.onClick?.();
-                setIsOpen(false);
-              }}
-            >
-              {item.label}
-            </button>
+            <div key={index}>
+              {item.separator && index > 0 && (
+                <div className="border-t border-black/10" />
+              )}
+              <button
+                className={cn(classes.dropdownItem, "flex items-center gap-3")}
+                onClick={() => {
+                  item.onClick?.();
+                  setIsOpen(false);
+                }}
+              >
+                {item.icon && (
+                  <Image
+                    src={item.icon}
+                    alt=""
+                    width={16}
+                    height={16}
+                    className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
+                  />
+                )}
+                <span className={cn(classes.dropdownItemText, item.className)}>
+                  {item.label}
+                </span>
+              </button>
+            </div>
           ))}
         </div>
       )}

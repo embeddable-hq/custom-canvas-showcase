@@ -150,6 +150,12 @@ export const sizes = {
     minWidth: "min-w-[var(--min-width-sidenav,15.5rem)]",
     height: "h-[var(--sidebar-height,66.0625rem)]",
   },
+  dropdown: {
+    icon: {
+      width: "w-[var(--em-sl-item-icon-size-width,1rem)]",
+      height: "h-[var(--em-sl-item-icon-size-height,1rem)]",
+    },
+  },
 } as const;
 
 // Select Menu Tokens (complete sets)

@@ -27,6 +27,7 @@ export const classes = {
   sidebarLink: 'px-2 py-3 text-[var(--foreground)] no-underline rounded-md transition-all hover:bg-black/5',
   
   // Dropdown item
-  dropdownItem: 'block w-full px-4 py-3 text-left bg-transparent border-none text-[var(--foreground)] cursor-pointer transition-colors hover:bg-black/5',
+  dropdownItem: 'block w-full px-4 py-3 text-left bg-transparent border-none cursor-pointer transition-colors hover:bg-black/5',
+  dropdownItemText: 'text-[var(--em-sl-item-left-label-text-default,#212129)] font-[var(--em-sl-item-left-label-font-family,Inter)] text-[length:var(--em-sl-item-left-label-font-size,0.75rem)] font-normal font-[weight:var(--em-sl-item-left-label-font-weight,500)] leading-[var(--em-sl-item-left-label-font-line-height,0.875rem)]',
 };
 
