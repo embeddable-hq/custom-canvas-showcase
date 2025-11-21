@@ -163,6 +163,14 @@ export function DashboardItem({
     </div>
   );
 }
+  // Generate a unique random ID
+  const generateRandomId = (): string => {
+    // Use crypto.randomUUID if available (modern browsers), otherwise fallback to timestamp + random
+    if (typeof crypto !== "undefined" && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  };
 
 
 const getDefaultDashboards = (): TDashboardItem[] => {
@@ -175,7 +183,7 @@ const getDefaultDashboards = (): TDashboardItem[] => {
       id: "1",
       name: "Dashboard 1",
       users: allUserIds,
-      state: "customCanvasState1",
+      state: `customCanvasState${generateRandomId()}`,
       permissions: defaultPermissions,
     },
   ];
@@ -319,14 +327,7 @@ export default function Sidebar({
       (userId) => defaultPermissions[userId] !== "no access"
     );
 
-    // Generate a unique random ID
-    const generateRandomId = (): string => {
-      // Use crypto.randomUUID if available (modern browsers), otherwise fallback to timestamp + random
-      if (typeof crypto !== "undefined" && crypto.randomUUID) {
-        return crypto.randomUUID();
-      }
-      return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-    };
+  
 
     const randomId = generateRandomId();
     const dashboardNumber = dashboards.length + 1;
