@@ -42,7 +42,7 @@ export default function DesktopNavigation({
           />
         ))}
       </div>
-      <div className="mt-2">
+      <div>
         <button
           onClick={onAddDashboard}
           className={cn(
