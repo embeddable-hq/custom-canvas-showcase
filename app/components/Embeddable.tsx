@@ -22,7 +22,6 @@ export default function Embeddable({
 }: EmbeddableProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
   const [isComponentsLoaded, setIsComponentsLoaded] = useState(false);
-  const [embeddableError, setEmbeddableError] = useState<{ errorDetail?: string } | null>(null);
   const [token, tokenError, tokenLoading] = useGetToken(
     customCanvasState || "",
     userEmail || "",
@@ -35,20 +34,14 @@ export default function Embeddable({
     setIsComponentsLoaded(true);
   }
 
-  function handleEmbeddableError(e: Event) {
-    const customEvent = e as CustomEvent;
-    setEmbeddableError(customEvent.detail);
-  }
 
   useEffect(() => {
     const element = ref.current;
     if (element) {
       element.addEventListener("componentsLoad", handleComponentsLoad);
-      element.addEventListener("embeddableError", handleEmbeddableError);
 
       return () => {
         element.removeEventListener("componentsLoad", handleComponentsLoad);
-        element.removeEventListener("embeddableError", handleEmbeddableError);
       };
     }
   }, [token]);
@@ -57,11 +50,11 @@ export default function Embeddable({
     return null;
   }
 
-  if (tokenError || scriptError || !!embeddableError) {
+  if (tokenError || scriptError) {
     return (
       <div className="flex items-center justify-center h-full min-h-[400px]">
         <div className="text-red-500">
-          Error: {tokenError || scriptError || embeddableError?.errorDetail}
+          Error: {tokenError || scriptError}
         </div>
       </div>
     );
