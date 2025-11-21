@@ -31,6 +31,7 @@
   /* EM Semantic Colors */
   --em-sem-chart-color-1: #FF5400;
   --em-sem-text-default: #212129;
+  --em-sem-text-muted: #5C5C66;
   --em-sem-background-subtle: #E4E4EA;
   
   /* EM Button Colors */
@@ -39,10 +40,13 @@
   /* EM Typography */
   --em-font-size-md: 1rem;
   --em-font-size-sm: 0.875rem;
+  --em-font-size-xs: 0.75rem;
   --em-font-weight-bold: 700;
   --em-font-weight-medium: 500;
+  --em-font-weight-regular: 400;
   --em-line-height-l: 1.1875rem;
   --em-line-height-md: 1rem;
+  --em-line-height-sm: 0.875rem;
   
   /* EM Action Icon */
   --em-action-icon-size-width: 1.25rem;

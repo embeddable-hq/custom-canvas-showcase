@@ -170,9 +170,9 @@ export default function Home() {
           <footer
             className={cn(
               "flex justify-center items-center self-stretch mt-auto",
-              "gap-2.5 text-sm",
+              "gap-2.5",
               classes.appPadding,
-              classes.textForegroundMuted
+              classes.footerText
             )}
           >
             © 2025 TMD Technology Limited. All rights reserved.
