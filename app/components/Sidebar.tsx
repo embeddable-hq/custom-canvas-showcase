@@ -177,13 +177,13 @@ const getDefaultDashboards = (): TDashboardItem[] => {
   const allUserIds = getAllUserIds();
   const defaultPermissions = createDefaultPermissions();
   // All users get write access by default
-  
+  const randomId = generateRandomId();
   return [
     {
-      id: "1",
+      id: randomId,
       name: "Dashboard 1",
       users: allUserIds,
-      state: `customCanvasState${generateRandomId()}`,
+      state: `customCanvasState${randomId}`,
       permissions: defaultPermissions,
     },
   ];
