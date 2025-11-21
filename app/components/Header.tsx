@@ -62,7 +62,7 @@ export default function Header({
                   )
                 : cn(
                     classes.textForeground,
-                    'disabled:cursor-default px-4 py-2'
+                    'cursor-not-allowed px-4 py-2'
                   )
             )}
             disabled={item !== selectedNavItem}
