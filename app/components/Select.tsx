@@ -2,6 +2,7 @@
 
 import { cn } from "../lib/utils";
 import { selectMenu } from "../lib/tokens";
+import { spacing } from "../lib/tokens";
 import Image from "next/image";
 import { ReactNode } from "react";
 
@@ -39,6 +40,18 @@ export default function Select({
     : "w-full";
   const selectClassName = className?.replace(/\bw-[^\s]*/g, "").trim();
 
+  // Build select classes - use paddingLeftIcon when no icon, paddingLeft when icon exists
+  const selectClasses = selectMenu.className
+    .split(" ")
+    .map((cls) => {
+      // Replace paddingLeft with appropriate padding based on icon presence
+      if (cls === spacing.select.paddingLeft) {
+        return leftIcon ? spacing.select.paddingLeft : spacing.select.paddingLeftIcon;
+      }
+      return cls;
+    })
+    .join(" ");
+
   return (
     <div className={cn("relative", widthClass)}>
       {leftIcon && (
@@ -51,7 +64,7 @@ export default function Select({
         />
       )}
       <select
-        className={cn(selectMenu.className, selectClassName, "w-full")}
+        className={cn(selectClasses, selectClassName, "w-full")}
         style={selectStyle}
         {...props}
       >
