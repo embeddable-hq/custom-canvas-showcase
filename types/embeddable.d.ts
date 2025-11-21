@@ -1,13 +1,13 @@
-import 'react';
+import "react";
 
-declare module 'react' {
+declare module "react" {
   namespace JSX {
     interface IntrinsicElements {
-      'em-beddable': {
-        'base-url': string;
+      "em-beddable": {
+        "base-url": string;
         token: string;
+        "client-context"?: string;
       };
     }
   }
 }
-

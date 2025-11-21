@@ -7,7 +7,7 @@ import Sidebar, {
   type TDashboardItem,
 } from "./components/Sidebar";
 import { users, type UserId } from "../utils/constants";
-import EmbeddableRenderer from "./components/EmbeddableRenderer";
+import Embeddable from "./components/Embeddable";
 import DashboardHeader from "./components/DashboardHeader";
 import { getEmailFromUserId } from "./lib/userUtils";
 import { NAV_ITEMS, DEFAULT_SELECTED_NAV_ITEM } from "../utils/constants";
@@ -157,7 +157,7 @@ export default function Home() {
               />
             )}
             <div className="flex-1">
-              <EmbeddableRenderer
+              <Embeddable
                 customCanvasState={selectedCustomCanvasState}
                 userEmail={selectedUserEmail}
                 customCanvasReadOnly={
