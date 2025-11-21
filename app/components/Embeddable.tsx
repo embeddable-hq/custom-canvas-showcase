@@ -3,8 +3,9 @@
 import useGetToken from "../hooks/useGetToken";
 import useEmbeddableScriptTag from "../hooks/useEmbeddableScriptTag";
 import { embeddableBaseUrl } from "@/utils/constants";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { cn } from "../lib/utils";
 
 interface EmbeddableProps {
   customCanvasState: string;
@@ -20,6 +21,8 @@ export default function Embeddable({
   theme,
 }: EmbeddableProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
+  const [isComponentsLoaded, setIsComponentsLoaded] = useState(false);
+  const [embeddableError, setEmbeddableError] = useState(null);
   const [token, tokenError, tokenLoading] = useGetToken(
     customCanvasState || "",
     userEmail || "",
@@ -28,31 +31,55 @@ export default function Embeddable({
   const ref = useRef<HTMLElement>(null);
 
   // COMMENTED OUT FOR NOW SINCE IT SHOULD BE FIXED FROM THE WEBCOMPONENTS REPO TO SUUPORT THE COMPONENTS CYCLE FOR CUSTOM CANVAS
-  // function handleComponentsLoad(e: Event) {
-  //   // console.log('event from onComponentsLoad --------------------', e);
-  // }
+  function handleComponentsLoad() {
+    setIsComponentsLoaded(true);
+  }
 
-  // function handleEmbeddableError(e: Event) {
-  //   const customEvent = e as CustomEvent;
-  //   console.error('embeddable error', customEvent.detail);
-  // }
+  function handleEmbeddableError(e: Event) {
+    const customEvent = e as CustomEvent;
+    setEmbeddableError(customEvent.detail);
+  }
 
-  // useEffect(() => {
-  //   const element = ref.current;
-  //   if (element) {
-  //     element.addEventListener('componentsLoad', handleComponentsLoad);
-  //     element.addEventListener('embeddableError', handleEmbeddableError);
+  useEffect(() => {
+    const element = ref.current;
+    if (element) {
+      element.addEventListener("componentsLoad", handleComponentsLoad);
+      element.addEventListener("embeddableError", handleEmbeddableError);
 
-  //     return () => {
-  //       element.removeEventListener('componentsLoad', handleComponentsLoad);
-  //       element.removeEventListener('embeddableError', handleEmbeddableError);
-  //     };
-  //   }
-  // }, [token]);
+      return () => {
+        element.removeEventListener("componentsLoad", handleComponentsLoad);
+        element.removeEventListener("embeddableError", handleEmbeddableError);
+      };
+    }
+  }, [token]);
 
-  if (tokenLoading || !isScriptLoaded) {
+  if (!token) {
+    return null;
+  }
+
+  if (tokenError || scriptError || !!embeddableError) {
     return (
-      <div className="flex flex-col items-center justify-center h-full min-h-[400px] gap-4">
+      <div className="flex items-center justify-center h-full min-h-[400px]">
+        <div className="text-red-500">
+          Error: {tokenError || scriptError || embeddableError}
+        </div>
+      </div>
+    );
+  }
+
+  const clientContext = theme ? { theme } : {};
+
+  return (
+    <div className="relative w-full h-full min-h-[400px]">
+      {/* Loading overlay - shown when components are not loaded */}
+      <div
+        className={cn(
+          "absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white z-10",
+          isComponentsLoaded || !tokenLoading || isScriptLoaded
+            ? "hidden"
+            : "flex"
+        )}
+      >
         <Image
           src="/spinner.svg"
           alt="Loading"
@@ -62,31 +89,23 @@ export default function Embeddable({
         />
         <div className="text-gray-500">Loading your dashboard</div>
       </div>
-    );
-  }
 
-  if (tokenError || scriptError) {
-    return (
-      <div className="flex items-center justify-center h-full min-h-[400px]">
-        <div className="text-red-500">Error: {tokenError || scriptError}</div>
+      {/* Embeddable - always in DOM, visible when components are loaded */}
+      <div
+        className={cn(
+          "w-full h-full",
+          isComponentsLoaded || !tokenLoading || isScriptLoaded
+            ? "block"
+            : "hidden"
+        )}
+      >
+        {React.createElement("em-beddable", {
+          ref,
+          token,
+          "base-url": embeddableBaseUrl || "",
+          "client-context": JSON.stringify(clientContext),
+        })}
       </div>
-    );
-  }
-
-  if (!token) {
-    return null;
-  }
-
-  const clientContext = theme ? { theme } : {};
-
-  return (
-    <div className="w-full h-full">
-      {React.createElement("em-beddable", {
-        ref,
-        token,
-        "base-url": embeddableBaseUrl || "",
-        "client-context": JSON.stringify(clientContext),
-      })}
     </div>
   );
 }
