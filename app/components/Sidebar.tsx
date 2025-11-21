@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { cn, classes } from "../lib/utils";
-import { spacing, borders, colors, components, sidebar as sidebarTokens } from "../lib/tokens";
+import { spacing, borders, colors, sidebar as sidebarTokens } from "../lib/tokens";
 import { IconDotsVertical } from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
@@ -118,8 +118,7 @@ export function DashboardItem({
       )}
     >
       <div
-        className={cn("no-underline flex-1")}
-        style={components.textStyles.small}
+        className={cn("no-underline flex-1", classes.textSmall)}
       >
         {dashboard.name}
       </div>

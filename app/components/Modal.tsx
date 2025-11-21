@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { cn } from "../lib/utils";
+import { cn, classes } from "../lib/utils";
 import { spacing, borders, colors, typography } from "../lib/tokens";
 import CloseButton from "./CloseButton";
 
@@ -40,13 +40,9 @@ export default function Modal({
           "flex flex-col items-start",
           "w-[24.5rem]",
           "rounded-[var(--em-form-border-radius-default,2rem)]",
-          "bg-[var(--em-sem-background-neutral,#FFF)]"
+          "bg-[var(--em-sem-background-neutral,#FFF)]",
+          classes.modalContent
         )}
-        style={{
-          padding: "var(--app-spacing, 1rem)",
-          gap: "var(--app-spacing, 1rem)",
-          boxShadow: "var(--em-core-shadow-default-position-x, 0) var(--em-core-shadow-default-position-y, 1px) var(--em-core-shadow-default-blur, 40px) var(--em-core-shadow-default-spread, 0) var(--em-core-shadow-default-color, rgba(33, 33, 41, 0.25))",
-        }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

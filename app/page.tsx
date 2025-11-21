@@ -101,12 +101,7 @@ export default function Home() {
   );
   return (
     <div
-      className="flex flex-col min-h-screen w-full bg-white"
-      style={{
-        maxWidth: "var(--page-max-width, 100%)",
-        marginLeft: "auto",
-        marginRight: "auto",
-      }}
+      className={cn("flex flex-col min-h-screen w-full bg-white", classes.pageContainer)}
     >
       <Header
         onMenuClick={toggleSidebar}
@@ -116,11 +111,7 @@ export default function Home() {
         onUserSelect={handleUserSelect}
       />
       <div
-        className="grid flex-1 min-w-0 min-h-0"
-        style={{
-          gridTemplateColumns: "repeat(var(--grid-columns, 4), minmax(0, 1fr))",
-          gap: "var(--app-spacing)",
-        }}
+        className={cn("grid flex-1 min-w-0 min-h-0", classes.gridContainer)}
       >
         <Sidebar
           selectedCustomCanvasState={selectedCustomCanvasState}
@@ -140,12 +131,9 @@ export default function Home() {
             "flex flex-col min-h-0",
             "min-h-[31.25rem]",
             "gap-2.5",
-            "col-span-4 md:col-span-8 lg:col-span-9"
+            "col-span-4 md:col-span-8 lg:col-span-9",
+            classes.mainPadding
           )}
-          style={{
-            paddingLeft: "var(--app-spacing, 1rem)",
-            paddingRight: "var(--app-spacing, 1rem)",
-          }}
         >
           <div className="flex-1 flex flex-col w-full">
             {selectedCustomCanvasState && (

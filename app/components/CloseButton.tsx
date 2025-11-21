@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "../lib/utils";
+import { cn, classes } from "../lib/utils";
 import { IconX } from "@tabler/icons-react";
 
 interface CloseButtonProps {
@@ -27,17 +27,9 @@ export default function CloseButton({
         "flex-shrink-0",
         "cursor-pointer",
         "border-none",
+        classes.closeButton,
         className
       )}
-      style={{
-        width: "var(--em-action-icon-size-width, 1.25rem)",
-        height: "var(--em-action-icon-size-height, 2rem)",
-        padding:
-          "var(--em-action-icon-padding-top-bottom, 0.5rem) var(--em-action-icon-padding-left-right, 0.125rem)",
-        borderRadius:
-          "var(--em-action-icon-border-radius-default, 624.9375rem)",
-        background: "var(--em-action-icon-background-default, #EDEDF1)",
-      }}
     >
       <IconX className="w-4 h-4" />
     </button>

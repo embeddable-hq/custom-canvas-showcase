@@ -46,6 +46,7 @@ export default function MobileNavigation({
                 "text-left",
                 "text-sm font-[var(--em-font-weight-medium,500)] leading-4",
                 "p-[var(--em-core-spacing-300,0.75rem)]",
+                classes.mobileNavText,
                 item === selectedItem
                   ? cn(
                       "flex items-center",
@@ -57,9 +58,6 @@ export default function MobileNavigation({
                     )
                   : cn("text-[var(--em-sem-text-default,#212129)]")
               )}
-              style={{
-                fontFamily: "Inter, sans-serif",
-              }}
             >
               {item}
             </button>
@@ -114,7 +112,7 @@ export default function MobileNavigation({
       </div>
 
       {/* Help dropdown - fixed at bottom */}
-      <div className="flex-shrink-0" style={{ paddingBottom: 'var(--app-spacing, 1rem)' }}>
+      <div className={cn("flex-shrink-0", classes.appPaddingY)}>
         <Dropdown
           trigger={
             <button

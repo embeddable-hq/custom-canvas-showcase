@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "../lib/utils";
-import { components } from "../lib/tokens";
+import { cn, classes } from "../lib/utils";
 import Image from "next/image";
 import Select from "./Select";
 
@@ -55,12 +54,11 @@ export default function DashboardHeader({
             onBlur={handleNameBlur}
             onKeyDown={handleNameKeyDown}
             autoFocus
-            className="outline-none border-none bg-transparent"
-            style={components.textStyles.medium}
+            className={cn("outline-none border-none bg-transparent", classes.textMedium)}
           />
         ) : (
           <>
-            <h2 style={components.textStyles.medium}>
+            <h2 className={classes.textMedium}>
               {dashboardName || "Dashboard"}
             </h2>
             <button
@@ -75,15 +73,7 @@ export default function DashboardHeader({
       </div>
       {/* Dropdown - always right-aligned */}
       <div 
-        className="flex md:ml-auto"
-        style={{
-          height: 'var(--em-sl-menu-size-height-default, 2.5rem)',
-          minWidth: 'var(--em-select-menu-size-width-min-width, 4rem)',
-          maxWidth: 'var(--em-select-menu-size-width-max-width, 25rem)',
-          padding: 'var(--em-sl-menu-padding-default, 0.75rem)',
-          alignItems: 'center',
-          flex: '1 0 0',
-        }}
+        className={cn("flex md:ml-auto", classes.selectMenuWrapper)}
       >
         <Select
           leftIcon={{

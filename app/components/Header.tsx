@@ -1,7 +1,7 @@
 'use client';
 
 import { cn, classes } from '../lib/utils';
-import { spacing, borders, colors, components, button } from '../lib/tokens';
+import { spacing, borders, colors, button } from '../lib/tokens';
 import Image from 'next/image';
 import { users, type UserId, getHelpItems } from '../../utils/constants';
 import Dropdown from './Dropdown';
@@ -29,16 +29,14 @@ export default function Header({
     <header className={cn(
       'flex justify-between items-center self-stretch w-full',
       'bg-white',
-      classes.borderDivider
+      classes.borderDivider,
+      classes.appPadding
     )}
-    style={{
-      padding: 'var(--app-spacing, 1rem)',
-    }}
     >
       <div className="flex items-center">
         <div className={cn("flex items-center justify-center", spacing.core.mdGap)}>
          <Image src="/logo.svg" alt="Logo" width={24} height={24} />
-         <span style={components.textStyles.medium}>
+         <span className={classes.textMedium}>
            Shopocalypse
          </span>
         </div>
@@ -49,7 +47,6 @@ export default function Header({
           <button
             key={item}
             className={cn(
-              'text-sm font-medium',
               item === selectedNavItem
                 ? cn(
                     'flex items-center',
@@ -61,7 +58,7 @@ export default function Header({
                     'text-white font-semibold'
                   )
                 : cn(
-                    classes.textForeground,
+                    classes.navMenuTextUnselected,
                     'cursor-not-allowed px-4 py-2'
                   )
             )}
@@ -77,7 +74,7 @@ export default function Header({
           'hidden lg:flex',
           'justify-between items-center self-stretch',
         )}>
-          <span className={cn('text-sm', classes.textForegroundMuted)}>
+          <span className={classes.switchUsersText}>
             Switch users:
           </span>
           <div className="flex pl-1 items-center justify-center">

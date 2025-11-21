@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { cn } from "../lib/utils";
+import { cn, classes } from "../lib/utils";
 import { type User } from "../../utils/constants";
 
 interface UserAvatarProps {
@@ -36,10 +36,10 @@ export default function UserAvatar({
             "flex justify-center items-center",
             "cursor-pointer",
             "inline-flex",
-            "transition-colors"
+            "transition-colors",
+            classes.userAvatarLarge
           )}
           style={{
-            padding: "var(--em-core-spacing-100, 0.25rem)",
             borderRadius: borderRadius,
             border: `var(--em-core-border-width-050, 2px) solid ${
               selected ? user.textColor : "transparent"
@@ -60,22 +60,18 @@ export default function UserAvatar({
         >
           {/* Inner circle: fixed size with background */}
           <div
-            className="flex justify-center items-center"
+            className={cn("flex justify-center items-center", classes.userAvatarInner)}
             style={{
-              width: "var(--em-core-size-600, 1.5rem)",
-              height: "var(--em-core-size-600, 1.5rem)",
               background: user.bgColor,
               borderRadius: borderRadius,
             }}
           >
             <span
-              className="text-center font-bold"
+              className={cn("text-center font-bold", classes.userAvatarText)}
               style={{
                 color: user.textColor,
-                fontFamily: "Inter, sans-serif",
                 fontSize: fontSize,
                 fontStyle: "normal",
-                fontWeight: "var(--em-font-weight-bold, 700)",
                 lineHeight: lineHeight,
               }}
             >
@@ -97,13 +93,11 @@ export default function UserAvatar({
           onMouseLeave={() => setShowPopup(false)}
         >
           <span
-            className="text-center font-bold"
+            className={cn("text-center font-bold", classes.userAvatarText)}
             style={{
               color: user.textColor,
-              fontFamily: "Inter, sans-serif",
               fontSize: fontSize,
               fontStyle: "normal",
-              fontWeight: "var(--em-font-weight-bold, 700)",
               lineHeight: lineHeight,
             }}
           >
