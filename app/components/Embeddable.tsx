@@ -3,7 +3,7 @@
 import useGetToken from "../hooks/useGetToken";
 import useEmbeddableScriptTag from "../hooks/useEmbeddableScriptTag";
 import { embeddableBaseUrl } from "@/utils/constants";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { cn } from "../lib/utils";
 
@@ -21,19 +21,26 @@ export default function Embeddable({
   theme,
 }: EmbeddableProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
-  const [isComponentsLoaded, setIsComponentsLoaded] = useState(false);
+  const [loadedKey, setLoadedKey] = useState<string>("");
   const [token, tokenError, tokenLoading] = useGetToken(
-    customCanvasState || "",
-    userEmail || "",
+    customCanvasState,
+    userEmail,
     customCanvasReadOnly
   );
   const ref = useRef<HTMLElement>(null);
 
-  // COMMENTED OUT FOR NOW SINCE IT SHOULD BE FIXED FROM THE WEBCOMPONENTS REPO TO SUUPORT THE COMPONENTS CYCLE FOR CUSTOM CANVAS
-  function handleComponentsLoad() {
-    setIsComponentsLoaded(true);
-  }
+  // Create a unique key based on token and theme to force recreation
+  const embeddableKey = useMemo(
+    () => `${token}-${theme || "default"}`,
+    [token, theme]
+  );
 
+  // Derive loading state from whether current key matches loaded key
+  const isComponentsLoaded = loadedKey === embeddableKey;
+
+  const handleComponentsLoad = useCallback(() => {
+    setLoadedKey(embeddableKey);
+  }, [embeddableKey]);
 
   useEffect(() => {
     const element = ref.current;
@@ -44,7 +51,7 @@ export default function Embeddable({
         element.removeEventListener("componentsLoad", handleComponentsLoad);
       };
     }
-  }, [token]);
+  }, [handleComponentsLoad]);
 
   if (!token) {
     return null;
@@ -85,6 +92,7 @@ export default function Embeddable({
 
       {/* Embeddable - always in DOM, visible when components are loaded */}
       <div
+        key={embeddableKey}
         className={cn(
           "w-full h-full",
           isComponentsLoaded || !tokenLoading || isScriptLoaded
