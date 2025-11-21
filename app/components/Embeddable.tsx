@@ -4,6 +4,7 @@ import useGetToken from "../hooks/useGetToken";
 import useEmbeddableScriptTag from "../hooks/useEmbeddableScriptTag";
 import { embeddableBaseUrl } from "@/utils/constants";
 import React, { useRef } from "react";
+import Image from "next/image";
 
 interface EmbeddableProps {
   customCanvasState: string;
@@ -51,8 +52,15 @@ export default function Embeddable({
 
   if (tokenLoading || !isScriptLoaded) {
     return (
-      <div className="flex items-center justify-center h-full min-h-[400px]">
-        <div className="text-gray-500">Loading embeddable...</div>
+      <div className="flex flex-col items-center justify-center h-full min-h-[400px] gap-4">
+        <Image
+          src="/spinner.svg"
+          alt="Loading"
+          width={24}
+          height={24}
+          className="animate-spin"
+        />
+        <div className="text-gray-500">Loading your dashboard</div>
       </div>
     );
   }
