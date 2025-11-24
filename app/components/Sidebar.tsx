@@ -445,12 +445,13 @@ export default function Sidebar({
         className={cn(
           sidebarTokens.base,
           classes.borderDivider,
-          isOpen ? sidebarTokens.translateOpen : sidebarTokens.translateClosed
+          isOpen ? sidebarTokens.translateOpen : sidebarTokens.translateClosed,
+          "overflow-hidden lg:overflow-visible"
         )}
         aria-label="Navigation sidebar"
       >
         {/* Mobile close button */}
-        <div className="lg:hidden w-full flex justify-end">
+        <div className="lg:hidden w-full flex justify-end flex-shrink-0">
           <CloseButton onClick={onClose} ariaLabel="Close menu" />
         </div>
 
@@ -476,25 +477,27 @@ export default function Sidebar({
 
         {/* Mobile Navigation */}
         {isLoading ? (
-          <div className={cn("lg:hidden flex flex-col h-full w-full", spacing.appGap)}>
+          <div className={cn("lg:hidden flex flex-col flex-1 min-h-0 w-full", spacing.appGap)}>
             <div className="flex items-center justify-center p-4">
               <div className="text-sm text-gray-500">Loading dashboards...</div>
             </div>
           </div>
         ) : (
-          <MobileNavigation
-            navItems={navItems}
-            selectedItem={selectedNavItem}
-            dashboards={filteredDashboards}
-            selectedCustomCanvasState={selectedCustomCanvasState}
-            selectedUserId={selectedUserId}
-            onDashboardSelect={onDashboardSelect}
-            onUserSelect={onUserSelect}
-            helpItems={helpItems}
-            onEditPermissions={handleEditPermissions}
-            onRename={handleRename}
-            onDelete={handleDelete}
-          />
+          <div className="lg:hidden flex-1 min-h-0">
+            <MobileNavigation
+              navItems={navItems}
+              selectedItem={selectedNavItem}
+              dashboards={filteredDashboards}
+              selectedCustomCanvasState={selectedCustomCanvasState}
+              selectedUserId={selectedUserId}
+              onDashboardSelect={onDashboardSelect}
+              onUserSelect={onUserSelect}
+              helpItems={helpItems}
+              onEditPermissions={handleEditPermissions}
+              onRename={handleRename}
+              onDelete={handleDelete}
+            />
+          </div>
         )}
       </aside>
 

@@ -101,7 +101,12 @@ export default function Home() {
   );
   return (
     <div
-      className={cn("flex flex-col min-h-screen w-full bg-white", classes.pageContainer)}
+      className={cn(
+        "grid min-h-screen w-full bg-white min-w-0",
+        classes.pageContainer,
+        classes.gridContainer,
+        "grid-rows-[auto_1fr]"
+      )}
     >
       <Header
         onMenuClick={toggleSidebar}
@@ -109,64 +114,61 @@ export default function Home() {
         selectedNavItem={selectedNavItem}
         selectedUserId={selectedUserId}
         onUserSelect={handleUserSelect}
+        className="col-span-full"
       />
-      <div
-        className={cn("grid flex-1 min-w-0 min-h-0", classes.gridContainer)}
+      <Sidebar
+        selectedCustomCanvasState={selectedCustomCanvasState}
+        isOpen={sidebarOpen}
+        onClose={closeSidebar}
+        navItems={navItems}
+        selectedNavItem={selectedNavItem}
+        onDashboardSelect={handleSelectDashboard}
+        selectedUserId={selectedUserId}
+        onUserSelect={handleUserSelect}
+        onDashboardRename={handleDashboardRename}
+        onUpdateDashboardName={sidebarUpdateNameRef}
+        onPermissionsUpdate={handlePermissionsUpdate}
+      />
+      <main
+        className={cn(
+          "flex flex-col min-h-0",
+          "min-h-[31.25rem]",
+          "gap-2.5",
+          "col-span-4 md:col-span-8 lg:col-span-9",
+          classes.mainPadding
+        )}
       >
-        <Sidebar
-          selectedCustomCanvasState={selectedCustomCanvasState}
-          isOpen={sidebarOpen}
-          onClose={closeSidebar}
-          navItems={navItems}
-          selectedNavItem={selectedNavItem}
-          onDashboardSelect={handleSelectDashboard}
-          selectedUserId={selectedUserId}
-          onUserSelect={handleUserSelect}
-          onDashboardRename={handleDashboardRename}
-          onUpdateDashboardName={sidebarUpdateNameRef}
-          onPermissionsUpdate={handlePermissionsUpdate}
-        />
-        <main
+        <div className="flex-1 flex flex-col w-full">
+          {selectedCustomCanvasState && (
+            <DashboardHeader
+              dashboardName={selectedDashboardName}
+              onNameChange={handleNameChangeFromHeader}
+              selectedTheme={selectedTheme}
+              onThemeChange={handleThemeChange}
+            />
+          )}
+          <div className="flex-1">
+            <Embeddable
+              customCanvasState={selectedCustomCanvasState}
+              userEmail={selectedUserEmail}
+              customCanvasReadOnly={
+                selectedDashboard?.permissions?.[selectedUserId] === "readonly"
+              }
+              theme={selectedTheme}
+            />
+          </div>
+        </div>
+        <footer
           className={cn(
-            "flex flex-col min-h-0",
-            "min-h-[31.25rem]",
+            "flex justify-center items-center self-stretch mt-auto",
             "gap-2.5",
-            "col-span-4 md:col-span-8 lg:col-span-9",
-            classes.mainPadding
+            classes.appPadding,
+            classes.footerText
           )}
         >
-          <div className="flex-1 flex flex-col w-full">
-            {selectedCustomCanvasState && (
-              <DashboardHeader
-                dashboardName={selectedDashboardName}
-                onNameChange={handleNameChangeFromHeader}
-                selectedTheme={selectedTheme}
-                onThemeChange={handleThemeChange}
-              />
-            )}
-            <div className="flex-1">
-              <Embeddable
-                customCanvasState={selectedCustomCanvasState}
-                userEmail={selectedUserEmail}
-                customCanvasReadOnly={
-                  selectedDashboard?.permissions?.[selectedUserId] === "readonly"
-                }
-                theme={selectedTheme}
-              />
-            </div>
-          </div>
-          <footer
-            className={cn(
-              "flex justify-center items-center self-stretch mt-auto",
-              "gap-2.5",
-              classes.appPadding,
-              classes.footerText
-            )}
-          >
-            © 2025 TMD Technology Limited. All rights reserved.
-          </footer>
-        </main>
-      </div>
+          © 2025 TMD Technology Limited. All rights reserved.
+        </footer>
+      </main>
     </div>
   );
 }

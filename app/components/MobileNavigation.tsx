@@ -36,9 +36,9 @@ export default function MobileNavigation({
 }: MobileNavigationProps) {
 
   return (
-    <div className={cn("lg:hidden flex flex-col h-full w-full", spacing.appGap)}>
+    <div className={cn("lg:hidden flex flex-col h-full w-full min-h-0", spacing.appGap)}>
       {/* Header navigation */}
-      <nav className={cn("flex flex-col w-full", spacing.appGap)}>
+      <nav className={cn("flex flex-col w-full flex-shrink-0", spacing.appGap)}>
         {navItems.map((item) => (
           <div key={item} className="w-full">
             <button
@@ -68,7 +68,7 @@ export default function MobileNavigation({
       {/* Switch users section */}
       <div
         className={cn(
-          "flex",
+          "flex flex-shrink-0",
           "gap-[var(--em-core-spacing-200,0.5rem)] items-center"
         )}
       >

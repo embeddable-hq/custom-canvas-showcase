@@ -13,6 +13,7 @@ interface HeaderProps {
   selectedNavItem: string;
   selectedUserId: UserId;
   onUserSelect: (userId: UserId) => void;
+  className?: string;
 }
 
 export default function Header({ 
@@ -21,6 +22,7 @@ export default function Header({
   selectedNavItem,
   selectedUserId,
   onUserSelect,
+  className,
 }: HeaderProps) {
 
   const helpItems = getHelpItems();
@@ -30,7 +32,8 @@ export default function Header({
       'flex justify-between items-center self-stretch w-full',
       'bg-white',
       classes.borderDivider,
-      classes.appPadding
+      classes.appPadding,
+      className
     )}
     >
       <div className="flex items-center">
