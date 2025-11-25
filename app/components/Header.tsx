@@ -45,7 +45,7 @@ export default function Header({
         </div>
       </div>
 
-      <nav className="hidden lg:flex gap-6 items-center">
+      <nav className="hidden lg:flex items-center">
         {navItems.map((item) => (
           <button
             key={item}
@@ -58,11 +58,12 @@ export default function Header({
                     'gap-2.5',
                     borders.radius.sm,
                     colors.semantic.chartColor1,
-                    'text-white font-semibold'
+                    classes.navMenuTextSelected
                   )
                 : cn(
                     classes.navMenuTextUnselected,
-                    'cursor-not-allowed px-4 py-2'
+                    'cursor-not-allowed',
+                    spacing.core.md
                   )
             )}
             disabled={item !== selectedNavItem}

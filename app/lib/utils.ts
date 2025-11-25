@@ -37,6 +37,14 @@ const typography = {
   alignCenter: 'text-center',
 };
 
+// Navigation menu text base (common styles)
+const navMenuTextBase = cn(
+  typography.fontInter,
+  typography.sizeSm,
+  typography.weightMedium,
+  typography.lineHeightMd
+);
+
 // Common class patterns
 export const classes = {
   // Text colors
@@ -84,10 +92,12 @@ export const classes = {
   // Navigation menu text (unselected)
   navMenuTextUnselected: cn(
     typography.colorDefault,
-    typography.fontInter,
-    typography.sizeSm,
-    typography.weightMedium,
-    typography.lineHeightMd
+    navMenuTextBase
+  ),
+  // Navigation menu text (selected)
+  navMenuTextSelected: cn(
+    'text-[var(--em-sem-text-inverted,#FFF)]',
+    navMenuTextBase
   ),
   
   // Text styles (matching components.textStyles)
