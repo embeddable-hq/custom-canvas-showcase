@@ -58,9 +58,15 @@ export const classes = {
   // Borders
   borderDivider: "border-black/10",
 
+  // Dropdown container
+  dropdownContainer:
+    "inline-flex flex-col items-start gap-[var(--em-select-menu-list-gap-default,0.5rem)] p-[var(--em-padding-200,0.5rem)] rounded-[var(--em-border-radius-300,0.75rem)] bg-[var(--em-sl-menu-background-color-default,#FFF)] shadow-[var(--em-core-shadow-default-position-x,0)_var(--em-core-shadow-default-position-y,1px)_var(--em-core-shadow-default-blur,40px)_var(--em-core-shadow-default-spread,0)_var(--em-core-shadow-default-color,rgba(33,33,41,0.25))]",
+  // Dropdown separator
+  dropdownSeparator:
+    "border-t border-black/10 w-full",
   // Dropdown item
   dropdownItem:
-    "block w-full px-4 py-3 text-left bg-transparent border-none cursor-pointer transition-colors hover:bg-black/5",
+    "flex w-full items-center h-[var(--em-sl-item-size-height,2rem)] p-[var(--em-sl-item-padding-default,0.5rem)] rounded-[var(--em-sl-item-border-radius-default,0.5rem)] text-left bg-transparent border-none cursor-pointer transition-colors hover:bg-[var(--em-sl-item-background-color-hover,#F7F7F8)]",
   dropdownItemText: cn(
     typography.colorDropdown,
     typography.fontInter,

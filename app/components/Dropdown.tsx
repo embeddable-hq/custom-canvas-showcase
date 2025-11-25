@@ -11,12 +11,13 @@ interface DropdownItem {
   href?: string;
   icon?: string;
   className?: string;
-  separator?: boolean;
 }
+
+type DropdownElement = DropdownItem | { type: "separator" };
 
 interface DropdownProps {
   trigger: ReactNode;
-  items: DropdownItem[];
+  items: DropdownElement[];
   position?: "top" | "bottom" | "left" | "right";
   align?: "start" | "end" | "center";
   className?: string;
@@ -76,21 +77,27 @@ export default function Dropdown({
             "absolute",
             positionClasses[position],
             alignClasses[align],
-            "bg-white border rounded-lg shadow-lg min-w-[10rem] z-[1000] overflow-hidden",
-            classes.borderDivider
+            "min-w-[10rem] z-[1000] overflow-hidden",
+            classes.dropdownContainer
           )}
         >
-          {items.map((item, index) => (
-            <div key={index}>
-              {item.separator && index > 0 && (
-                <div className="border-t border-black/10" />
-              )}
-              {item.href ? (
+          {items.map((element, index) => {
+            if ('type' in element && element.type === 'separator') {
+              return (
+                <div key={`separator-${index}`} className={classes.dropdownSeparator} />
+              );
+            }
+            
+            const item = element as DropdownItem;
+            
+            if (item.href) {
+              return (
                 <a
+                  key={`item-${index}`}
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={cn(classes.dropdownItem, "flex items-center gap-3")}
+                  className={cn(classes.dropdownItem, "flex items-center gap-3 w-full")}
                   onClick={() => {
                     item.onClick?.();
                     setIsOpen(false);
@@ -109,30 +116,33 @@ export default function Dropdown({
                     {item.label}
                   </span>
                 </a>
-              ) : (
-                <button
-                  className={cn(classes.dropdownItem, "flex items-center gap-3")}
-                  onClick={() => {
-                    item.onClick?.();
-                    setIsOpen(false);
-                  }}
-                >
-                  {item.icon && (
-                    <Image
-                      src={item.icon}
-                      alt=""
-                      width={16}
-                      height={16}
-                      className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
-                    />
-                  )}
-                  <span className={cn(classes.dropdownItemText, item.className)}>
-                    {item.label}
-                  </span>
-                </button>
-              )}
-            </div>
-          ))}
+              );
+            }
+            
+            return (
+              <button
+                key={item.label}
+                className={cn(classes.dropdownItem, "flex items-center gap-3 w-full")}
+                onClick={() => {
+                  item.onClick?.();
+                  setIsOpen(false);
+                }}
+              >
+                {item.icon && (
+                  <Image
+                    src={item.icon}
+                    alt=""
+                    width={16}
+                    height={16}
+                    className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
+                  />
+                )}
+                <span className={cn(classes.dropdownItemText, item.className)}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>

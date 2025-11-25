@@ -144,11 +144,11 @@ export function DashboardItem({
             onClick: () => onEditPermissions?.(dashboard),
             icon: "/user.svg",
           },
+          { type: "separator" },
           {
             label: "Rename",
             onClick: () => onRename?.(dashboard),
             icon: "/edit.svg",
-            separator: true,
           },
           {
             label: "Delete",
