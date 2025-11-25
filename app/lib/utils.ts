@@ -128,7 +128,7 @@ export const classes = {
 
   // Select menu wrapper
   selectMenuWrapper:
-    "h-[var(--em-sl-menu-size-height-default,2.5rem)] min-w-[var(--em-select-menu-size-width-min-width,4rem)] max-w-[var(--em-select-menu-size-width-max-width,25rem)] p-[var(--em-sl-menu-padding-default,0.75rem)] items-center flex-[1_0_0]",
+    "h-[var(--em-sl-menu-size-height-default,2.5rem)] min-w-[var(--em-select-menu-size-width-min-width,4rem)] max-w-[var(--em-select-menu-size-width-max-width,25rem)] items-center flex-[1_0_0]",
 
   // Close button
   closeButton:

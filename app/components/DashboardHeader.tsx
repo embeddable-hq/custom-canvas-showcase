@@ -71,9 +71,8 @@ export default function DashboardHeader({
           </>
         )}
       </div>
-      {/* Dropdown - always right-aligned */}
       <div 
-        className={cn("flex md:ml-auto", classes.selectMenuWrapper)}
+        className={cn("flex md:ml-auto w-full md:w-1/2 lg:w-[calc((2/12)/(9/12)*100%)] flex-none", classes.selectMenuWrapper)}
       >
         <Select
           leftIcon={{
