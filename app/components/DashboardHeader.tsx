@@ -43,7 +43,7 @@ export default function DashboardHeader({
   };
 
   return (
-    <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full mb-4 gap-2 md:gap-0">
+    <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full gap-2 md:gap-0">
       {/* Dashboard name - hidden on mobile and tablet, only show on desktop */}
       <div className="hidden lg:flex items-center gap-2">
         {isEditingName ? (
