@@ -69,7 +69,7 @@ export default function Dropdown({
 
   return (
     <div className={cn("relative", className)} ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
+      <div className="flex" onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
       {isOpen && (
         <div
           className={cn(
