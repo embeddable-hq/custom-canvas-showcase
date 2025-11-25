@@ -102,7 +102,7 @@ export default function Home() {
   return (
     <div
       className={cn(
-        "grid min-h-screen w-full bg-white min-w-0",
+        "grid min-h-screen min-w-0 w-full bg-white",
         classes.pageContainer,
         classes.gridContainer,
         "grid-rows-[auto_1fr]"
