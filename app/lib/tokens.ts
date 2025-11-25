@@ -223,7 +223,7 @@ export const sidebar = {
     spacing.sidebar.gap,
     sizes.sidebar.width,
     sizes.sidebar.minWidth,
-    "h-screen lg:h-auto",
+    "h-[100dvh] lg:h-auto", // Use dynamic viewport height for mobile to account for browser UI
     spacing.sidebar.paddingMobile,
     "fixed lg:relative left-0 top-0 z-[1000]",
     "shadow-lg lg:shadow-none",
@@ -231,6 +231,7 @@ export const sidebar = {
     "md:p-[var(--app-spacing,1rem)]",
     "lg:p-0 lg:pl-[var(--app-spacing,1rem)]",
     "lg:col-span-3",
+    "pb-[env(safe-area-inset-bottom)]", // Add safe area padding for mobile browsers
   ].join(" "),
   translateOpen: "translate-x-0 lg:translate-x-0",
   translateClosed: "-translate-x-full lg:translate-x-0",

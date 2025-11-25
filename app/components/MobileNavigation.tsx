@@ -112,7 +112,7 @@ export default function MobileNavigation({
       </div>
 
       {/* Help dropdown - fixed at bottom */}
-      <div className={cn("flex-shrink-0", classes.appPaddingY)}>
+      <div className={cn("flex-shrink-0", classes.appPaddingY, "pb-[max(1rem,env(safe-area-inset-bottom))]")}>
         <Dropdown
           trigger={
             <button
