@@ -10,6 +10,15 @@ import Modal from "./Modal";
 
 export type Permission = "write" | "readonly" | "no access";
 
+const PERMISSION_OPTIONS = [
+  { value: "write" as const, label: "Write" },
+  { value: "readonly" as const, label: "Readonly" },
+  { value: "no access" as const, label: "No access" },
+] as const;
+
+const PERMISSIONS_MODAL_TITLE = "Edit Permissions";
+const PERMISSIONS_MODAL_BUTTON_TEXT = "Save";
+
 interface PermissionsModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -59,8 +68,8 @@ export default function PermissionsModal({
     <Modal
       isOpen={isOpen && !!dashboard}
       onClose={onClose}
-      title="Edit Permissions"
-      buttonText="Save"
+      title={PERMISSIONS_MODAL_TITLE}
+      buttonText={PERMISSIONS_MODAL_BUTTON_TEXT}
       onButtonClick={handleSave}
     >
       {users.map((user) => (
@@ -83,9 +92,11 @@ export default function PermissionsModal({
             }
             className="w-full"
           >
-            <option value="write">Write</option>
-            <option value="readonly">Readonly</option>
-            <option value="no access">No access</option>
+            {PERMISSION_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </Select>
         </div>
       ))}

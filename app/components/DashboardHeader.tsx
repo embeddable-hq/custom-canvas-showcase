@@ -12,6 +12,19 @@ interface DashboardHeaderProps {
   onThemeChange: (theme: string) => void;
 }
 
+// Constants moved outside component to prevent recreation on every render
+const THEME_SELECT_LEFT_ICON = {
+  src: "/pen.svg",
+  alt: "edit",
+  width: 16,
+  height: 16,
+} as const;
+
+const THEME_OPTIONS = [
+  { value: "red", label: "Red" },
+  { value: "green", label: "Green" },
+] as const;
+
 export default function DashboardHeader({
   dashboardName,
   onNameChange,
@@ -75,18 +88,16 @@ export default function DashboardHeader({
         className={cn("flex md:ml-auto w-full md:w-1/2 lg:w-[calc((2/12)/(9/12)*100%)] flex-none", classes.selectMenuWrapper)}
       >
         <Select
-          leftIcon={{
-            src: "/pen.svg",
-            alt: "",
-            width: 16,
-            height: 16,
-          }}
+          leftIcon={THEME_SELECT_LEFT_ICON}
           className="w-full"
           value={selectedTheme}
           onChange={(e) => onThemeChange(e.target.value)}
         >
-          <option value="red">Red</option>
-          <option value="green">Green</option>
+          {THEME_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </Select>
       </div>
     </div>

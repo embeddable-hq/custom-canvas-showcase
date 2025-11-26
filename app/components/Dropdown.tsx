@@ -23,6 +23,22 @@ interface DropdownProps {
   className?: string;
 }
 
+// Constants moved outside component to prevent recreation on every render
+const POSITION_CLASSES = {
+  top: "bottom-[calc(100%+0.5rem)]",
+  bottom: "top-[calc(100%+0.5rem)]",
+  left: "right-[calc(100%+0.5rem)]",
+  right: "left-[calc(100%+0.5rem)]",
+} as const;
+
+const getAlignClasses = (positionTopOrBottom: boolean) => ({
+  start: positionTopOrBottom ? "left-0" : "top-0",
+  end: positionTopOrBottom ? "right-0" : "bottom-0",
+  center: positionTopOrBottom
+    ? "left-1/2 -translate-x-1/2"
+    : "top-1/2 -translate-y-1/2",
+});
+
 export default function Dropdown({
   trigger,
   items,
@@ -52,21 +68,8 @@ export default function Dropdown({
     };
   }, [isOpen]);
 
-  const positionClasses = {
-    top: "bottom-[calc(100%+0.5rem)]",
-    bottom: "top-[calc(100%+0.5rem)]",
-    left: "right-[calc(100%+0.5rem)]",
-    right: "left-[calc(100%+0.5rem)]",
-  };
-
-  const alignClasses = {
-    start: position === "top" || position === "bottom" ? "left-0" : "top-0",
-    end: position === "top" || position === "bottom" ? "right-0" : "bottom-0",
-    center:
-      position === "top" || position === "bottom"
-        ? "left-1/2 -translate-x-1/2"
-        : "top-1/2 -translate-y-1/2",
-  };
+  const positionTopOrBottom = position === "top" || position === "bottom";
+  const alignClasses = getAlignClasses(positionTopOrBottom);
 
   return (
     <div className={cn("relative", className)} ref={dropdownRef}>
@@ -75,7 +78,7 @@ export default function Dropdown({
         <div
           className={cn(
             "absolute",
-            positionClasses[position],
+            POSITION_CLASSES[position],
             alignClasses[align],
             "min-w-[10rem] z-[1000] overflow-hidden",
             classes.dropdownContainer

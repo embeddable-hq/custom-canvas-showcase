@@ -13,6 +13,10 @@ interface RenameModalProps {
   onSave: (dashboard: TDashboardItem, newName: string) => void;
 }
 
+const RENAME_MODAL_TITLE = "Rename Dashboard";
+const RENAME_MODAL_BUTTON_TEXT = "Rename Dashboard";
+const RENAME_MODAL_PLACEHOLDER = "Enter dashboard name";
+
 export default function RenameModal({
   isOpen,
   onClose,
@@ -46,8 +50,8 @@ export default function RenameModal({
     <Modal
       isOpen={isOpen && !!dashboard}
       onClose={onClose}
-      title="Rename Dashboard"
-      buttonText="Rename Dashboard"
+      title={RENAME_MODAL_TITLE}
+      buttonText={RENAME_MODAL_BUTTON_TEXT}
       onButtonClick={handleSave}
       buttonDisabled={!newName.trim() || newName.trim() === dashboard.name}
     >
@@ -64,7 +68,7 @@ export default function RenameModal({
           "focus:outline-none focus:ring-2 focus:ring-blue-500",
           "w-full"
         )}
-        placeholder="Enter dashboard name"
+        placeholder={RENAME_MODAL_PLACEHOLDER}
         autoFocus
       />
     </Modal>

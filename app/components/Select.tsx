@@ -17,6 +17,15 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   className?: string;
 }
 
+const SELECT_DROPDOWN_ICON = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`;
+
+const getSelectStyle = () => ({
+  ...selectMenu.style,
+  backgroundImage: SELECT_DROPDOWN_ICON,
+  backgroundSize: "12px 12px",
+  backgroundRepeat: "no-repeat",
+});
+
 /**
  * Reusable select component with consistent styling
  * Used in theme selector and permissions modal
@@ -27,12 +36,7 @@ export default function Select({
   className,
   ...props
 }: SelectProps) {
-  const selectStyle = {
-    ...selectMenu.style,
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-    backgroundSize: "12px 12px",
-    backgroundRepeat: "no-repeat",
-  };
+  const selectStyle = getSelectStyle();
 
   // Extract width classes from className to apply to wrapper
   const widthClass = className?.includes("w-") 
