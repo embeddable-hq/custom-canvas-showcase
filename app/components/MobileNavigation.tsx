@@ -1,7 +1,7 @@
 "use client";
 
 import { cn, classes } from "../lib/utils";
-import { spacing } from "../lib/tokens";
+import { spacing, borders, colors, typography } from "../lib/tokens";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
 import { DashboardItem, type TDashboardItem } from "./Sidebar";
@@ -44,19 +44,21 @@ export default function MobileNavigation({
             <button
               className={cn(
                 "text-left",
-                "text-sm font-[var(--em-font-weight-medium,500)] leading-4",
-                "p-[var(--em-core-spacing-300,0.75rem)]",
+                "text-sm leading-4",
+                typography.fontWeight.medium,
+                spacing.core.mdPadding,
                 classes.mobileNavText,
                 item === selectedItem
                   ? cn(
                       "flex items-center",
                       "h-6",
-                      "rounded-[var(--em-core-border-radius-200,0.5rem)]",
-                      "bg-[var(--em-sem-chart-color-1,#FF5400)]",
-                      "text-[var(--em-sem-text-inverted,#FFF)] font-semibold",
+                      borders.radius.sm,
+                      colors.semantic.chartColor1,
+                      colors.semantic.textInverted,
+                      "font-semibold",
                       "w-auto inline-flex"
                     )
-                  : cn("text-[var(--em-sem-text-default,#212129)]")
+                  : colors.semantic.textDefault
               )}
             >
               {item}
@@ -69,7 +71,8 @@ export default function MobileNavigation({
       <div
         className={cn(
           "flex flex-shrink-0",
-          "gap-[var(--em-core-spacing-200,0.5rem)] items-center"
+          spacing.core.smGap,
+          "items-center"
         )}
       >
         <span className={cn("text-sm pl-2", classes.textForegroundMuted)}>
@@ -117,7 +120,8 @@ export default function MobileNavigation({
           trigger={
             <button
               className={cn(
-                "w-10 h-10 rounded-full bg-[var(--em-btn-pr-background-default,#5C5C66)] text-white",
+                "w-10 h-10 rounded-full text-white",
+                colors.button.primaryBackground,
                 "flex items-center justify-center text-lg font-semibold",
                 "transition-transform hover:scale-105"
               )}

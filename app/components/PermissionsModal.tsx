@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "../lib/utils";
+import { colors } from "../lib/tokens";
 import { type TDashboardItem } from "./Sidebar";
 import { users, type UserId, getAllUserIds } from "../../utils/constants";
 import { createDefaultPermissions } from "../lib/userUtils";
@@ -77,7 +78,7 @@ export default function PermissionsModal({
           <span
             className={cn(
               "text-sm font-medium",
-              "text-[var(--foreground)]"
+              colors.foreground.text
             )}
           >
             {user.mail}

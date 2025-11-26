@@ -154,7 +154,7 @@ export function DashboardItem({
             label: "Delete",
             onClick: () => onDelete?.(dashboard),
             icon: "/trash.svg",
-            className: "text-[var(--em-sem-status-error-text,#BC1010)]",
+            className: colors.semantic.textError,
           },
         ]}
         position="bottom"

@@ -39,8 +39,8 @@ export default function Modal({
         className={cn(
           "flex flex-col items-start",
           "w-[24.5rem]",
-          "rounded-[var(--em-form-border-radius-default,2rem)]",
-          "bg-[var(--em-sem-background-neutral,#FFF)]",
+          borders.radius.form,
+          colors.semantic.backgroundNeutral,
           classes.modalContent
         )}
         onClick={(e) => e.stopPropagation()}
@@ -55,7 +55,7 @@ export default function Modal({
             className={cn(
               typography.fontSize.md,
               typography.fontWeight.bold,
-              "text-[var(--foreground)]"
+              colors.foreground.text
             )}
           >
             {title}

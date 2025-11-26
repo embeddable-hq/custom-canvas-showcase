@@ -58,10 +58,15 @@ export const typography = {
 // Color Tokens - Use Tailwind utilities from @theme
 export const colors = {
   semantic: {
-    textDefault: "text-default", // Now a simple utility! (or fallback to arbitrary)
+    textDefault: "text-default",
     textInverted: "text-inverted",
-    backgroundSubtle: "bg-[var(--em-sem-background-subtle,#E4E4EA)]", // Fallback to arbitrary value
-    chartColor1: "bg-[var(--em-sem-chart-color-1,#FF5400)]", // Fallback to arbitrary value
+    textError: "text-[var(--em-sem-status-error-text,#BC1010)]",
+    backgroundSubtle: "bg-[var(--em-sem-background-subtle,#E4E4EA)]",
+    backgroundNeutral: "bg-[var(--em-sem-background-neutral,#FFF)]",
+    chartColor1: "bg-[var(--em-sem-chart-color-1,#FF5400)]",
+  },
+  foreground: {
+    text: "text-[var(--foreground)]",
   },
   button: {
     primaryBackground: "bg-btn-primary",
@@ -82,8 +87,10 @@ export const spacing = {
     xs: "p-core-xs", // Or use: p-[var(--em-core-spacing-100,0.25rem)]
     sm: "gap-core-sm",
     md: "p-core-md", // Or use: p-[var(--em-core-spacing-300,0.75rem)]
+    mdPadding: "p-[var(--em-core-spacing-300,0.75rem)]",
     lg: "p-core-lg",
     mdGap: "gap-core-md",
+    smGap: "gap-[var(--em-core-spacing-200,0.5rem)]",
   },
   app: "p-[var(--app-spacing,1rem)]",
   appGap: "gap-[var(--app-spacing)]",
@@ -116,6 +123,7 @@ export const borders = {
     button: "rounded-[var(--em-btn-pr-border-radius-default,624.9375rem)]",
     select: "rounded-[var(--em-sl-menu-border-radius-default,0.5rem)]",
     actionIcon: "rounded-[var(--em-action-icon-border-radius-default,624.9375rem)]",
+    form: "rounded-[var(--em-form-border-radius-default,2rem)]",
   },
   width: {
     thin: "border-[var(--em-core-border-width-050,2px)]",
