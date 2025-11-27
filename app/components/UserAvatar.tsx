@@ -20,11 +20,11 @@ export default function UserAvatar({
   const [showPopup, setShowPopup] = useState(false);
 
   const isLarge = size === "large";
-  const innerSize = isLarge ? "var(--em-core-size-600, 1.5rem)" : "1rem";
+  const innerSize = isLarge ? "var(--so-core-size-600, 1.5rem)" : "1rem";
   const fontSize = isLarge ? "1.02rem" : "0.58331rem";
   const lineHeight = isLarge ? "1.17rem" : "unset";
   const borderRadius = isLarge
-    ? "var(--em-core-border-radius-500,624.9375rem)"
+    ? "var(--so-core-border-radius-500,624.9375rem)"
     : "416.625rem";
 
   return (
@@ -41,7 +41,7 @@ export default function UserAvatar({
           )}
           style={{
             borderRadius: borderRadius,
-            border: `var(--em-core-border-width-050, 2px) solid ${
+            border: `var(--so-core-border-width-050, 2px) solid ${
               selected ? user.textColor : "transparent"
             }`,
           }}

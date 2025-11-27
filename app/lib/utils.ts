@@ -11,28 +11,28 @@ const typography = {
   fontInterSans: "font-[Inter,sans-serif]",
 
   // Text colors
-  colorDefault: "text-[var(--em-sem-text-default,#212129)]",
-  colorMuted: "text-[var(--em-sem-text-muted,#5C5C66)]",
-  colorDropdown: "text-[var(--em-sl-item-left-label-text-default,#212129)]",
+  colorDefault: "text-[var(--so-sem-text-default,#212129)]",
+  colorMuted: "text-[var(--so-sem-text-muted,#5C5C66)]",
+  colorDropdown: "text-[var(--so-sl-item-left-label-text-default,#212129)]",
 
   // Font sizes
-  sizeXs: "text-[length:var(--em-font-size-xs,0.75rem)]",
-  sizeSm: "text-[length:var(--em-font-size-sm,0.875rem)]",
-  sizeMd: "text-[length:var(--em-font-size-md,1rem)]",
-  sizeDropdown: "text-[length:var(--em-sl-item-left-label-font-size,0.75rem)]",
+  sizeXs: "text-[length:var(--so-font-size-xs,0.75rem)]",
+  sizeSm: "text-[length:var(--so-font-size-sm,0.875rem)]",
+  sizeMd: "text-[length:var(--so-font-size-md,1rem)]",
+  sizeDropdown: "text-[length:var(--so-sl-item-left-label-font-size,0.75rem)]",
 
   // Font weights
-  weightRegular: "font-[weight:var(--em-font-weight-regular,400)]",
-  weightMedium: "font-[weight:var(--em-font-weight-medium,500)]",
-  weightBold: "font-[weight:var(--em-font-weight-bold,700)]",
-  weightDropdown: "font-[weight:var(--em-sl-item-left-label-font-weight,500)]",
+  weightRegular: "font-[weight:var(--so-font-weight-regular,400)]",
+  weightMedium: "font-[weight:var(--so-font-weight-medium,500)]",
+  weightBold: "font-[weight:var(--so-font-weight-bold,700)]",
+  weightDropdown: "font-[weight:var(--so-sl-item-left-label-font-weight,500)]",
 
   // Line heights
-  lineHeightSm: "leading-[var(--em-line-height-sm,0.875rem)]",
-  lineHeightMd: "leading-[var(--em-line-height-md,1rem)]",
-  lineHeightL: "leading-[var(--em-line-height-l,1.1875rem)]",
+  lineHeightSm: "leading-[var(--so-line-height-sm,0.875rem)]",
+  lineHeightMd: "leading-[var(--so-line-height-md,1rem)]",
+  lineHeightL: "leading-[var(--so-line-height-l,1.1875rem)]",
   lineHeightDropdown:
-    "leading-[var(--em-sl-item-left-label-font-line-height,0.875rem)]",
+    "leading-[var(--so-sl-item-left-label-font-line-height,0.875rem)]",
 
   // Text alignment
   alignCenter: "text-center",
@@ -60,13 +60,13 @@ export const classes = {
 
   // Dropdown container
   dropdownContainer:
-    "inline-flex flex-col items-start gap-[var(--em-select-menu-list-gap-default,0.5rem)] p-[var(--em-padding-200,0.5rem)] rounded-[var(--em-border-radius-300,0.75rem)] bg-[var(--em-sl-menu-background-color-default,#FFF)] shadow-[var(--em-core-shadow-default-position-x,0)_var(--em-core-shadow-default-position-y,1px)_var(--em-core-shadow-default-blur,40px)_var(--em-core-shadow-default-spread,0)_var(--em-core-shadow-default-color,rgba(33,33,41,0.25))]",
+    "inline-flex flex-col items-start gap-[var(--so-select-menu-list-gap-default,0.5rem)] p-[var(--so-padding-200,0.5rem)] rounded-[var(--so-border-radius-300,0.75rem)] bg-[var(--so-sl-menu-background-color-default,#FFF)] shadow-[var(--so-core-shadow-default-position-x,0)_var(--so-core-shadow-default-position-y,1px)_var(--so-core-shadow-default-blur,40px)_var(--so-core-shadow-default-spread,0)_var(--so-core-shadow-default-color,rgba(33,33,41,0.25))]",
   // Dropdown separator
   dropdownSeparator:
     "border-t border-black/10 w-full",
   // Dropdown item
   dropdownItem:
-    "flex w-full items-center h-[var(--em-sl-item-size-height,2rem)] p-[var(--em-sl-item-padding-default,0.5rem)] rounded-[var(--em-sl-item-border-radius-default,0.5rem)] text-left bg-transparent border-none cursor-pointer transition-colors hover:bg-[var(--em-sl-item-background-color-hover,#F7F7F8)]",
+    "flex w-full items-center h-[var(--so-sl-item-size-height,2rem)] p-[var(--so-sl-item-padding-default,0.5rem)] rounded-[var(--so-sl-item-border-radius-default,0.5rem)] text-left bg-transparent border-none cursor-pointer transition-colors hover:bg-[var(--so-sl-item-background-color-hover,#F7F7F8)]",
   dropdownItemText: cn(
     typography.colorDropdown,
     typography.fontInter,
@@ -100,7 +100,7 @@ export const classes = {
   navMenuTextUnselected: cn(typography.colorDefault, navMenuTextBase),
   // Navigation menu text (selected)
   navMenuTextSelected: cn(
-    "text-[var(--em-sem-text-inverted,#FFF)]",
+    "text-[var(--so-sem-text-inverted,#FFF)]",
     navMenuTextBase
   ),
 
@@ -128,24 +128,24 @@ export const classes = {
 
   // Select menu wrapper
   selectMenuWrapper:
-    "h-[var(--em-sl-menu-size-height-default,2.5rem)] min-w-[var(--em-select-menu-size-width-min-width,4rem)] max-w-[var(--em-select-menu-size-width-max-width,25rem)] items-center flex-[1_0_0]",
+    "h-[var(--so-sl-menu-size-height-default,2.5rem)] min-w-[var(--so-select-menu-size-width-min-width,4rem)] max-w-[var(--so-select-menu-size-width-max-width,25rem)] items-center flex-[1_0_0]",
 
   // Close button
   closeButton:
-    "w-[var(--em-action-icon-size-width,1.25rem)] h-[var(--em-action-icon-size-height,2rem)] py-[var(--em-action-icon-padding-top-bottom,0.5rem)] px-[var(--em-action-icon-padding-left-right,0.125rem)] rounded-[var(--em-action-icon-border-radius-default,624.9375rem)] bg-[var(--em-action-icon-background-default,#EDEDF1)]",
+    "w-[var(--so-action-icon-size-width,1.25rem)] h-[var(--so-action-icon-size-height,2rem)] py-[var(--so-action-icon-padding-top-bottom,0.5rem)] px-[var(--so-action-icon-padding-left-right,0.125rem)] rounded-[var(--so-action-icon-border-radius-default,624.9375rem)] bg-[var(--so-action-icon-background-default,#EDEDF1)]",
 
   // User avatar base (dynamic colors handled inline)
   userAvatarLarge:
-    "p-[var(--em-core-spacing-100,0.25rem)] rounded-[var(--em-core-border-radius-500,624.9375rem)]",
+    "p-[var(--so-core-spacing-100,0.25rem)] rounded-[var(--so-core-border-radius-500,624.9375rem)]",
   userAvatarInner:
-    "w-[var(--em-core-size-600,1.5rem)] h-[var(--em-core-size-600,1.5rem)] rounded-[var(--em-core-border-radius-500,624.9375rem)]",
+    "w-[var(--so-core-size-600,1.5rem)] h-[var(--so-core-size-600,1.5rem)] rounded-[var(--so-core-border-radius-500,624.9375rem)]",
   userAvatarText:
-    "font-[Inter,sans-serif] font-[weight:var(--em-font-weight-bold,700)]",
+    "font-[Inter,sans-serif] font-[weight:var(--so-font-weight-bold,700)]",
 
   // Mobile navigation text
   mobileNavText: "font-[Inter,sans-serif]",
 
   // Modal
   modalContent:
-    "p-[var(--app-spacing,1rem)] gap-[var(--app-spacing,1rem)] shadow-[var(--em-core-shadow-default-position-x,0)_var(--em-core-shadow-default-position-y,1px)_var(--em-core-shadow-default-blur,40px)_var(--em-core-shadow-default-spread,0)_var(--em-core-shadow-default-color,rgba(33,33,41,0.25))]",
+    "p-[var(--app-spacing,1rem)] gap-[var(--app-spacing,1rem)] shadow-[var(--so-core-shadow-default-position-x,0)_var(--so-core-shadow-default-position-y,1px)_var(--so-core-shadow-default-blur,40px)_var(--so-core-shadow-default-spread,0)_var(--so-core-shadow-default-color,rgba(33,33,41,0.25))]",
 };

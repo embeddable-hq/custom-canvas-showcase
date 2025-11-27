@@ -60,58 +60,58 @@ export const colors = {
   semantic: {
     textDefault: "text-default",
     textInverted: "text-inverted",
-    textError: "text-[var(--em-sem-status-error-text,#BC1010)]",
-    backgroundSubtle: "bg-[var(--em-sem-background-subtle,#E4E4EA)]",
-    backgroundNeutral: "bg-[var(--em-sem-background-neutral,#FFF)]",
-    chartColor1: "bg-[var(--em-sem-chart-color-1,#FF5400)]",
+    textError: "text-error",
+    backgroundSubtle: "bg-subtle",
+    backgroundNeutral: "bg-neutral",
+    chartColor1: "bg-chart-1",
   },
   foreground: {
-    text: "text-[var(--foreground)]",
+    text: "text-foreground",
   },
   button: {
     primaryBackground: "bg-btn-primary",
   },
   select: {
-    background: "bg-[var(--em-sl-menu-background-color-default,#FFF)]",
-    border: "border-[var(--em-sl-menu-border-color-default,#D2D2D5)]",
-    text: "text-[var(--em-sl-menu-label-text-default,#212129)]",
+    background: "bg-sl-menu-bg",
+    border: "border-sl-menu-border",
+    text: "text-sl-menu-text",
   },
   actionIcon: {
-    background: "bg-[var(--em-action-icon-background-default,#EDEDF1)]",
+    background: "bg-action-icon-bg",
   },
 } as const;
 
 // Spacing Tokens - Use from @theme where possible
 export const spacing = {
   core: {
-    xs: "p-core-xs", // Or use: p-[var(--em-core-spacing-100,0.25rem)]
+    xs: "p-core-xs",
     sm: "gap-core-sm",
-    md: "p-core-md", // Or use: p-[var(--em-core-spacing-300,0.75rem)]
-    mdPadding: "p-[var(--em-core-spacing-300,0.75rem)]",
+    md: "p-core-md",
+    mdPadding: "p-core-md",
     lg: "p-core-lg",
     mdGap: "gap-core-md",
-    smGap: "gap-[var(--em-core-spacing-200,0.5rem)]",
+    smGap: "gap-core-sm",
   },
-  app: "p-[var(--app-spacing,1rem)]",
-  appGap: "gap-[var(--app-spacing)]",
+  app: "p-app",
+  appGap: "gap-app",
   sidebar: {
-    padding: "p-[var(--app-spacing,1rem)]",
-    paddingMobile: "p-[var(--app-spacing,1rem)]",
-    paddingDesktop: "p-0 pl-[var(--app-spacing,1rem)]",
-    gap: "gap-[var(--app-spacing,1rem)]",
+    padding: "p-app",
+    paddingMobile: "p-app",
+    paddingDesktop: "p-0 pl-app",
+    gap: "gap-app",
   },
   select: {
-    padding: "p-[var(--em-sl-menu-padding-default,0.75rem)]",
-    paddingLeft: "pl-[calc(var(--em-sl-menu-padding-default,0.75rem)+1.5rem)]",
-    paddingRight: "pr-[calc(var(--em-sl-menu-padding-default,0.75rem)+2rem)]",
-    paddingLeftIcon: "pl-[var(--em-sl-menu-padding-default,0.75rem)]",
+    padding: "p-sl-menu-padding",
+    paddingLeft: "pl-[calc(var(--so-sl-menu-padding-default,0.75rem)+1.5rem)]",
+    paddingRight: "pr-[calc(var(--so-sl-menu-padding-default,0.75rem)+2rem)]",
+    paddingLeftIcon: "pl-sl-menu-padding",
   },
   button: {
-    labelPadding: "px-[var(--em-btn-pr-label-padding-default,0.5rem)]",
-    paddingSmall: "px-[var(--em-btn-pr-padding-top-bottom-small,0.375rem)] py-[var(--em-btn-pr-padding-left-right-small,0.375rem)]",
+    labelPadding: "px-btn-label-padding",
+    paddingSmall: "px-btn-padding-small-x py-btn-padding-small-y",
   },
   actionIcon: {
-    padding: "py-[var(--em-action-icon-padding-top-bottom,0.5rem)] px-[var(--em-action-icon-padding-left-right,0.125rem)]",
+    padding: "py-action-icon-padding-y px-action-icon-padding-x",
   },
 } as const;
 
@@ -120,86 +120,87 @@ export const borders = {
   radius: {
     sm: "rounded-sm", 
     pill: "rounded-pill", 
-    button: "rounded-[var(--em-btn-pr-border-radius-default,624.9375rem)]",
-    select: "rounded-[var(--em-sl-menu-border-radius-default,0.5rem)]",
-    actionIcon: "rounded-[var(--em-action-icon-border-radius-default,624.9375rem)]",
-    form: "rounded-[var(--em-form-border-radius-default,2rem)]",
+    button: "rounded-button",
+    select: "rounded-select",
+    actionIcon: "rounded-action-icon",
+    form: "rounded-form",
   },
   width: {
-    thin: "border-[var(--em-core-border-width-050,2px)]",
-    select: "border-[var(--em-sl-menu-border-width-default,1px)]",
+    thin: "border-thin",
+    select: "border-select",
   },
   color: {
-    select: "border-[var(--em-sl-menu-border-color-default,#D2D2D5)]",
+    select: "border-sl-menu-border",
   },
   select: {
-    complete: "rounded-[var(--em-sl-menu-border-radius-default,0.5rem)] border-[var(--em-sl-menu-border-width-default,1px)] border-solid border-[var(--em-sl-menu-border-color-default,#D2D2D5)]",
+    complete: "rounded-select border-select border-solid border-sl-menu-border",
   },
 } as const;
 
 // Size Tokens
 export const sizes = {
   core: {
-    lg: "w-[var(--em-core-size-600,1.5rem)] h-[var(--em-core-size-600,1.5rem)]",
-    lgWidth: "w-[var(--em-core-size-600,1.5rem)]",
-    lgHeight: "h-[var(--em-core-size-600,1.5rem)]",
+    lg: "w-core-lg h-core-lg",
+    lgWidth: "w-core-lg",
+    lgHeight: "h-core-lg",
   },
   select: {
-    height: "h-[var(--em-sl-menu-size-height-default,2.5rem)]",
-    minWidth: "min-w-[var(--em-select-menu-size-width-min-width,4rem)]",
-    maxWidth: "max-w-[var(--em-select-menu-size-width-max-width,25rem)]",
+    height: "h-sl-menu-height",
+    minWidth: "min-w-select-menu-min-width",
+    maxWidth: "max-w-select-menu-max-width",
   },
   actionIcon: {
-    width: "w-[var(--em-action-icon-size-width,1.25rem)]",
-    height: "h-[var(--em-action-icon-size-height,2rem)]",
+    width: "w-action-icon-width",
+    height: "h-action-icon-height",
   },
   sidebar: {
-    width: "w-[var(--sidebar-width,14.875rem)]",
-    minWidth: "min-w-[var(--min-width-sidenav,15.5rem)]",
-    height: "h-[var(--sidebar-height,66.0625rem)]",
+    width: "w-sidebar-width",
+    minWidth: "min-w-sidebar-min-width",
+    height: "h-sidebar-height",
   },
   dropdown: {
     icon: {
-      width: "w-[var(--em-sl-item-icon-size-width,1rem)]",
-      height: "h-[var(--em-sl-item-icon-size-height,1rem)]",
+      width: "w-sl-item-icon-width",
+      height: "h-sl-item-icon-height",
     },
   },
 } as const;
 
 // Select Menu Tokens (complete sets)
 export const selectMenu = {
-  // For the select element itself
+  // For the select element itself - layout and spacing via Tailwind utilities
+  // Typography must be inline styles due to browser default overrides on <select> elements
   className: [
     "flex items-center",
-    "appearance-none",
-    "cursor-pointer",
-    "bg-no-repeat bg-right",
+    "appearance-none cursor-pointer",
     sizes.select.height,
     sizes.select.minWidth,
     sizes.select.maxWidth,
     spacing.select.padding,
     spacing.select.paddingLeft,
     spacing.select.paddingRight,
-    colors.select.text,
-    "font-[var(--em-sl-menu-label-font-family,Inter)]",
-    "text-[length:var(--em-sl-menu-label-font-size,0.75rem)]",
-    "font-normal",
-    "leading-[var(--em-sl-menu-label-font-line-height,0.875rem)]",
+    colors.select.background,
+    borders.radius.select,
+    "bg-no-repeat bg-right",
   ].join(" "),
 
   // For the icon inside select
-  iconPosition: `left-[var(--em-sl-menu-padding-default,0.75rem)]`,
+  iconPosition: `left-sl-menu-padding`,
 
-  // Inline styles that can't be expressed as Tailwind classes
+  // Inline styles for typography (required due to browser defaults) and visual styles
   style: {
-    borderRadius: "var(--em-sl-menu-border-radius-default, 0.5rem)",
-    border: "var(--em-sl-menu-border-width-default, 1px) solid var(--em-sl-menu-border-color-default, #D2D2D5)",
-    background: "var(--em-sl-menu-background-color-default, #FFF)",
-    fontWeight: "var(--em-sl-menu-label-font-weight, 500)",
+    // Typography - using CSS variables for maintainability
+    color: "var(--so-sl-menu-label-text-default, #212129)",
+    fontFamily: "var(--so-sl-menu-label-font-family, Inter)",
+    fontSize: "var(--so-sl-menu-label-font-size, 0.75rem)",
+    fontStyle: "normal",
+    fontWeight: "var(--so-sl-menu-label-font-weight, 500)",
+    lineHeight: "var(--so-sl-menu-label-font-line-height, 0.875rem)",
+    // Visual styles
+    border: "var(--so-sl-menu-border-width-default, 1px) solid var(--so-sl-menu-border-color-default, #D2D2D5)",
     backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-    backgroundPosition: "right var(--em-sl-menu-padding-default, 0.75rem) center",
+    backgroundPosition: "right var(--so-sl-menu-padding-default, 0.75rem) center",
     backgroundSize: "12px 12px",
-    backgroundRepeat: "no-repeat",
   },
 } as const;
 
@@ -214,10 +215,10 @@ export const button = {
       "rounded-full",
       "justify-center",
       "items-center",
-      "h-[var(--em-btn-pr-size-height-small,2rem)]",
+      "h-btn-height-small",
       "min-w-[2rem]",
-      "py-[var(--em-btn-pr-padding-top-bottom-small,0.375rem)]",
-      "px-[var(--em-btn-pr-padding-left-right-small,0.375rem)]",
+      "py-btn-padding-small-y",
+      "px-btn-padding-small-x",
       colors.button.primaryBackground,
     ].join(" "),
   },
@@ -235,9 +236,9 @@ export const sidebar = {
     spacing.sidebar.paddingMobile,
     "fixed lg:relative left-0 top-0 z-[1000]",
     "shadow-lg lg:shadow-none",
-    "lg:w-auto lg:max-w-full lg:min-w-[var(--min-width-sidenav,15.5rem)]",
-    "md:p-[var(--app-spacing,1rem)]",
-    "lg:p-0 lg:pl-[var(--app-spacing,1rem)]",
+    "lg:w-auto lg:max-w-full lg:min-w-sidebar-min-width",
+    "md:p-app",
+    "lg:p-0 lg:pl-app",
     "lg:col-span-3",
     "pb-[env(safe-area-inset-bottom)]", // Add safe area padding for mobile browsers
   ].join(" "),
@@ -249,20 +250,20 @@ export const sidebar = {
 export const components = {
   textStyles: {
     small: {
-      color: "var(--em-sem-text-default, #212129)",
+      color: "var(--so-sem-text-default, #212129)",
       fontFamily: "Inter, sans-serif",
-      fontSize: "var(--em-font-size-sm, 0.875rem)",
+      fontSize: "var(--so-font-size-sm, 0.875rem)",
       fontStyle: "normal",
-      fontWeight: "var(--em-font-weight-medium, 500)",
-      lineHeight: "var(--em-line-height-md, 1rem)",
+      fontWeight: "var(--so-font-weight-medium, 500)",
+      lineHeight: "var(--so-line-height-md, 1rem)",
     },
     medium: {
-      color: "var(--em-sem-text-default, #212129)",
+      color: "var(--so-sem-text-default, #212129)",
       fontFamily: "Inter",
-      fontSize: "var(--em-font-size-md, 1rem)",
+      fontSize: "var(--so-font-size-md, 1rem)",
       fontStyle: "normal",
-      fontWeight: "var(--em-font-weight-bold, 700)",
-      lineHeight: "var(--em-line-height-l, 1.1875rem)",
+      fontWeight: "var(--so-font-weight-bold, 700)",
+      lineHeight: "var(--so-line-height-l, 1.1875rem)",
     },
   },
 } as const;
