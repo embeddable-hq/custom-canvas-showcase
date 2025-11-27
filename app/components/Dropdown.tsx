@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef, ReactNode } from "react";
 import { cn, classes } from "../lib/utils";
 import { sizes } from "../lib/tokens";
-import Image from "next/image";
+import { type TablerIcon } from "@tabler/icons-react";
 
 interface DropdownItem {
   label: string;
   onClick?: () => void;
   href?: string;
-  icon?: string;
+  icon?: TablerIcon;
   className?: string;
 }
 
@@ -107,13 +107,12 @@ export default function Dropdown({
                   }}
                 >
                   {item.icon && (
-                    <Image
-                      src={item.icon}
-                      alt=""
-                      width={16}
-                      height={16}
-                      className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
-                    />
+                    <div className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height, "flex items-center justify-center")}>
+                      {(() => {
+                        const IconComponent = item.icon;
+                        return <IconComponent size={16} />;
+                      })()}
+                    </div>
                   )}
                   <span className={cn(classes.dropdownItemText, item.className)}>
                     {item.label}
@@ -132,13 +131,12 @@ export default function Dropdown({
                 }}
               >
                 {item.icon && (
-                  <Image
-                    src={item.icon}
-                    alt=""
-                    width={16}
-                    height={16}
-                    className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height)}
-                  />
+                  <div className={cn("flex-shrink-0", sizes.dropdown.icon.width, sizes.dropdown.icon.height, "flex items-center justify-center")}>
+                    {(() => {
+                      const IconComponent = item.icon;
+                      return <IconComponent size={16} className={item.className} />;
+                    })()}
+                  </div>
                 )}
                 <span className={cn(classes.dropdownItemText, item.className)}>
                   {item.label}

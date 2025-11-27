@@ -1,3 +1,10 @@
+import {
+  type TablerIcon,
+  IconBook,
+  IconBrandGithub,
+  IconMail,
+} from "@tabler/icons-react";
+
 export const envConfig = {
   embeddableApiKey: process.env.EMBEDDABLE_API_KEY,
   embeddableApiUrl: process.env.NEXT_PUBLIC_EMBEDDABLE_API_URL,
@@ -14,7 +21,13 @@ export const envConfig = {
 export const STORAGE_KEY_DASHBOARD_PERMISSIONS = "dashboard-permissions";
 
 // Navigation
-export const NAV_ITEMS: string[] = ["Shop", "Gift cards", "Analytics", "Profile", "About"];
+export const NAV_ITEMS: string[] = [
+  "Shop",
+  "Gift cards",
+  "Analytics",
+  "Profile",
+  "About",
+];
 export const DEFAULT_SELECTED_NAV_ITEM = "Analytics";
 
 // Token expiry (7 days in seconds)
@@ -66,25 +79,27 @@ export const getAllUserIds = (): UserId[] => {
 export interface HelpItem {
   label: string;
   href?: string;
-  icon?: string;
+  icon?: TablerIcon;
 }
 
 export const getHelpItems = (): HelpItem[] => {
   return [
-    { 
-      label: "Docs", 
+    {
+      label: "Docs",
       href: envConfig.documentationUrl,
-      icon: "/docs.svg"
+      icon: IconBook,
     },
-    { 
-      label: "Github", 
+    {
+      label: "Github",
       href: envConfig.githubRepositoryUrl,
-      icon: "/github.svg"
+      icon: IconBrandGithub,
     },
-    { 
-      label: "Contact", 
-      href: envConfig.contactEmail ? `mailto:${envConfig.contactEmail}` : undefined,
-      icon: "/contact.svg"
+    {
+      label: "Contact",
+      href: envConfig.contactEmail
+        ? `mailto:${envConfig.contactEmail}`
+        : undefined,
+      icon: IconMail,
     },
   ];
 };

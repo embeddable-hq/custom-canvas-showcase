@@ -2,17 +2,43 @@
 
 import { useState, useEffect } from "react";
 import { cn, classes } from "../lib/utils";
-import { spacing, borders, colors, sidebar as sidebarTokens } from "../lib/tokens";
-import { IconDotsVertical } from "@tabler/icons-react";
+import {
+  spacing,
+  borders,
+  colors,
+  sidebar as sidebarTokens,
+} from "../lib/tokens";
+import {
+  IconDotsVertical,
+  IconPencil,
+  IconTrash,
+  IconUser,
+} from "@tabler/icons-react";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
 import DesktopNavigation from "./DesktopNavigation";
 import MobileNavigation from "./MobileNavigation";
-import PermissionsModal, { type Permission, PERMISSION_WRITE, PERMISSION_READONLY, PERMISSION_NO_ACCESS } from "./PermissionsModal";
+import PermissionsModal, {
+  type Permission,
+  PERMISSION_WRITE,
+  PERMISSION_READONLY,
+  PERMISSION_NO_ACCESS,
+} from "./PermissionsModal";
 import RenameModal from "./RenameModal";
-import { getEmailFromUserId, createDefaultPermissions, ensureCompletePermissions } from "../lib/userUtils";
+import {
+  getEmailFromUserId,
+  createDefaultPermissions,
+  ensureCompletePermissions,
+} from "../lib/userUtils";
 import CloseButton from "./CloseButton";
-import { STORAGE_KEY_DASHBOARD_PERMISSIONS, users, getAllUserIds, type UserId, type User, getHelpItems } from "../../utils/constants";
+import {
+  STORAGE_KEY_DASHBOARD_PERMISSIONS,
+  users,
+  getAllUserIds,
+  type UserId,
+  type User,
+  getHelpItems,
+} from "../../utils/constants";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -25,7 +51,9 @@ interface SidebarProps {
   selectedUserId: UserId;
   onUserSelect: (userId: UserId) => void;
   onDashboardRename?: (dashboardId: string, newName: string) => void;
-  onUpdateDashboardName?: React.MutableRefObject<((state: string, name: string) => void) | null>;
+  onUpdateDashboardName?: React.MutableRefObject<
+    ((state: string, name: string) => void) | null
+  >;
   onPermissionsUpdate?: (dashboard: TDashboardItem) => void;
 }
 
@@ -40,7 +68,6 @@ export interface TDashboardItem {
   state: string;
   permissions?: Record<UserId, Permission>;
 }
-
 
 export function DashboardItem({
   dashboard,
@@ -117,9 +144,7 @@ export function DashboardItem({
         isSelected ? colors.semantic.backgroundSubtle : "hover:bg-black/5"
       )}
     >
-      <div
-        className={cn("no-underline flex-1", classes.textSmall)}
-      >
+      <div className={cn("no-underline flex-1", classes.textSmall)}>
         {dashboard.name}
       </div>
       {itemUsers.length > 0 && (
@@ -142,18 +167,18 @@ export function DashboardItem({
           {
             label: "Edit permissions",
             onClick: () => onEditPermissions?.(dashboard),
-            icon: "/user.svg",
+            icon: IconUser,
           },
           { type: "separator" },
           {
             label: "Rename",
             onClick: () => onRename?.(dashboard),
-            icon: "/edit.svg",
+            icon: IconPencil,
           },
           {
             label: "Delete",
             onClick: () => onDelete?.(dashboard),
-            icon: "/trash.svg",
+            icon: IconTrash,
             className: colors.semantic.textError,
           },
         ]}
@@ -163,15 +188,14 @@ export function DashboardItem({
     </div>
   );
 }
-  // Generate a unique random ID
-  const generateRandomId = (): string => {
-    // Use crypto.randomUUID if available (modern browsers), otherwise fallback to timestamp + random
-    if (typeof crypto !== "undefined" && crypto.randomUUID) {
-      return crypto.randomUUID();
-    }
-    return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-  };
-
+// Generate a unique random ID
+const generateRandomId = (): string => {
+  // Use crypto.randomUUID if available (modern browsers), otherwise fallback to timestamp + random
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+};
 
 const getDefaultDashboards = (): TDashboardItem[] => {
   const allUserIds = getAllUserIds();
@@ -222,7 +246,10 @@ const saveDashboardsToStorage = (dashboards: TDashboardItem[]) => {
   if (typeof window === "undefined") return;
 
   try {
-    sessionStorage.setItem(STORAGE_KEY_DASHBOARD_PERMISSIONS, JSON.stringify(dashboards));
+    sessionStorage.setItem(
+      STORAGE_KEY_DASHBOARD_PERMISSIONS,
+      JSON.stringify(dashboards)
+    );
   } catch (error) {
     console.error("Error saving dashboards to session storage:", error);
   }
@@ -249,7 +276,8 @@ export default function Sidebar({
   const [renameModalOpen, setRenameModalOpen] = useState(false);
   const [selectedDashboardForRename, setSelectedDashboardForRename] =
     useState<TDashboardItem | null>(null);
-  const [pendingPermissionsUpdate, setPendingPermissionsUpdate] = useState<TDashboardItem | null>(null);
+  const [pendingPermissionsUpdate, setPendingPermissionsUpdate] =
+    useState<TDashboardItem | null>(null);
 
   // Load dashboards from storage on mount
   useEffect(() => {
@@ -327,8 +355,6 @@ export default function Sidebar({
       (userId) => defaultPermissions[userId] !== PERMISSION_NO_ACCESS
     );
 
-  
-
     const randomId = generateRandomId();
     const dashboardNumber = dashboards.length + 1;
 
@@ -364,7 +390,7 @@ export default function Sidebar({
     );
     setDashboards(updatedDashboards);
     saveDashboardsToStorage(updatedDashboards);
-    
+
     // Notify parent about rename if this is the currently selected dashboard
     if (dashboard.state === selectedCustomCanvasState) {
       onDashboardRename?.(dashboard.id, newName);
@@ -392,7 +418,10 @@ export default function Sidebar({
     permissions: Record<UserId, Permission>
   ) => {
     // Ensure all users are in the permissions object (even if "no access")
-    const completePermissions = ensureCompletePermissions(permissions, PERMISSION_NO_ACCESS);
+    const completePermissions = ensureCompletePermissions(
+      permissions,
+      PERMISSION_NO_ACCESS
+    );
 
     // Update users array to only include users with "write" or "readonly" access
     const allUserIds = getAllUserIds();
@@ -477,7 +506,12 @@ export default function Sidebar({
 
         {/* Mobile Navigation */}
         {isLoading ? (
-          <div className={cn("lg:hidden flex flex-col flex-1 min-h-0 w-full", spacing.appGap)}>
+          <div
+            className={cn(
+              "lg:hidden flex flex-col flex-1 min-h-0 w-full",
+              spacing.appGap
+            )}
+          >
             <div className="flex items-center justify-center p-4">
               <div className="text-sm text-gray-500">Loading dashboards...</div>
             </div>

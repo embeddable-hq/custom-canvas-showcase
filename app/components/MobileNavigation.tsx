@@ -5,7 +5,7 @@ import { spacing, borders, colors, typography } from "../lib/tokens";
 import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
 import { DashboardItem, type TDashboardItem } from "./Sidebar";
-import { users, type UserId } from "../../utils/constants";
+import { users, type UserId, type HelpItem } from "../../utils/constants";
 
 interface MobileNavigationProps {
   navItems: string[];
@@ -15,7 +15,7 @@ interface MobileNavigationProps {
   selectedUserId: UserId;
   onDashboardSelect: (dashboard: TDashboardItem, userEmail: string) => void;
   onUserSelect: (id: UserId) => void;
-  helpItems: { label: string; href?: string; icon?: string }[];
+  helpItems: HelpItem[];
   onEditPermissions?: (dashboard: TDashboardItem) => void;
   onRename?: (dashboard: TDashboardItem) => void;
   onDelete?: (dashboard: TDashboardItem) => void;

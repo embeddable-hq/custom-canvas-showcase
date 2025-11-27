@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn, classes } from "../lib/utils";
-import Image from "next/image";
+import { IconPencil, IconEdit, IconBrush } from "@tabler/icons-react";
 import Select from "./Select";
 
 interface DashboardHeaderProps {
@@ -12,13 +12,6 @@ interface DashboardHeaderProps {
   onThemeChange: (theme: string) => void;
 }
 
-// Constants moved outside component to prevent recreation on every render
-const THEME_SELECT_LEFT_ICON = {
-  src: "/pen.svg",
-  alt: "edit",
-  width: 16,
-  height: 16,
-} as const;
 
 export const THEME_OPTIONS = [
   { value: "red", label: "Red" },
@@ -79,7 +72,7 @@ export default function DashboardHeader({
               className="cursor-pointer p-1 hover:opacity-70 transition-opacity"
               aria-label="Edit dashboard name"
             >
-              <Image src="/edit.svg" alt="Edit" width={16} height={16} />
+              <IconPencil size={16} />
             </button>
           </>
         )}
@@ -88,7 +81,7 @@ export default function DashboardHeader({
         className={cn("flex md:ml-auto w-full md:w-1/2 lg:w-[calc((2/12)/(9/12)*100%)] flex-none", classes.selectMenuWrapper)}
       >
         <Select
-          leftIcon={THEME_SELECT_LEFT_ICON}
+          leftIcon={IconBrush}
           className="w-full"
           value={selectedTheme}
           onChange={(e) => onThemeChange(e.target.value)}

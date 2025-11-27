@@ -3,27 +3,17 @@
 import { cn } from "../lib/utils";
 import { selectMenu } from "../lib/tokens";
 import { spacing } from "../lib/tokens";
-import Image from "next/image";
 import { ReactNode } from "react";
+import { IconChevronDown, type TablerIcon } from "@tabler/icons-react";
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  leftIcon?: {
-    src: string;
-    alt?: string;
-    width?: number;
-    height?: number;
-  };
+  leftIcon?: TablerIcon;
   children: ReactNode;
   className?: string;
 }
 
-const SELECT_DROPDOWN_ICON = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`;
-
 const getSelectStyle = () => ({
   ...selectMenu.style,
-  backgroundImage: SELECT_DROPDOWN_ICON,
-  backgroundSize: "12px 12px",
-  backgroundRepeat: "no-repeat",
 });
 
 /**
@@ -56,14 +46,13 @@ export default function Select({
     })
     .join(" ");
 
+  const LeftIconComponent = leftIcon;
+  
   return (
     <div className={cn("relative", widthClass)}>
-      {leftIcon && (
-        <Image
-          src={leftIcon.src}
-          alt={leftIcon.alt || ""}
-          width={leftIcon.width || 16}
-          height={leftIcon.height || 16}
+      {LeftIconComponent && (
+        <LeftIconComponent
+          size={16}
           className={`absolute ${selectMenu.iconPosition} top-1/2 -translate-y-1/2 pointer-events-none z-10`}
         />
       )}
@@ -74,6 +63,10 @@ export default function Select({
       >
         {children}
       </select>
+      <IconChevronDown
+        size={12}
+        className="absolute right-[var(--so-sl-menu-padding-default,0.75rem)] top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#666]"
+      />
     </div>
   );
 }

@@ -181,7 +181,6 @@ export const selectMenu = {
     spacing.select.paddingRight,
     colors.select.background,
     borders.radius.select,
-    "bg-no-repeat bg-right",
   ].join(" "),
 
   // For the icon inside select
@@ -198,9 +197,6 @@ export const selectMenu = {
     lineHeight: "var(--so-sl-menu-label-font-line-height, 0.875rem)",
     // Visual styles
     border: "var(--so-sl-menu-border-width-default, 1px) solid var(--so-sl-menu-border-color-default, #D2D2D5)",
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-    backgroundPosition: "right var(--so-sl-menu-padding-default, 0.75rem) center",
-    backgroundSize: "12px 12px",
   },
 } as const;
 
@@ -215,7 +211,8 @@ export const button = {
       "rounded-full",
       "justify-center",
       "items-center",
-
+      "color-white",
+      spacing.button.paddingSmall,
       colors.button.primaryBackground,
     ].join(" "),
   },

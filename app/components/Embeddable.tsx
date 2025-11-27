@@ -4,7 +4,7 @@ import useGetToken from "../hooks/useGetToken";
 import useEmbeddableScriptTag from "../hooks/useEmbeddableScriptTag";
 import { envConfig } from "@/utils/constants";
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import Image from "next/image";
+import { IconLoader2 } from "@tabler/icons-react";
 import { cn } from "../lib/utils";
 
 interface EmbeddableProps {
@@ -80,13 +80,7 @@ export default function Embeddable({
             : "flex"
         )}
       >
-        <Image
-          src="/spinner.svg"
-          alt="Loading"
-          width={24}
-          height={24}
-          className="animate-spin"
-        />
+        <IconLoader2 size={24} className="animate-spin" />
         <div className="text-gray-500">Loading your dashboard</div>
       </div>
 

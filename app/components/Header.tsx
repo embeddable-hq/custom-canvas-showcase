@@ -2,10 +2,11 @@
 
 import { cn, classes } from '../lib/utils';
 import { spacing, borders, colors, button } from '../lib/tokens';
-import Image from 'next/image';
+import { IconList } from '@tabler/icons-react';
 import { users, type UserId, getHelpItems } from '../../utils/constants';
 import Dropdown from './Dropdown';
 import UserAvatar from './UserAvatar';
+import Image from 'next/image';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -122,7 +123,7 @@ export default function Header({
           onClick={onMenuClick}
           aria-label="Toggle menu"
         >
-          <Image src="/hamburger.svg" alt="Menu" width={32} height={32} />
+          <IconList size={16} className="text-white" />
         </button>
       </div>
     </header>

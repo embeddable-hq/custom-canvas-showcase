@@ -31,7 +31,7 @@ export default function CloseButton({
         className
       )}
     >
-      <IconX className="w-4 h-4" />
+      <IconX size={16} />
     </button>
   );
 }
