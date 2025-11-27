@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { cn, classes } from "../lib/utils";
-import { IconPencil, IconEdit, IconBrush } from "@tabler/icons-react";
+import { IconPencil, IconBrush } from "@tabler/icons-react";
 import Select from "./Select";
 
 interface DashboardHeaderProps {
