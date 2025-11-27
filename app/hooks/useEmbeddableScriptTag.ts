@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { embeddableScriptUrl } from '@/utils/constants';
+import { envConfig } from '@/utils/constants';
 
 const useEmbeddableScriptTag = () => {
   const [isLoaded, setIsLoaded] = useState(() => {
     if (typeof document === 'undefined') return false;
-    return !!document.querySelector(`script[src="${embeddableScriptUrl}"]`);
+    return !!document.querySelector(`script[src="${envConfig.embeddableScriptUrl}"]`);
   });
   const [error, setError] = useState<string | undefined>();
 
@@ -12,7 +12,7 @@ const useEmbeddableScriptTag = () => {
     if (isLoaded) return;
 
     const script = document.createElement('script');
-    script.src = embeddableScriptUrl!;
+    script.src = envConfig.embeddableScriptUrl!;
     script.async = true;
     script.type = 'module';
     

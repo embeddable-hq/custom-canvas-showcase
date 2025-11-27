@@ -1,12 +1,14 @@
-export const embeddableApiKey = process.env.EMBEDDABLE_API_KEY;
-export const embeddableApiUrl = process.env.NEXT_PUBLIC_EMBEDDABLE_API_URL;
-export const embeddableBaseUrl = process.env.NEXT_PUBLIC_EMBEDDABLE_BASE_URL;
-export const embeddableScriptUrl = process.env.NEXT_PUBLIC_EMBEDDABLE_SCRIPT_URL;
-export const userEmail = process.env.NEXT_PUBLIC_USER_EMAIL; 
-export const EMBEDDABLE_ID = process.env.EMBEDDABLE_ID;
-export const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
-export const githubRepositoryUrl = process.env.NEXT_PUBLIC_GITHUB_REPOSITORY_URL;
-export const documentationUrl = process.env.NEXT_PUBLIC_DOCUMENTATION_URL;
+export const envConfig = {
+  embeddableApiKey: process.env.EMBEDDABLE_API_KEY,
+  embeddableApiUrl: process.env.NEXT_PUBLIC_EMBEDDABLE_API_URL,
+  embeddableBaseUrl: process.env.NEXT_PUBLIC_EMBEDDABLE_BASE_URL,
+  embeddableScriptUrl: process.env.NEXT_PUBLIC_EMBEDDABLE_SCRIPT_URL,
+  userEmail: process.env.NEXT_PUBLIC_USER_EMAIL,
+  EMBEDDABLE_ID: process.env.EMBEDDABLE_ID,
+  contactEmail: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
+  githubRepositoryUrl: process.env.NEXT_PUBLIC_GITHUB_REPOSITORY_URL,
+  documentationUrl: process.env.NEXT_PUBLIC_DOCUMENTATION_URL,
+};
 
 // Storage keys
 export const STORAGE_KEY_DASHBOARD_PERMISSIONS = "dashboard-permissions";
@@ -71,17 +73,17 @@ export const getHelpItems = (): HelpItem[] => {
   return [
     { 
       label: "Docs", 
-      href: documentationUrl,
+      href: envConfig.documentationUrl,
       icon: "/docs.svg"
     },
     { 
       label: "Github", 
-      href: githubRepositoryUrl,
+      href: envConfig.githubRepositoryUrl,
       icon: "/github.svg"
     },
     { 
       label: "Contact", 
-      href: contactEmail ? `mailto:${contactEmail}` : undefined,
+      href: envConfig.contactEmail ? `mailto:${envConfig.contactEmail}` : undefined,
       icon: "/contact.svg"
     },
   ];

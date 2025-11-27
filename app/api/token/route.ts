@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { EMBEDDABLE_ID, embeddableApiUrl, TOKEN_EXPIRY_SECONDS } from "@/utils/constants";
+import { envConfig, TOKEN_EXPIRY_SECONDS } from "@/utils/constants";
 
 // Server-side API route to get security token
 // This keeps the API key secure and never exposes it to the client
@@ -19,14 +19,14 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!embeddableApiUrl) {
+  if (!envConfig.embeddableApiUrl) {
     return NextResponse.json(
       { error: "EMBEDDABLE_API_URL is not set" },
       { status: 500 }
     );
   }
 
-  if (!EMBEDDABLE_ID) {
+  if (!envConfig.EMBEDDABLE_ID) {
     return NextResponse.json(
       { error: "EMBEDDABLE_ID is not set" },
       { status: 500 }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const response = await fetch(`${embeddableApiUrl}/api/v1/security-token`, {
+    const response = await fetch(`${envConfig.embeddableApiUrl}/api/v1/security-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${process.env.EMBEDDABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        embeddableId: EMBEDDABLE_ID,     
+        embeddableId: envConfig.EMBEDDABLE_ID,     
         customCanvasState: customCanvasState,
         customCanvasReadOnly: customCanvasReadOnly ?? false,
         expiryInSeconds: TOKEN_EXPIRY_SECONDS,

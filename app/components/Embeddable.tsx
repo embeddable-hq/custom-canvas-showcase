@@ -2,7 +2,7 @@
 
 import useGetToken from "../hooks/useGetToken";
 import useEmbeddableScriptTag from "../hooks/useEmbeddableScriptTag";
-import { embeddableBaseUrl } from "@/utils/constants";
+import { envConfig } from "@/utils/constants";
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { cn } from "../lib/utils";
@@ -103,7 +103,7 @@ export default function Embeddable({
         {React.createElement("em-beddable", {
           ref,
           token,
-          "base-url": embeddableBaseUrl || "",
+          "base-url": envConfig.embeddableBaseUrl || "",
           "client-context": JSON.stringify(clientContext),
         })}
       </div>
