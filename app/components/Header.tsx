@@ -122,7 +122,7 @@ export default function Header({
           onClick={onMenuClick}
           aria-label="Toggle menu"
         >
-          <Image src="/hamburger.svg" alt="Menu" width={16} height={16} />
+          <Image src="/hamburger.svg" alt="Menu" width={32} height={32} />
         </button>
       </div>
     </header>

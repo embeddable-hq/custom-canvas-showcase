@@ -215,10 +215,7 @@ export const button = {
       "rounded-full",
       "justify-center",
       "items-center",
-      "h-btn-height-small",
-      "min-w-[2rem]",
-      "py-btn-padding-small-y",
-      "px-btn-padding-small-x",
+
       colors.button.primaryBackground,
     ].join(" "),
   },
