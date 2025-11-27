@@ -3,31 +3,28 @@
 import { useState, useCallback, useRef } from "react";
 import { cn, classes } from "./lib/utils";
 import Header from "./components/Header";
-import Sidebar, {
-  type TDashboardItem,
-} from "./components/Sidebar";
+import Sidebar, { type TDashboardItem } from "./components/Sidebar";
 import { users, type UserId } from "../utils/constants";
 import Embeddable from "./components/Embeddable";
-import DashboardHeader from "./components/DashboardHeader";
+import DashboardHeader, { THEME_OPTIONS } from "./components/DashboardHeader";
 import { getEmailFromUserId } from "./lib/userUtils";
 import { NAV_ITEMS, DEFAULT_SELECTED_NAV_ITEM } from "../utils/constants";
 import { PERMISSION_READONLY } from "./components/PermissionsModal";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedDashboard, setSelectedDashboard] = useState<TDashboardItem | null>(null);
+  const [selectedDashboard, setSelectedDashboard] =
+    useState<TDashboardItem | null>(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
-  const [selectedTheme, setSelectedTheme] = useState<string>("red");
-  // Initialize with first user from users array
-  const [selectedUserId, setSelectedUserId] = useState<UserId>(
-    users[0]?.id || "denis"
+  const [selectedTheme, setSelectedTheme] = useState<string>(
+    THEME_OPTIONS[0].value
   );
+  // Initialize with first user from users array
+  const [selectedUserId, setSelectedUserId] = useState<UserId>(users[0]?.id);
 
   // Derive state from selectedDashboard
   const selectedCustomCanvasState = selectedDashboard?.state || "";
   const selectedDashboardName = selectedDashboard?.name || "";
-  const navItems = NAV_ITEMS;
-  const selectedNavItem = DEFAULT_SELECTED_NAV_ITEM;
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -111,8 +108,8 @@ export default function Home() {
     >
       <Header
         onMenuClick={toggleSidebar}
-        navItems={navItems}
-        selectedNavItem={selectedNavItem}
+        navItems={NAV_ITEMS}
+        selectedNavItem={DEFAULT_SELECTED_NAV_ITEM}
         selectedUserId={selectedUserId}
         onUserSelect={handleUserSelect}
         className="col-span-full"
@@ -121,8 +118,8 @@ export default function Home() {
         selectedCustomCanvasState={selectedCustomCanvasState}
         isOpen={sidebarOpen}
         onClose={closeSidebar}
-        navItems={navItems}
-        selectedNavItem={selectedNavItem}
+        navItems={NAV_ITEMS}
+        selectedNavItem={DEFAULT_SELECTED_NAV_ITEM}
         onDashboardSelect={handleSelectDashboard}
         selectedUserId={selectedUserId}
         onUserSelect={handleUserSelect}
@@ -153,7 +150,8 @@ export default function Home() {
               customCanvasState={selectedCustomCanvasState}
               userEmail={selectedUserEmail}
               customCanvasReadOnly={
-                selectedDashboard?.permissions?.[selectedUserId] === PERMISSION_READONLY
+                selectedDashboard?.permissions?.[selectedUserId] ===
+                PERMISSION_READONLY
               }
               theme={selectedTheme}
             />

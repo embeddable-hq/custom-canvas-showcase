@@ -20,7 +20,7 @@ const THEME_SELECT_LEFT_ICON = {
   height: 16,
 } as const;
 
-const THEME_OPTIONS = [
+export const THEME_OPTIONS = [
   { value: "red", label: "Red" },
   { value: "green", label: "Green" },
 ] as const;
