@@ -118,7 +118,7 @@ export const classes = {
   // Layout classes
   pageContainer: "max-w-[var(--page-max-width,100%)] mx-auto",
   gridContainer:
-    "[grid-template-columns:repeat(var(--grid-columns,4),minmax(0,1fr))] gap-[var(--app-spacing)]",
+    "[grid-template-columns:repeat(var(--grid-columns,4),minmax(0,1fr))] gap-x-[var(--app-spacing)] gap-y-0",
   mainPadding: "pl-[var(--app-spacing,1rem)] pr-[var(--app-spacing,1rem)]",
 
   // Select menu wrapper
