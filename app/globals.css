@@ -151,6 +151,7 @@
   --color-action-icon-bg: var(--so-action-icon-background-default);
   
   /* Font Sizes */
+  --font-size-font-xs: var(--so-font-size-xs);
   --font-size-font-sm: var(--so-font-size-sm);
   --font-size-font-md: var(--so-font-size-md);
   --font-size-sl-menu-label: var(--so-sl-menu-label-font-size);
@@ -165,6 +166,7 @@
   --font-weight-sl-menu-label: var(--so-sl-menu-label-font-weight);
   
   /* Line Heights */
+  --line-height-sm: var(--so-line-height-sm);
   --line-height-md: var(--so-line-height-md);
   --line-height-l: var(--so-line-height-l);
   --line-height-sl-menu-label: var(--so-sl-menu-label-font-line-height);

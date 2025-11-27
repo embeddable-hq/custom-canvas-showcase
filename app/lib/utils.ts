@@ -10,29 +10,24 @@ const typography = {
   fontInter: "font-[Inter]",
   fontInterSans: "font-[Inter,sans-serif]",
 
-  // Text colors
+  // Text colors - using CSS variables directly to ensure correct values
   colorDefault: "text-[var(--so-sem-text-default,#212129)]",
   colorMuted: "text-[var(--so-sem-text-muted,#5C5C66)]",
-  colorDropdown: "text-[var(--so-sl-item-left-label-text-default,#212129)]",
-
-  // Font sizes
+  
+  // Font sizes - using CSS variables directly to ensure correct values
   sizeXs: "text-[length:var(--so-font-size-xs,0.75rem)]",
   sizeSm: "text-[length:var(--so-font-size-sm,0.875rem)]",
   sizeMd: "text-[length:var(--so-font-size-md,1rem)]",
-  sizeDropdown: "text-[length:var(--so-sl-item-left-label-font-size,0.75rem)]",
 
-  // Font weights
-  weightRegular: "font-[weight:var(--so-font-weight-regular,400)]",
-  weightMedium: "font-[weight:var(--so-font-weight-medium,500)]",
-  weightBold: "font-[weight:var(--so-font-weight-bold,700)]",
-  weightDropdown: "font-[weight:var(--so-sl-item-left-label-font-weight,500)]",
+  // Font weights - use Tailwind utilities from @theme
+  weightRegular: "font-normal",
+  weightMedium: "font-medium",
+  weightBold: "font-bold",
 
-  // Line heights
+  // Line heights - using CSS variables directly to ensure correct values
   lineHeightSm: "leading-[var(--so-line-height-sm,0.875rem)]",
   lineHeightMd: "leading-[var(--so-line-height-md,1rem)]",
   lineHeightL: "leading-[var(--so-line-height-l,1.1875rem)]",
-  lineHeightDropdown:
-    "leading-[var(--so-sl-item-left-label-font-line-height,0.875rem)]",
 
   // Text alignment
   alignCenter: "text-center",
@@ -68,11 +63,11 @@ export const classes = {
   dropdownItem:
     "flex w-full items-center h-[var(--so-sl-item-size-height,2rem)] p-[var(--so-sl-item-padding-default,0.5rem)] rounded-[var(--so-sl-item-border-radius-default,0.5rem)] text-left bg-transparent border-none cursor-pointer transition-colors hover:bg-[var(--so-sl-item-background-color-hover,#F7F7F8)]",
   dropdownItemText: cn(
-    typography.colorDropdown,
+    typography.colorDefault,
     typography.fontInter,
-    typography.sizeDropdown,
-    typography.weightDropdown,
-    typography.lineHeightDropdown
+    typography.sizeXs,
+    typography.weightMedium,
+    typography.lineHeightSm
   ),
 
   // Footer text
