@@ -9,12 +9,16 @@ import { createDefaultPermissions } from "../lib/userUtils";
 import Select from "./Select";
 import Modal from "./Modal";
 
-export type Permission = "write" | "readonly" | "no access";
+export const PERMISSION_WRITE = "write" as const;
+export const PERMISSION_READONLY = "readonly" as const;
+export const PERMISSION_NO_ACCESS = "no access" as const;
+
+export type Permission = typeof PERMISSION_WRITE | typeof PERMISSION_READONLY | typeof PERMISSION_NO_ACCESS;
 
 const PERMISSION_OPTIONS = [
-  { value: "write" as const, label: "Write" },
-  { value: "readonly" as const, label: "Readonly" },
-  { value: "no access" as const, label: "No access" },
+  { value: PERMISSION_WRITE, label: "Write" },
+  { value: PERMISSION_READONLY, label: "Readonly" },
+  { value: PERMISSION_NO_ACCESS, label: "No access" },
 ] as const;
 
 const PERMISSIONS_MODAL_TITLE = "Edit Permissions";
@@ -43,7 +47,7 @@ export default function PermissionsModal({
       const permissions: Record<UserId, Permission> = {} as Record<UserId, Permission>;
       
       allUserIds.forEach((userId) => {
-        permissions[userId] = dashboard.permissions?.[userId] || "write";
+        permissions[userId] = dashboard.permissions?.[userId] || PERMISSION_WRITE;
       });
       
       return permissions;

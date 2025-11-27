@@ -11,6 +11,7 @@ import Embeddable from "./components/Embeddable";
 import DashboardHeader from "./components/DashboardHeader";
 import { getEmailFromUserId } from "./lib/userUtils";
 import { NAV_ITEMS, DEFAULT_SELECTED_NAV_ITEM } from "../utils/constants";
+import { PERMISSION_READONLY } from "./components/PermissionsModal";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -152,7 +153,7 @@ export default function Home() {
               customCanvasState={selectedCustomCanvasState}
               userEmail={selectedUserEmail}
               customCanvasReadOnly={
-                selectedDashboard?.permissions?.[selectedUserId] === "readonly"
+                selectedDashboard?.permissions?.[selectedUserId] === PERMISSION_READONLY
               }
               theme={selectedTheme}
             />

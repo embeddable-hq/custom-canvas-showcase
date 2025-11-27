@@ -8,7 +8,7 @@ import Dropdown from "./Dropdown";
 import UserAvatar from "./UserAvatar";
 import DesktopNavigation from "./DesktopNavigation";
 import MobileNavigation from "./MobileNavigation";
-import PermissionsModal, { type Permission } from "./PermissionsModal";
+import PermissionsModal, { type Permission, PERMISSION_WRITE, PERMISSION_READONLY, PERMISSION_NO_ACCESS } from "./PermissionsModal";
 import RenameModal from "./RenameModal";
 import { getEmailFromUserId, createDefaultPermissions, ensureCompletePermissions } from "../lib/userUtils";
 import CloseButton from "./CloseButton";
@@ -72,8 +72,8 @@ export function DashboardItem({
     return (Object.keys(dashboard.permissions) as UserId[])
       .filter(
         (userId) =>
-          dashboard.permissions![userId] === "write" ||
-          dashboard.permissions![userId] === "readonly"
+          dashboard.permissions![userId] === PERMISSION_WRITE ||
+          dashboard.permissions![userId] === PERMISSION_READONLY
       )
       .map((userId) => users.find((u) => u.id === userId))
       .filter((u): u is User => u !== undefined);
@@ -89,7 +89,7 @@ export function DashboardItem({
     // Check if selectedUserId has access to this dashboard
     if (dashboard.permissions && selectedUserId) {
       const userPermission = dashboard.permissions[selectedUserId];
-      if (userPermission === "no access") {
+      if (userPermission === PERMISSION_NO_ACCESS) {
         userIdToUse = undefined;
       }
     }
@@ -278,7 +278,7 @@ export default function Sidebar({
     if (dashboard.permissions) {
       const userPermission = dashboard.permissions[selectedUserId];
       // If permission exists and is not "no access", show the dashboard
-      if (userPermission && userPermission !== "no access") {
+      if (userPermission && userPermission !== PERMISSION_NO_ACCESS) {
         return true;
       }
       // If permission is "no access" or doesn't exist, don't show
@@ -324,7 +324,7 @@ export default function Sidebar({
 
     // Get users with access (not "no access")
     const usersWithAccess: UserId[] = allUserIds.filter(
-      (userId) => defaultPermissions[userId] !== "no access"
+      (userId) => defaultPermissions[userId] !== PERMISSION_NO_ACCESS
     );
 
   
@@ -392,12 +392,12 @@ export default function Sidebar({
     permissions: Record<UserId, Permission>
   ) => {
     // Ensure all users are in the permissions object (even if "no access")
-    const completePermissions = ensureCompletePermissions(permissions, "no access");
+    const completePermissions = ensureCompletePermissions(permissions, PERMISSION_NO_ACCESS);
 
     // Update users array to only include users with "write" or "readonly" access
     const allUserIds = getAllUserIds();
     const usersWithAccess: UserId[] = allUserIds.filter(
-      (userId) => completePermissions[userId] !== "no access"
+      (userId) => completePermissions[userId] !== PERMISSION_NO_ACCESS
     );
 
     setDashboards((prev) => {

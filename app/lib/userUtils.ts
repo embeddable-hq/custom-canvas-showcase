@@ -1,4 +1,4 @@
-import { Permission } from "../components/PermissionsModal";
+import { Permission, PERMISSION_WRITE, PERMISSION_NO_ACCESS } from "../components/PermissionsModal";
 import { users, getAllUserIds, type UserId } from "../../utils/constants";
 
 /**
@@ -19,7 +19,7 @@ export const createDefaultPermissions = (): Record<UserId, Permission> => {
   const permissions: Record<UserId, Permission> = {} as Record<UserId, Permission>;
   
   allUserIds.forEach((userId) => {
-    permissions[userId] = "write";
+    permissions[userId] = PERMISSION_WRITE;
   });
   
   return permissions;
@@ -31,7 +31,7 @@ export const createDefaultPermissions = (): Record<UserId, Permission> => {
  */
 export const ensureCompletePermissions = (
   permissions: Partial<Record<UserId, Permission>>,
-  defaultPermission: Permission = "no access"
+  defaultPermission: Permission = PERMISSION_NO_ACCESS
 ): Record<UserId, Permission> => {
   const allUserIds = getAllUserIds();
   const completePermissions: Record<UserId, Permission> = {} as Record<UserId, Permission>;
