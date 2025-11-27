@@ -3,7 +3,7 @@
 import { cn, classes } from '../lib/utils';
 import { spacing, borders, colors, button } from '../lib/tokens';
 import { IconList } from '@tabler/icons-react';
-import { users, type UserId, getHelpItems } from '../../utils/constants';
+import { users, type UserId, HELP_ITEMS } from '../../utils/constants';
 import Dropdown from './Dropdown';
 import UserAvatar from './UserAvatar';
 import Image from 'next/image';
@@ -26,7 +26,6 @@ export default function Header({
   className,
 }: HeaderProps) {
 
-  const helpItems = getHelpItems();
 
   return (
     <header className={cn(
@@ -113,7 +112,7 @@ export default function Header({
                 <span>?</span>
               </button>
             }
-            items={helpItems}
+            items={HELP_ITEMS}
             position="bottom"
             align="end"
           />

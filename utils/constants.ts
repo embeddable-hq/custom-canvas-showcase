@@ -82,24 +82,22 @@ export interface HelpItem {
   icon?: TablerIcon;
 }
 
-export const getHelpItems = (): HelpItem[] => {
-  return [
-    {
-      label: "Docs",
-      href: envConfig.documentationUrl,
-      icon: IconBook,
-    },
-    {
-      label: "Github",
-      href: envConfig.githubRepositoryUrl,
-      icon: IconBrandGithub,
-    },
-    {
-      label: "Contact",
-      href: envConfig.contactEmail
-        ? `mailto:${envConfig.contactEmail}`
-        : undefined,
-      icon: IconMail,
-    },
-  ];
-};
+export const HELP_ITEMS: HelpItem[] = [
+  {
+    label: "Docs",
+    href: envConfig.documentationUrl,
+    icon: IconBook,
+  },
+  {
+    label: "Github",
+    href: envConfig.githubRepositoryUrl,
+    icon: IconBrandGithub,
+  },
+  {
+    label: "Contact",
+    href: envConfig.contactEmail
+      ? `mailto:${envConfig.contactEmail}`
+      : undefined,
+    icon: IconMail,
+  },
+];

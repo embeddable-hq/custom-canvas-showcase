@@ -37,7 +37,7 @@ import {
   getAllUserIds,
   type UserId,
   type User,
-  getHelpItems,
+  HELP_ITEMS,
 } from "../../utils/constants";
 
 interface SidebarProps {
@@ -458,7 +458,6 @@ export default function Sidebar({
     }
   }, [pendingPermissionsUpdate, onPermissionsUpdate]);
 
-  const helpItems = getHelpItems();
 
   return (
     <>
@@ -526,7 +525,7 @@ export default function Sidebar({
               selectedUserId={selectedUserId}
               onDashboardSelect={onDashboardSelect}
               onUserSelect={onUserSelect}
-              helpItems={helpItems}
+              helpItems={HELP_ITEMS}
               onEditPermissions={handleEditPermissions}
               onRename={handleRename}
               onDelete={handleDelete}
