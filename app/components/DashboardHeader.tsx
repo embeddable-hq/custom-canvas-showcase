@@ -18,8 +18,8 @@ interface DashboardHeaderProps {
  */
 export const THEME_OPTIONS = [
   { value: "default", label: "Default" },
-  { value: "aurora", label: "Aurora" },
   { value: "dark", label: "Dark" },
+  { value: "aurora", label: "Aurora" },
 ] as const;
 
 export default function DashboardHeader({
