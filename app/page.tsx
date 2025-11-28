@@ -1,64 +1,172 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useCallback, useRef } from "react";
+import { cn, classes } from "./lib/utils";
+import Header from "./components/Header";
+import Sidebar, { type TDashboardItem } from "./components/Sidebar";
+import { users, type UserId } from "../utils/constants";
+import Embeddable from "./components/Embeddable";
+import DashboardHeader, { THEME_OPTIONS } from "./components/DashboardHeader";
+import { getEmailFromUserId } from "./lib/userUtils";
+import { NAV_ITEMS, DEFAULT_SELECTED_NAV_ITEM } from "../utils/constants";
+import { PERMISSION_READONLY } from "./components/PermissionsModal";
 
 export default function Home() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedDashboard, setSelectedDashboard] =
+    useState<TDashboardItem | null>(null);
+  const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
+  const [selectedTheme, setSelectedTheme] = useState<string>(
+    THEME_OPTIONS[0].value
+  );
+  // Initialize with first user from users array
+  const [selectedUserId, setSelectedUserId] = useState<UserId>(users[0]?.id);
+
+  // Derive state from selectedDashboard
+  const selectedCustomCanvasState = selectedDashboard?.state || "";
+  const selectedDashboardName = selectedDashboard?.name || "";
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
+  const handleSelectDashboard = useCallback(
+    (dashboard: TDashboardItem, userEmail: string) => {
+      setSelectedDashboard(dashboard);
+      setSelectedUserEmail(userEmail);
+    },
+    []
+  );
+
+  const handleDashboardRename = useCallback(
+    (dashboardId: string, newName: string) => {
+      // Update the selected dashboard name if it's the current one
+      if (selectedDashboard && selectedDashboard.id === dashboardId) {
+        setSelectedDashboard({ ...selectedDashboard, name: newName });
+      }
+    },
+    [selectedDashboard]
+  );
+
+  const handlePermissionsUpdate = useCallback(
+    (dashboard: TDashboardItem) => {
+      // If the updated dashboard is the currently selected one, update our state
+      // This will trigger a token refresh with the new readonly status
+      if (selectedDashboard && dashboard.id === selectedDashboard.id) {
+        setSelectedDashboard(dashboard);
+      }
+    },
+    [selectedDashboard]
+  );
+
+  const sidebarUpdateNameRef = useRef<
+    ((state: string, name: string) => void) | null
+  >(null);
+
+  const handleNameChangeFromHeader = useCallback(
+    (newName: string) => {
+      // Update the selected dashboard name
+      if (selectedDashboard) {
+        setSelectedDashboard({ ...selectedDashboard, name: newName });
+        // Update the dashboard in Sidebar
+        if (sidebarUpdateNameRef.current && selectedDashboard.state) {
+          sidebarUpdateNameRef.current(selectedDashboard.state, newName);
+        }
+      }
+    },
+    [selectedDashboard]
+  );
+
+  const handleThemeChange = useCallback((theme: string) => {
+    setSelectedTheme(theme);
+  }, []);
+
+  // Handle user selection - update email to trigger new token fetch
+  const handleUserSelect = useCallback(
+    (userId: UserId) => {
+      setSelectedUserId(userId);
+      // Update user email immediately to trigger new token fetch
+      if (selectedDashboard) {
+        const userEmail = getEmailFromUserId(userId);
+        setSelectedUserEmail(userEmail);
+      }
+    },
+    [selectedDashboard]
+  );
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div
+      className={cn(
+        "grid min-h-screen min-w-0 w-full bg-white",
+        classes.pageContainer,
+        classes.gridContainer,
+        "grid-rows-[auto_1fr]"
+      )}
+    >
+      <Header
+        onMenuClick={toggleSidebar}
+        navItems={NAV_ITEMS}
+        selectedNavItem={DEFAULT_SELECTED_NAV_ITEM}
+        selectedUserId={selectedUserId}
+        onUserSelect={handleUserSelect}
+        className="col-span-full"
+      />
+      <Sidebar
+        selectedCustomCanvasState={selectedCustomCanvasState}
+        isOpen={sidebarOpen}
+        onClose={closeSidebar}
+        navItems={NAV_ITEMS}
+        selectedNavItem={DEFAULT_SELECTED_NAV_ITEM}
+        onDashboardSelect={handleSelectDashboard}
+        selectedUserId={selectedUserId}
+        onUserSelect={handleUserSelect}
+        onDashboardRename={handleDashboardRename}
+        onUpdateDashboardName={sidebarUpdateNameRef}
+        onPermissionsUpdate={handlePermissionsUpdate}
+      />
+      <main
+        className={cn(
+          "flex flex-col min-h-0",
+          "min-h-[31.25rem]",
+          "gap-2.5",
+          "col-span-4 md:col-span-8 lg:col-span-9",
+          classes.mainPadding
+        )}
+      >
+        <div className="flex-1 flex flex-col w-full">
+          {selectedCustomCanvasState && (
+            <DashboardHeader
+              dashboardName={selectedDashboardName}
+              onNameChange={handleNameChangeFromHeader}
+              selectedTheme={selectedTheme}
+              onThemeChange={handleThemeChange}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          )}
+          <div className="flex-1">
+            <Embeddable
+              customCanvasState={selectedCustomCanvasState}
+              userEmail={selectedUserEmail}
+              customCanvasReadOnly={
+                selectedDashboard?.permissions?.[selectedUserId] ===
+                PERMISSION_READONLY
+              }
+              theme={selectedTheme}
+            />
+          </div>
         </div>
+        <footer
+          className={cn(
+            "flex justify-center items-center self-stretch mt-auto",
+            "gap-2.5",
+            classes.appPadding,
+            classes.footerText
+          )}
+        >
+          © 2025 TMD Technology Limited. All rights reserved.
+        </footer>
       </main>
     </div>
   );
