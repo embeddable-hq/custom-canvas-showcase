@@ -17,8 +17,9 @@ interface DashboardHeaderProps {
  * Extracted as a constant for reusability and maintainability
  */
 export const THEME_OPTIONS = [
-  { value: "red", label: "Red" },
-  { value: "green", label: "Green" },
+  { value: "default", label: "Default" },
+  { value: "aurora", label: "Aurora" },
+  { value: "dark", label: "Dark" },
 ] as const;
 
 export default function DashboardHeader({
