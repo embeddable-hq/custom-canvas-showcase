@@ -31,8 +31,8 @@ export default function Embeddable({
 
   // Create a unique key based on token and theme to force recreation
   const embeddableKey = useMemo(
-    () => `${token}-${theme || "default"}`,
-    [token, theme]
+    () => `${token}`,
+    [token]
   );
 
   // Derive loading state from whether current key matches loaded key
