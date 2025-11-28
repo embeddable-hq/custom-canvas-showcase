@@ -20,8 +20,6 @@ import DesktopNavigation from "./DesktopNavigation";
 import MobileNavigation from "./MobileNavigation";
 import PermissionsModal, {
   type Permission,
-  PERMISSION_WRITE,
-  PERMISSION_READONLY,
   PERMISSION_NO_ACCESS,
 } from "./PermissionsModal";
 import RenameModal from "./RenameModal";
@@ -32,13 +30,17 @@ import {
 } from "../lib/userUtils";
 import CloseButton from "./CloseButton";
 import {
-  STORAGE_KEY_DASHBOARD_PERMISSIONS,
-  users,
   getAllUserIds,
   type UserId,
-  type User,
   HELP_ITEMS,
 } from "../../utils/constants";
+import {
+  getUsersWithAccess,
+  loadDashboardsAsync,
+  saveDashboardsToStorage,
+  filterDashboardsByUser,
+  createNewDashboard,
+} from "../lib/dashboardUtils";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -86,48 +88,28 @@ export function DashboardItem({
   onRename?: (dashboard: TDashboardItem) => void;
   onDelete?: (dashboard: TDashboardItem) => void;
 }) {
-  // Filter users based on permissions - only show users with "write" or "readonly" access
-  const getUsersWithAccess = (): User[] => {
-    if (!dashboard.permissions) {
-      // If no permissions set, show all users from dashboard.users
-      return dashboard.users
-        .map((userId) => users.find((u) => u.id === userId))
-        .filter((u): u is User => u !== undefined);
-    }
-
-    // Filter based on permissions
-    return (Object.keys(dashboard.permissions) as UserId[])
-      .filter(
-        (userId) =>
-          dashboard.permissions![userId] === PERMISSION_WRITE ||
-          dashboard.permissions![userId] === PERMISSION_READONLY
-      )
-      .map((userId) => users.find((u) => u.id === userId))
-      .filter((u): u is User => u !== undefined);
-  };
-
-  const itemUsers = getUsersWithAccess();
+  const usersWithAccess = getUsersWithAccess(dashboard);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     // Use the selectedUserId if provided and has access, otherwise use the first user with access
-    let userIdToUse: UserId | undefined = selectedUserId;
+    let selectedUserIdForDashboard: UserId | undefined = selectedUserId;
 
     // Check if selectedUserId has access to this dashboard
     if (dashboard.permissions && selectedUserId) {
       const userPermission = dashboard.permissions[selectedUserId];
       if (userPermission === PERMISSION_NO_ACCESS) {
-        userIdToUse = undefined;
+        selectedUserIdForDashboard = undefined;
       }
     }
 
     // If no valid user, use the first user with access
-    if (!userIdToUse && itemUsers.length > 0) {
-      userIdToUse = itemUsers[0].id;
+    if (!selectedUserIdForDashboard && usersWithAccess.length > 0) {
+      selectedUserIdForDashboard = usersWithAccess[0].id;
     }
 
-    if (userIdToUse) {
-      const userEmail = getEmailFromUserId(userIdToUse);
+    if (selectedUserIdForDashboard) {
+      const userEmail = getEmailFromUserId(selectedUserIdForDashboard);
       onSelect(dashboard, userEmail);
     }
   };
@@ -147,9 +129,9 @@ export function DashboardItem({
       <div className={cn("no-underline flex-1", classes.textSmall)}>
         {dashboard.name}
       </div>
-      {itemUsers.length > 0 && (
+      {usersWithAccess.length > 0 && (
         <div className="flex items-center gap-1">
-          {itemUsers.slice(0, 3).map((user) => (
+          {usersWithAccess.slice(0, 3).map((user) => (
             <UserAvatar key={user.id} user={user} showTooltip={false} />
           ))}
         </div>
@@ -188,72 +170,6 @@ export function DashboardItem({
     </div>
   );
 }
-// Generate a unique random ID
-const generateRandomId = (): string => {
-  // Use crypto.randomUUID if available (modern browsers), otherwise fallback to timestamp + random
-  if (typeof crypto !== "undefined" && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-};
-
-const getDefaultDashboards = (): TDashboardItem[] => {
-  const allUserIds = getAllUserIds();
-  const defaultPermissions = createDefaultPermissions();
-  // All users get write access by default
-  const randomId = generateRandomId();
-  return [
-    {
-      id: randomId,
-      name: "Dashboard 1",
-      users: allUserIds,
-      state: `customCanvasState${randomId}`,
-      permissions: defaultPermissions,
-    },
-  ];
-};
-
-const loadDashboardsFromStorage = (): TDashboardItem[] => {
-  if (typeof window === "undefined") return getDefaultDashboards();
-
-  try {
-    const stored = sessionStorage.getItem(STORAGE_KEY_DASHBOARD_PERMISSIONS);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return parsed;
-    }
-  } catch (error) {
-    console.error("Error loading dashboards from session storage:", error);
-  }
-  return getDefaultDashboards();
-};
-
-// Load dashboards synchronously but with a small delay to prevent flash
-const loadDashboardsAsync = (): Promise<TDashboardItem[]> => {
-  return new Promise((resolve) => {
-    // Use requestAnimationFrame to ensure DOM is ready
-    if (typeof window !== "undefined") {
-      requestAnimationFrame(() => {
-        resolve(loadDashboardsFromStorage());
-      });
-    } else {
-      resolve(getDefaultDashboards());
-    }
-  });
-};
-
-const saveDashboardsToStorage = (dashboards: TDashboardItem[]) => {
-  if (typeof window === "undefined") return;
-
-  try {
-    sessionStorage.setItem(
-      STORAGE_KEY_DASHBOARD_PERMISSIONS,
-      JSON.stringify(dashboards)
-    );
-  } catch (error) {
-    console.error("Error saving dashboards to session storage:", error);
-  }
-};
 
 export default function Sidebar({
   isOpen,
@@ -301,20 +217,7 @@ export default function Sidebar({
   }, [onUpdateDashboardName, dashboards]);
 
   // Filter dashboards based on selected user and their permissions
-  const filteredDashboards = dashboards.filter((dashboard) => {
-    // If dashboard has permissions object, check the selected user's permission
-    if (dashboard.permissions) {
-      const userPermission = dashboard.permissions[selectedUserId];
-      // If permission exists and is not "no access", show the dashboard
-      if (userPermission && userPermission !== PERMISSION_NO_ACCESS) {
-        return true;
-      }
-      // If permission is "no access" or doesn't exist, don't show
-      return false;
-    }
-    // If no permissions set, fall back to checking users array
-    return dashboard.users.includes(selectedUserId);
-  });
+  const filteredDashboards = filterDashboardsByUser(dashboards, selectedUserId);
 
   // Only select the first dashboard on initial mount after loading completes
   useEffect(() => {
@@ -349,22 +252,14 @@ export default function Sidebar({
   const onAddDashboard = () => {
     const defaultPermissions = createDefaultPermissions();
     const allUserIds = getAllUserIds();
-
-    // Get users with access (not "no access")
-    const usersWithAccess: UserId[] = allUserIds.filter(
-      (userId) => defaultPermissions[userId] !== PERMISSION_NO_ACCESS
-    );
-
-    const randomId = generateRandomId();
     const dashboardNumber = dashboards.length + 1;
 
-    const newDashboard: TDashboardItem = {
-      id: randomId,
-      name: `Dashboard ${dashboardNumber}`,
-      users: usersWithAccess,
-      state: `customCanvasState${randomId}`,
-      permissions: defaultPermissions,
-    };
+    const newDashboard = createNewDashboard(
+      dashboardNumber,
+      allUserIds,
+      defaultPermissions
+    );
+    
     const updatedDashboards = [...dashboards, newDashboard];
     setDashboards(updatedDashboards);
     saveDashboardsToStorage(updatedDashboards);

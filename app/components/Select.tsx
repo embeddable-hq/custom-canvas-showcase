@@ -11,6 +11,10 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   className?: string;
 }
 
+/**
+ * Gets the select element inline styles
+ * Pure function that returns the select menu style object
+ */
 const getSelectStyle = () => ({
   ...selectMenu.style,
 });
@@ -18,6 +22,11 @@ const getSelectStyle = () => ({
 /**
  * Reusable select component with consistent styling
  * Used in theme selector and permissions modal
+ * 
+ * @param leftIcon - Optional icon to display on the left side of the select
+ * @param children - Option elements to render inside the select
+ * @param className - Additional CSS classes to apply
+ * @param props - All other standard HTML select element props
  */
 export default function Select({
   leftIcon,
@@ -31,6 +40,7 @@ export default function Select({
   const baseSelectClasses = [
     "flex items-center",
     "appearance-none cursor-pointer",
+    "w-full",
     sizes.select.height,
     sizes.select.minWidth,
     sizes.select.maxWidth,
@@ -39,7 +49,6 @@ export default function Select({
     spacing.select.paddingRight,
     colors.select.background,
     borders.radius.select,
-    "w-full",
   ];
 
   const LeftIconComponent = leftIcon;

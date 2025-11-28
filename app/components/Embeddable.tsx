@@ -14,6 +14,13 @@ interface EmbeddableProps {
   theme?: string;
 }
 
+/**
+ * Pure function to create client context object from theme
+ */
+const createClientContext = (theme?: string): Record<string, string> => {
+  return theme ? { theme } : {};
+};
+
 export default function Embeddable({
   customCanvasState,
   userEmail,
@@ -21,7 +28,7 @@ export default function Embeddable({
   theme,
 }: EmbeddableProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
-  const [loadedKey, setLoadedKey] = useState<string>("");
+  const [loadedEmbiddableKey, setLoadedEmbiddableKey] = useState<string>("");
   const [token, tokenError, tokenLoading] = useGetToken(
     customCanvasState,
     userEmail,
@@ -29,18 +36,18 @@ export default function Embeddable({
   );
   const ref = useRef<HTMLElement>(null);
 
-  // Create a unique key based on token and theme to force recreation
-  const embeddableKey = useMemo(
+  // Create a unique key based on token to force recreation
+  const embeddableInstanceKey = useMemo(
     () => `${token}`,
     [token]
   );
 
   // Derive loading state from whether current key matches loaded key
-  const isComponentsLoaded = loadedKey === embeddableKey;
+  const areComponentsLoaded = loadedEmbiddableKey === embeddableInstanceKey;
 
   const handleComponentsLoad = useCallback(() => {
-    setLoadedKey(embeddableKey);
-  }, [embeddableKey]);
+    setLoadedEmbiddableKey(embeddableInstanceKey);
+  }, [embeddableInstanceKey]);
 
   useEffect(() => {
     const element = ref.current;
@@ -67,7 +74,7 @@ export default function Embeddable({
     );
   }
 
-  const clientContext = theme ? { theme } : {};
+  const clientContext = createClientContext(theme);
 
   return (
     <div className="relative w-full h-full min-h-[400px]">
@@ -75,7 +82,7 @@ export default function Embeddable({
       <div
         className={cn(
           "absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white z-10",
-          isComponentsLoaded || !tokenLoading || isScriptLoaded
+          areComponentsLoaded || !tokenLoading || isScriptLoaded
             ? "hidden"
             : "flex"
         )}
@@ -86,10 +93,10 @@ export default function Embeddable({
 
       {/* Embeddable - always in DOM, visible when components are loaded */}
       <div
-        key={embeddableKey}
+        key={embeddableInstanceKey}
         className={cn(
           "w-full h-full",
-          isComponentsLoaded || !tokenLoading || isScriptLoaded
+          areComponentsLoaded || !tokenLoading || isScriptLoaded
             ? "block"
             : "hidden"
         )}

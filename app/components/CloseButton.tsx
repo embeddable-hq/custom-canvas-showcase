@@ -12,6 +12,10 @@ interface CloseButtonProps {
 /**
  * Reusable close button component
  * Matches the mobile sidebar close button styling
+ * 
+ * @param onClick - Callback function when button is clicked
+ * @param ariaLabel - Accessibility label for the button
+ * @param className - Additional CSS classes to apply
  */
 export default function CloseButton({
   onClick,

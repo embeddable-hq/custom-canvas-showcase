@@ -19,17 +19,17 @@ export default function UserAvatar({
 }: UserAvatarProps) {
   const [showPopup, setShowPopup] = useState(false);
 
-  const isLarge = size === "large";
-  const innerSize = isLarge ? "var(--so-core-size-600, 1.5rem)" : "1rem";
-  const fontSize = isLarge ? "1.02rem" : "0.58331rem";
-  const lineHeight = isLarge ? "1.17rem" : "unset";
-  const borderRadius = isLarge
+  const isLargeSize = size === "large";
+  const avatarInnerSize = isLargeSize ? "var(--so-core-size-600, 1.5rem)" : "1rem";
+  const avatarFontSize = isLargeSize ? "1.02rem" : "0.58331rem";
+  const avatarLineHeight = isLargeSize ? "1.17rem" : "unset";
+  const avatarBorderRadius = isLargeSize
     ? "var(--so-core-border-radius-500,624.9375rem)"
     : "416.625rem";
 
   return (
     <div className="relative">
-      {isLarge ? (
+      {isLargeSize ? (
         // Large avatars: always have padding and border space for consistent size
         <div
           className={cn(
@@ -40,7 +40,7 @@ export default function UserAvatar({
             classes.userAvatarLarge
           )}
           style={{
-            borderRadius: borderRadius,
+            borderRadius: avatarBorderRadius,
             border: `var(--so-core-border-width-050, 2px) solid ${
               selected ? user.textColor : "transparent"
             }`,
@@ -63,16 +63,16 @@ export default function UserAvatar({
             className={cn("flex justify-center items-center", classes.userAvatarInner)}
             style={{
               background: user.bgColor,
-              borderRadius: borderRadius,
+              borderRadius: avatarBorderRadius,
             }}
           >
             <span
               className={cn("text-center font-bold", classes.userAvatarText)}
               style={{
                 color: user.textColor,
-                fontSize: fontSize,
+                fontSize: avatarFontSize,
                 fontStyle: "normal",
-                lineHeight: lineHeight,
+                lineHeight: avatarLineHeight,
               }}
             >
               {user.name[0]}
@@ -84,10 +84,10 @@ export default function UserAvatar({
         <div
           className={cn("flex justify-center items-center", "cursor-pointer")}
           style={{
-            width: innerSize,
-            height: innerSize,
+            width: avatarInnerSize,
+            height: avatarInnerSize,
             background: user.bgColor,
-            borderRadius: borderRadius,
+            borderRadius: avatarBorderRadius,
           }}
           onMouseEnter={() => showTooltip && setShowPopup(true)}
           onMouseLeave={() => setShowPopup(false)}
@@ -96,9 +96,9 @@ export default function UserAvatar({
             className={cn("text-center font-bold", classes.userAvatarText)}
             style={{
               color: user.textColor,
-              fontSize: fontSize,
+              fontSize: avatarFontSize,
               fontStyle: "normal",
-              lineHeight: lineHeight,
+              lineHeight: avatarLineHeight,
             }}
           >
             {user.name[0]}

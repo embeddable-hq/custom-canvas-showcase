@@ -18,6 +18,14 @@ interface ModalProps {
 /**
  * Reusable modal component
  * Used for permissions and rename modals
+ * 
+ * @param isOpen - Controls whether the modal is visible
+ * @param onClose - Callback function when modal should be closed
+ * @param title - Modal title text
+ * @param children - Modal content
+ * @param buttonText - Text for the primary action button
+ * @param onButtonClick - Callback function when primary button is clicked
+ * @param buttonDisabled - Whether the primary button should be disabled
  */
 export default function Modal({
   isOpen,

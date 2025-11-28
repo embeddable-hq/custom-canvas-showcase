@@ -5,6 +5,11 @@ import { cn } from "../lib/utils";
 import { borders } from "../lib/tokens";
 import { type TDashboardItem } from "./Sidebar";
 import Modal from "./Modal";
+import {
+  RENAME_MODAL_TITLE,
+  RENAME_MODAL_BUTTON_TEXT,
+  RENAME_MODAL_PLACEHOLDER,
+} from "../lib/modalConstants";
 
 interface RenameModalProps {
   isOpen: boolean;
@@ -12,10 +17,6 @@ interface RenameModalProps {
   dashboard: TDashboardItem | null;
   onSave: (dashboard: TDashboardItem, newName: string) => void;
 }
-
-const RENAME_MODAL_TITLE = "Rename Dashboard";
-const RENAME_MODAL_BUTTON_TEXT = "Rename Dashboard";
-const RENAME_MODAL_PLACEHOLDER = "Enter dashboard name";
 
 export default function RenameModal({
   isOpen,
@@ -25,15 +26,15 @@ export default function RenameModal({
 }: RenameModalProps) {
   // Initialize state with lazy initializer
   // State will reset automatically when key (dashboard.id) changes in parent
-  const [newName, setNewName] = useState<string>(() => {
+  const [newDashboardName, setNewDashboardName] = useState<string>(() => {
     return dashboard?.name || "";
   });
 
   if (!isOpen || !dashboard) return null;
 
   const handleSave = () => {
-    if (newName.trim() && newName.trim() !== dashboard.name) {
-      onSave(dashboard, newName.trim());
+    if (newDashboardName.trim() && newDashboardName.trim() !== dashboard.name) {
+      onSave(dashboard, newDashboardName.trim());
       onClose();
     }
   };
@@ -53,12 +54,12 @@ export default function RenameModal({
       title={RENAME_MODAL_TITLE}
       buttonText={RENAME_MODAL_BUTTON_TEXT}
       onButtonClick={handleSave}
-      buttonDisabled={!newName.trim() || newName.trim() === dashboard.name}
+      buttonDisabled={!newDashboardName.trim() || newDashboardName.trim() === dashboard.name}
     >
       <input
         type="text"
-        value={newName}
-        onChange={(e) => setNewName(e.target.value)}
+        value={newDashboardName}
+        onChange={(e) => setNewDashboardName(e.target.value)}
         onKeyDown={handleKeyDown}
         className={cn(
           "px-3 py-2 rounded-md border",

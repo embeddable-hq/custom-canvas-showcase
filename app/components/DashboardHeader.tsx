@@ -12,7 +12,10 @@ interface DashboardHeaderProps {
   onThemeChange: (theme: string) => void;
 }
 
-
+/**
+ * Available theme options for the dashboard
+ * Extracted as a constant for reusability and maintainability
+ */
 export const THEME_OPTIONS = [
   { value: "red", label: "Red" },
   { value: "green", label: "Green" },
@@ -24,27 +27,27 @@ export default function DashboardHeader({
   selectedTheme,
   onThemeChange,
 }: DashboardHeaderProps) {
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [editedName, setEditedName] = useState<string>("");
+  const [isNameEditing, setIsNameEditing] = useState(false);
+  const [editedDashboardName, setEditedDashboardName] = useState<string>("");
 
   const handleEditClick = () => {
-    setEditedName(dashboardName);
-    setIsEditingName(true);
+    setEditedDashboardName(dashboardName);
+    setIsNameEditing(true);
   };
 
   const handleNameBlur = () => {
-    if (editedName.trim()) {
-      onNameChange(editedName.trim());
+    if (editedDashboardName.trim()) {
+      onNameChange(editedDashboardName.trim());
     }
-    setIsEditingName(false);
+    setIsNameEditing(false);
   };
 
   const handleNameKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleNameBlur();
     } else if (e.key === "Escape") {
-      setEditedName(dashboardName);
-      setIsEditingName(false);
+      setEditedDashboardName(dashboardName);
+      setIsNameEditing(false);
     }
   };
 
@@ -52,11 +55,11 @@ export default function DashboardHeader({
     <div className="flex flex-col md:flex-row md:justify-between md:items-center w-full gap-2 md:gap-0">
       {/* Dashboard name - hidden on mobile and tablet, only show on desktop */}
       <div className="hidden lg:flex items-center gap-2">
-        {isEditingName ? (
+        {isNameEditing ? (
           <input
             type="text"
-            value={editedName}
-            onChange={(e) => setEditedName(e.target.value)}
+            value={editedDashboardName}
+            onChange={(e) => setEditedDashboardName(e.target.value)}
             onBlur={handleNameBlur}
             onKeyDown={handleNameKeyDown}
             autoFocus
@@ -80,7 +83,9 @@ export default function DashboardHeader({
       </div>
       <div
         className={cn(
-          "flex md:ml-auto w-full md:w-1/2 lg:w-[calc((2/12)/(9/12)*100%)] flex-none",
+          "flex flex-none w-full",
+          "md:ml-auto md:w-1/2",
+          "lg:w-[calc((2/12)/(9/12)*100%)]",
           classes.selectMenuWrapper
         )}
       >

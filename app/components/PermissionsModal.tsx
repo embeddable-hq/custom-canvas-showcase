@@ -15,14 +15,16 @@ export const PERMISSION_NO_ACCESS = "no access" as const;
 
 export type Permission = typeof PERMISSION_WRITE | typeof PERMISSION_READONLY | typeof PERMISSION_NO_ACCESS;
 
-const PERMISSION_OPTIONS = [
+export const PERMISSION_OPTIONS = [
   { value: PERMISSION_WRITE, label: "Write" },
   { value: PERMISSION_READONLY, label: "Readonly" },
   { value: PERMISSION_NO_ACCESS, label: "No access" },
 ] as const;
 
-const PERMISSIONS_MODAL_TITLE = "Edit Permissions";
-const PERMISSIONS_MODAL_BUTTON_TEXT = "Save";
+import {
+  PERMISSIONS_MODAL_TITLE,
+  PERMISSIONS_MODAL_BUTTON_TEXT,
+} from "../lib/modalConstants";
 
 interface PermissionsModalProps {
   isOpen: boolean;

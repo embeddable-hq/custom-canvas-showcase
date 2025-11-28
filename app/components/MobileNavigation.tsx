@@ -115,15 +115,21 @@ export default function MobileNavigation({
       </div>
 
       {/* Help dropdown - fixed at bottom */}
-      <div className={cn("flex-shrink-0", classes.appPaddingY, "pb-[max(1rem,env(safe-area-inset-bottom))]")}>
+      <div
+        className={cn(
+          "flex-shrink-0",
+          classes.appPaddingY,
+          "pb-[max(1rem,env(safe-area-inset-bottom))]"
+        )}
+      >
         <Dropdown
           trigger={
             <button
               className={cn(
                 "w-10 h-10 rounded-full text-white",
-                colors.button.primaryBackground,
                 "flex items-center justify-center text-lg font-semibold",
-                "transition-transform hover:scale-105"
+                "transition-transform hover:scale-105",
+                colors.button.primaryBackground
               )}
               aria-label="Help"
             >

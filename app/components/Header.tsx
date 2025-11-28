@@ -37,11 +37,14 @@ export default function Header({
     )}
     >
       <div className="flex items-center">
-        <div className={cn("flex items-center justify-center", spacing.core.mdGap)}>
-         <Image src="/logo.svg" alt="Logo" width={24} height={24} />
-         <span className={classes.textMedium}>
-           Shopocalypse
-         </span>
+        <div className={cn(
+          "flex items-center justify-center",
+          spacing.core.mdGap
+        )}>
+          <Image src="/logo.svg" alt="Logo" width={24} height={24} />
+          <span className={classes.textMedium}>
+            Shopocalypse
+          </span>
         </div>
       </div>
 
@@ -75,8 +78,8 @@ export default function Header({
 
       <div className="flex items-center gap-4">
         <div className={cn(
-          'hidden lg:flex',
-          'justify-between items-center self-stretch',
+          "hidden lg:flex",
+          "justify-between items-center self-stretch"
         )}>
           <span className={classes.switchUsersText}>
             Switch users:
@@ -103,9 +106,10 @@ export default function Header({
             trigger={
               <button
                 className={cn(
-                  `w-10 h-10 rounded-full ${colors.button.primaryBackground} text-white`,
-                  'flex items-center justify-center text-lg font-semibold',
-                  'transition-transform hover:scale-105'
+                  "w-10 h-10 rounded-full text-white",
+                  "flex items-center justify-center text-lg font-semibold",
+                  "transition-transform hover:scale-105",
+                  colors.button.primaryBackground
                 )}
                 aria-label="Help"
               >
