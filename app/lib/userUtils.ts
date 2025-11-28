@@ -43,3 +43,24 @@ export const ensureCompletePermissions = (
   return completePermissions;
 };
 
+/**
+ * Gets default permissions for editing
+ * If existing permissions are provided, merges them with all users (filling missing with write access)
+ * Otherwise returns default permissions for all users (write access)
+ */
+export const getDefaultPermissions = (
+  existingPermissions?: Record<UserId, Permission>
+): Record<UserId, Permission> => {
+  if (existingPermissions) {
+    const allUserIds = getAllUserIds();
+    const permissions: Record<UserId, Permission> = {} as Record<UserId, Permission>;
+    
+    allUserIds.forEach((userId) => {
+      permissions[userId] = existingPermissions[userId] || PERMISSION_WRITE;
+    });
+    
+    return permissions;
+  }
+  return createDefaultPermissions();
+};
+

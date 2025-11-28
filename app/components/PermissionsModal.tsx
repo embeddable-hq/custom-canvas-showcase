@@ -4,8 +4,8 @@ import { useState } from "react";
 import { cn } from "../lib/utils";
 import { colors } from "../lib/tokens";
 import { type TDashboardItem } from "./Sidebar";
-import { users, type UserId, getAllUserIds } from "../../utils/constants";
-import { createDefaultPermissions } from "../lib/userUtils";
+import { users, type UserId } from "../../utils/constants";
+import { getDefaultPermissions } from "../lib/userUtils";
 import Select from "./Select";
 import Modal from "./Modal";
 
@@ -41,19 +41,9 @@ export default function PermissionsModal({
   onSave,
 }: PermissionsModalProps) {
 
-  const [permissions, setPermissions] = useState<Record<UserId, Permission>>(() => {
-    if (dashboard?.permissions) {
-      const allUserIds = getAllUserIds();
-      const permissions: Record<UserId, Permission> = {} as Record<UserId, Permission>;
-      
-      allUserIds.forEach((userId) => {
-        permissions[userId] = dashboard.permissions?.[userId] || PERMISSION_WRITE;
-      });
-      
-      return permissions;
-    }
-    return createDefaultPermissions();
-  });
+  const [permissions, setPermissions] = useState<Record<UserId, Permission>>(() => 
+    getDefaultPermissions(dashboard?.permissions)
+  );
 
   if (!isOpen || !dashboard) return null;
 

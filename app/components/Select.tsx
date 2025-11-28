@@ -1,8 +1,7 @@
 "use client";
 
 import { cn } from "../lib/utils";
-import { selectMenu } from "../lib/tokens";
-import { spacing } from "../lib/tokens";
+import { selectMenu, spacing, sizes, colors, borders } from "../lib/tokens";
 import { ReactNode } from "react";
 import { IconChevronDown, type TablerIcon } from "@tabler/icons-react";
 
@@ -28,28 +27,25 @@ export default function Select({
 }: SelectProps) {
   const selectStyle = getSelectStyle();
 
-  // Extract width classes from className to apply to wrapper
-  const widthClass = className?.includes("w-") 
-    ? className.match(/\bw-[^\s]*/)?.[0] 
-    : "w-full";
-  const selectClassName = className?.replace(/\bw-[^\s]*/g, "").trim();
-
-  // Build select classes - use paddingLeftIcon when no icon, paddingLeft when icon exists
-  const selectClasses = selectMenu.className
-    .split(" ")
-    .map((cls) => {
-      // Replace paddingLeft with appropriate padding based on icon presence
-      if (cls === spacing.select.paddingLeft) {
-        return leftIcon ? spacing.select.paddingLeft : spacing.select.paddingLeftIcon;
-      }
-      return cls;
-    })
-    .join(" ");
+  // Build base select classes - use conditional padding based on icon presence
+  const baseSelectClasses = [
+    "flex items-center",
+    "appearance-none cursor-pointer",
+    sizes.select.height,
+    sizes.select.minWidth,
+    sizes.select.maxWidth,
+    spacing.select.padding,
+    leftIcon ? spacing.select.paddingLeft : spacing.select.paddingLeftIcon,
+    spacing.select.paddingRight,
+    colors.select.background,
+    borders.radius.select,
+    "w-full",
+  ];
 
   const LeftIconComponent = leftIcon;
   
   return (
-    <div className={cn("relative", widthClass)}>
+    <div className="relative w-full">
       {LeftIconComponent && (
         <LeftIconComponent
           size={16}
@@ -57,7 +53,7 @@ export default function Select({
         />
       )}
       <select
-        className={cn(selectClasses, selectClassName, "w-full")}
+        className={cn(baseSelectClasses, className)}
         style={selectStyle}
         {...props}
       >

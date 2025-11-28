@@ -60,13 +60,14 @@ export default function DashboardHeader({
             onBlur={handleNameBlur}
             onKeyDown={handleNameKeyDown}
             autoFocus
-            className={cn("outline-none border-none bg-transparent", classes.textMedium)}
+            className={cn(
+              "outline-none border-none bg-transparent",
+              classes.textMedium
+            )}
           />
         ) : (
           <>
-            <h2 className={classes.textMedium}>
-              {dashboardName || "Dashboard"}
-            </h2>
+            <h2 className={classes.textMedium}>{dashboardName}</h2>
             <button
               onClick={handleEditClick}
               className="cursor-pointer p-1 hover:opacity-70 transition-opacity"
@@ -77,8 +78,11 @@ export default function DashboardHeader({
           </>
         )}
       </div>
-      <div 
-        className={cn("flex md:ml-auto w-full md:w-1/2 lg:w-[calc((2/12)/(9/12)*100%)] flex-none", classes.selectMenuWrapper)}
+      <div
+        className={cn(
+          "flex md:ml-auto w-full md:w-1/2 lg:w-[calc((2/12)/(9/12)*100%)] flex-none",
+          classes.selectMenuWrapper
+        )}
       >
         <Select
           leftIcon={IconBrush}
@@ -96,4 +100,3 @@ export default function DashboardHeader({
     </div>
   );
 }
-
