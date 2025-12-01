@@ -10,14 +10,18 @@ import DashboardHeader, { THEME_OPTIONS } from "./components/DashboardHeader";
 import { getEmailFromUserId } from "./lib/userUtils";
 import { NAV_ITEMS, DEFAULT_SELECTED_NAV_ITEM } from "../utils/constants";
 import { PERMISSION_READONLY } from "./components/PermissionsModal";
+import {
+  loadThemeFromStorage,
+  saveThemeToStorage,
+} from "./lib/dashboardUtils";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedDashboard, setSelectedDashboard] =
     useState<TDashboardItem | null>(null);
   const [selectedUserEmail, setSelectedUserEmail] = useState<string>("");
-  const [selectedTheme, setSelectedTheme] = useState<string>(
-    THEME_OPTIONS[0].value
+  const [selectedTheme, setSelectedTheme] = useState<string>(() =>
+    loadThemeFromStorage(THEME_OPTIONS[0].value)
   );
   // Initialize with first user from users array
   const [selectedUserId, setSelectedUserId] = useState<UserId>(users[0]?.id);
@@ -83,6 +87,7 @@ export default function Home() {
 
   const handleThemeChange = useCallback((theme: string) => {
     setSelectedTheme(theme);
+    saveThemeToStorage(theme);
   }, []);
 
   // Handle user selection - update email to trigger new token fetch

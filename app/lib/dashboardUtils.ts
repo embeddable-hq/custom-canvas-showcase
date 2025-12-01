@@ -7,7 +7,10 @@ import {
   type Permission,
 } from "../components/PermissionsModal";
 import { createDefaultPermissions } from "./userUtils";
-import { STORAGE_KEY_DASHBOARD_PERMISSIONS } from "../../utils/constants";
+import {
+  STORAGE_KEY_DASHBOARD_PERMISSIONS,
+  STORAGE_KEY_SELECTED_THEME,
+} from "../../utils/constants";
 
 /**
  * Generates a unique random ID for dashboards
@@ -158,5 +161,41 @@ export const createNewDashboard = (
     state: `customCanvasState${dashboardId}`,
     permissions: defaultPermissions,
   };
+};
+
+/**
+ * Loads the selected theme from session storage
+ * Returns the default theme if storage is unavailable or empty
+ */
+export const loadThemeFromStorage = (defaultTheme: string): string => {
+  if (typeof window === "undefined") {
+    return defaultTheme;
+  }
+
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY_SELECTED_THEME);
+    if (stored) {
+      return stored;
+    }
+  } catch (error) {
+    console.error("Error loading theme from session storage:", error);
+  }
+
+  return defaultTheme;
+};
+
+/**
+ * Saves the selected theme to session storage
+ */
+export const saveThemeToStorage = (theme: string): void => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    sessionStorage.setItem(STORAGE_KEY_SELECTED_THEME, theme);
+  } catch (error) {
+    console.error("Error saving theme to session storage:", error);
+  }
 };
 
