@@ -33,6 +33,7 @@ import {
   getAllUserIds,
   type UserId,
   HELP_ITEMS,
+  STORAGE_KEY_DASHBOARD_PERMISSIONS,
 } from "../../utils/constants";
 import {
   getUsersWithAccess,
@@ -197,9 +198,15 @@ export default function Sidebar({
 
   // Load dashboards from storage on mount
   useEffect(() => {
+    const wasStorageEmpty = typeof window === "undefined" || 
+      !sessionStorage.getItem(STORAGE_KEY_DASHBOARD_PERMISSIONS);
+    
     loadDashboardsAsync().then((loadedDashboards) => {
       setDashboards(loadedDashboards);
       setIsLoading(false);
+      if (wasStorageEmpty && loadedDashboards.length > 0) {
+        saveDashboardsToStorage(loadedDashboards);
+      }
     });
   }, []);
 
