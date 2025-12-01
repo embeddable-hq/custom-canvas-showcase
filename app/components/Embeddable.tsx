@@ -21,6 +21,24 @@ const createClientContext = (theme?: string): Record<string, string> => {
   return theme ? { theme } : {};
 };
 
+/**
+ * Loading overlay component for embeddable dashboard
+ * Displays a spinner and loading message
+ */
+const LoadingOverlay = ({ className }: { className?: string }) => {
+  return (
+    <div
+      className={cn(
+        "absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white z-10",
+        className
+      )}
+    >
+      <IconLoader2 size={24} className="animate-spin" />
+      <div className="text-gray-500">Loading your dashboard</div>
+    </div>
+  );
+};
+
 export default function Embeddable({
   customCanvasState,
   userEmail,
@@ -61,7 +79,11 @@ export default function Embeddable({
   }, [handleComponentsLoad]);
 
   if (!token) {
-    return null;
+    return (
+      <div className="relative w-full h-full min-h-[400px]">
+        <LoadingOverlay className="flex" />
+      </div>
+    );
   }
 
   if (tokenError || scriptError) {
@@ -79,17 +101,13 @@ export default function Embeddable({
   return (
     <div className="relative w-full h-full min-h-[400px]">
       {/* Loading overlay - shown when components are not loaded */}
-      <div
-        className={cn(
-          "absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white z-10",
+      <LoadingOverlay
+        className={
           areComponentsLoaded || !tokenLoading || isScriptLoaded
             ? "hidden"
             : "flex"
-        )}
-      >
-        <IconLoader2 size={24} className="animate-spin" />
-        <div className="text-gray-500">Loading your dashboard</div>
-      </div>
+        }
+      />
 
       {/* Embeddable - always in DOM, visible when components are loaded */}
       <div
