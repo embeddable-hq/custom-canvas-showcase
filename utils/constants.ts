@@ -19,6 +19,7 @@ export const envConfig = {
 
 // Storage keys
 export const STORAGE_KEY_DASHBOARD_PERMISSIONS = "dashboard-permissions";
+export const STORAGE_KEY_SELECTED_THEME = "selected-theme";
 
 // Navigation
 export const NAV_ITEMS: string[] = [
