@@ -100,7 +100,7 @@ export default function Home() {
   return (
     <div
       className={cn(
-        "grid min-h-screen min-w-0 w-full bg-white",
+        "grid min-w-0 w-full bg-white",
         classes.pageContainer,
         classes.gridContainer,
         "grid-rows-[auto_1fr]"
@@ -157,16 +157,6 @@ export default function Home() {
             />
           </div>
         </div>
-        <footer
-          className={cn(
-            "flex justify-center items-center self-stretch mt-auto",
-            "gap-2.5",
-            classes.appPadding,
-            classes.footerText
-          )}
-        >
-          © 2025 TMD Technology Limited. All rights reserved.
-        </footer>
       </main>
     </div>
   );
