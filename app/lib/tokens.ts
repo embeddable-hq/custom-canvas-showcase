@@ -47,6 +47,12 @@ export const typography = {
     default: "text-default",
     inverted: "text-inverted",
   },
+  embeddable: {
+    fontFamily: "font-[Inter,serif]",
+    fontSize: "text-[var(--em-font-size-md,16px)]",
+    fontWeight: "font-[var(--em-font-weight-medium,500)]",
+    lineHeight: "leading-[var(--em-line-height-l,19px)]",
+  },
 
   // Complete Text Styles (combinations) - Use for inline styles
   text: {
@@ -61,6 +67,7 @@ export const colors = {
     textDefault: "text-default",
     textInverted: "text-inverted",
     textError: "text-error",
+    textMuted: "text-[var(--so-sem-text-muted,#5C5C66)]",
     backgroundSubtle: "bg-subtle",
     backgroundNeutral: "bg-neutral",
     chartColor1: "bg-chart-1",
@@ -81,6 +88,8 @@ export const colors = {
   },
   embeddable: {
     background: "bg-[var(--em-background-color-default,#f7f7f8)]",
+    emptyStateBackground: "bg-[var(--em-empty-state-background-color-default,#f7f7f8)]",
+    subtitleColor: "text-[var(--so-sem-text-muted,#5C5C66)]",
   },
 } as const;
 
@@ -116,6 +125,12 @@ export const spacing = {
   actionIcon: {
     padding: "py-action-icon-padding-y px-action-icon-padding-x",
   },
+  embeddable: {
+    loadingOverlay: {
+      gap: "gap-[10px]",
+      marginTop: "mt-6",
+    },
+  },
 } as const;
 
 // Border Tokens - Use from @theme where possible
@@ -128,6 +143,7 @@ export const borders = {
     actionIcon: "rounded-action-icon",
     form: "rounded-form",
     embeddable: "rounded-[var(--em-card-border-radius-default,2rem)]",
+    embeddableLoading: "rounded-[var(--em-border-radius-400,32px)]",
   },
   width: {
     thin: "border-thin",
@@ -166,6 +182,11 @@ export const sizes = {
     icon: {
       width: "w-sl-item-icon-width",
       height: "h-sl-item-icon-height",
+    },
+  },
+  embeddable: {
+    loadingOverlay: {
+      minHeight: "min-h-[35rem]",
     },
   },
 } as const;
@@ -242,6 +263,26 @@ export const sidebar = {
   ].join(" "),
   translateOpen: "translate-x-0 lg:translate-x-0",
   translateClosed: "-translate-x-full lg:translate-x-0",
+} as const;
+
+// Embeddable Tokens
+export const embeddable = {
+  loadingOverlay: [
+    "absolute inset-0 flex flex-col items-center justify-center z-10",
+    "w-full",
+    spacing.embeddable.loadingOverlay.gap,
+    borders.radius.embeddableLoading,
+    colors.embeddable.emptyStateBackground,
+    "text-center",
+    colors.embeddable.subtitleColor,
+    typography.embeddable.fontFamily,
+    typography.embeddable.fontSize,
+    typography.embeddable.fontWeight,
+    typography.embeddable.lineHeight,
+    sizes.embeddable.loadingOverlay.minHeight,
+    "overflow-hidden",
+    spacing.embeddable.loadingOverlay.marginTop,
+  ].join(" "),
 } as const;
 
 // Components - For inline styles that can't be Tailwind classes

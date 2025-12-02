@@ -10,9 +10,8 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { IconLoader2 } from "@tabler/icons-react";
 import { cn } from "../lib/utils";
-import { colors, borders } from "../lib/tokens";
+import { embeddable } from "../lib/tokens";
 
 interface EmbeddableProps {
   customCanvasState: string;
@@ -36,15 +35,12 @@ const LoadingOverlay = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "absolute inset-0 flex flex-col items-center justify-center gap-4 z-10",
-        colors.embeddable.background,
-        borders.radius.embeddable,
-        "mt-6",
+        embeddable.loadingOverlay,
         className
       )}
     >
-      <IconLoader2 size={24} className="animate-spin" />
-      <div className="text-gray-500">Loading your dashboard</div>
+      <div className="embeddable-spinner" />
+      <div>Loading your dashboard</div>
     </div>
   );
 };
@@ -87,7 +83,7 @@ export default function Embeddable({
 
   if (!token) {
     return (
-      <div className="relative w-full h-full min-h-[400px]">
+      <div className="relative">
         <LoadingOverlay className="flex" />
       </div>
     );
