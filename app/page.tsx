@@ -10,10 +10,7 @@ import DashboardHeader, { THEME_OPTIONS } from "./components/DashboardHeader";
 import { getEmailFromUserId } from "./lib/userUtils";
 import { NAV_ITEMS, DEFAULT_SELECTED_NAV_ITEM } from "../utils/constants";
 import { PERMISSION_READONLY } from "./components/PermissionsModal";
-import {
-  loadThemeFromStorage,
-  saveThemeToStorage,
-} from "./lib/dashboardUtils";
+import { loadThemeFromStorage, saveThemeToStorage } from "./lib/dashboardUtils";
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -142,14 +139,13 @@ export default function Home() {
         )}
       >
         <div className="flex-1 flex flex-col w-full">
-          {selectedCustomCanvasState && (
-            <DashboardHeader
-              dashboardName={selectedDashboardName}
-              onNameChange={handleNameChangeFromHeader}
-              selectedTheme={selectedTheme}
-              onThemeChange={handleThemeChange}
-            />
-          )}
+          <DashboardHeader
+            dashboardName={selectedDashboardName}
+            onNameChange={handleNameChangeFromHeader}
+            selectedTheme={selectedTheme}
+            onThemeChange={handleThemeChange}
+          />
+
           <div className="flex-1">
             <Embeddable
               customCanvasState={selectedCustomCanvasState}

@@ -3,9 +3,15 @@
 import useGetToken from "../hooks/useGetToken";
 import useEmbeddableScriptTag from "../hooks/useEmbeddableScriptTag";
 import { envConfig } from "@/utils/constants";
-import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
-import { IconLoader2 } from "@tabler/icons-react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import { cn } from "../lib/utils";
+import { embeddable } from "../lib/tokens";
 
 interface EmbeddableProps {
   customCanvasState: string;
@@ -29,12 +35,12 @@ const LoadingOverlay = ({ className }: { className?: string }) => {
   return (
     <div
       className={cn(
-        "absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white z-10",
+        embeddable.loadingOverlay,
         className
       )}
     >
-      <IconLoader2 size={24} className="animate-spin" />
-      <div className="text-gray-500">Loading your dashboard</div>
+      <div className="embeddable-spinner" />
+      <div>Loading your dashboard</div>
     </div>
   );
 };
@@ -55,10 +61,7 @@ export default function Embeddable({
   const ref = useRef<HTMLElement>(null);
 
   // Create a unique key based on token to force recreation
-  const embeddableInstanceKey = useMemo(
-    () => `${token}`,
-    [token]
-  );
+  const embeddableInstanceKey = useMemo(() => `${token}`, [token]);
 
   // Derive loading state from whether current key matches loaded key
   const areComponentsLoaded = loadedEmbiddableKey === embeddableInstanceKey;
@@ -80,7 +83,7 @@ export default function Embeddable({
 
   if (!token) {
     return (
-      <div className="relative w-full h-full min-h-[400px]">
+      <div className="relative">
         <LoadingOverlay className="flex" />
       </div>
     );
@@ -89,9 +92,7 @@ export default function Embeddable({
   if (tokenError || scriptError) {
     return (
       <div className="flex items-center justify-center h-full min-h-[400px]">
-        <div className="text-red-500">
-          Error: {tokenError || scriptError}
-        </div>
+        <div className="text-red-500">Error: {tokenError || scriptError}</div>
       </div>
     );
   }
