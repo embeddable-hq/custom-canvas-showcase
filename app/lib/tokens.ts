@@ -79,6 +79,9 @@ export const colors = {
   actionIcon: {
     background: "bg-action-icon-bg",
   },
+  embeddable: {
+    background: "bg-[var(--em-background-color-default,#f7f7f8)]",
+  },
 } as const;
 
 // Spacing Tokens - Use from @theme where possible
@@ -124,6 +127,7 @@ export const borders = {
     select: "rounded-select",
     actionIcon: "rounded-action-icon",
     form: "rounded-form",
+    embeddable: "rounded-[var(--em-card-border-radius-default,2rem)]",
   },
   width: {
     thin: "border-thin",

@@ -71,14 +71,18 @@ export default function DashboardHeader({
           />
         ) : (
           <>
-            <h2 className={classes.textMedium}>{dashboardName}</h2>
-            <button
-              onClick={handleEditClick}
-              className="cursor-pointer p-1 hover:opacity-70 transition-opacity"
-              aria-label="Edit dashboard name"
-            >
-              <IconPencil size={16} />
-            </button>
+            {dashboardName ? (
+              <>
+                <h2 className={classes.textMedium}>{dashboardName}</h2>
+                <button
+                  onClick={handleEditClick}
+                  className="cursor-pointer p-1 hover:opacity-70 transition-opacity"
+                  aria-label="Edit dashboard name"
+                >
+                  <IconPencil size={16} />
+                </button>
+              </>
+            ) : null}
           </>
         )}
       </div>
