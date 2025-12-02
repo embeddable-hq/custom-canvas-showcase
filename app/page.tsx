@@ -158,6 +158,15 @@ export default function Home() {
             />
           </div>
         </div>
+        <footer
+          className={cn(
+            "flex justify-center items-center self-stretch mt-auto",
+            "gap-2.5",
+            classes.appPadding,
+            classes.footerText
+          )}
+        >
+        </footer>
       </main>
     </div>
   );
