@@ -15,6 +15,7 @@ const useGetToken = (customCanvasState: string, userEmail: string, customCanvasR
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
 
+    
     async function fetchToken() {
       setLoading(true);
       setError(null);
