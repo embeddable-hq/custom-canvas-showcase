@@ -17,7 +17,7 @@ export type Permission = typeof PERMISSION_WRITE | typeof PERMISSION_READONLY | 
 
 export const PERMISSION_OPTIONS = [
   { value: PERMISSION_WRITE, label: "Write" },
-  { value: PERMISSION_READONLY, label: "Readonly" },
+  { value: PERMISSION_READONLY, label: "Read only" },
   { value: PERMISSION_NO_ACCESS, label: "No access" },
 ] as const;
 
