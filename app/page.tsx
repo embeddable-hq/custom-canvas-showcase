@@ -138,7 +138,7 @@ export default function Home() {
           classes.mainPadding
         )}
       >
-        <div className="flex-1 flex flex-col w-full">
+        <div className="flex-1 flex flex-col w-full gap-[0.625rem]">
           <DashboardHeader
             dashboardName={selectedDashboardName}
             onNameChange={handleNameChangeFromHeader}
