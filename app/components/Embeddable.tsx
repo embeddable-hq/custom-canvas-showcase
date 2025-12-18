@@ -100,7 +100,7 @@ export default function Embeddable({
   const clientContext = createClientContext(theme);
 
   return (
-    <div className="relative w-full h-full min-h-[400px]">
+    <div className="relative w-full h-full min-h-[400px] py-4">
       {/* Loading overlay - shown when components are not loaded */}
       <LoadingOverlay
         className={
