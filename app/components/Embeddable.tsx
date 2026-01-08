@@ -53,6 +53,7 @@ export default function Embeddable({
 }: EmbeddableProps) {
   const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
   const [loadedEmbiddableKey, setLoadedEmbiddableKey] = useState<string>("");
+  const [loading, setLoading] = useState(true);
   const [token, tokenError, tokenLoading] = useGetToken(
     customCanvasState,
     userEmail,
@@ -68,6 +69,8 @@ export default function Embeddable({
 
   const handleComponentsLoad = useCallback(() => {
     setLoadedEmbiddableKey(embeddableInstanceKey);
+    //  set a loading state to false
+    setLoading(false);
   }, [embeddableInstanceKey]);
 
   useEffect(() => {
@@ -80,8 +83,8 @@ export default function Embeddable({
       };
     }
   }, [handleComponentsLoad]);
-
-  if (!token) {
+  
+  if (!token || !loading) {
     return (
       <div className="relative">
         <LoadingOverlay className="flex" />
