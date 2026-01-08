@@ -84,7 +84,7 @@ export default function Embeddable({
     }
   }, [handleComponentsLoad]);
   
-  if (!token || !loading) {
+  if (!token || loading) {
     return (
       <div className="relative">
         <LoadingOverlay className="flex" />
