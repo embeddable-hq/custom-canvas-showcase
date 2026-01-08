@@ -73,10 +73,10 @@ export default function Embeddable({
   useEffect(() => {
     const element = ref.current;
     if (element) {
-      element.addEventListener("componentsLoad", handleComponentsLoad);
+      element.addEventListener("customCanvasReady", handleComponentsLoad);
 
       return () => {
-        element.removeEventListener("componentsLoad", handleComponentsLoad);
+        element.removeEventListener("customCanvasReady", handleComponentsLoad);
       };
     }
   }, [handleComponentsLoad]);
