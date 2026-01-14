@@ -33,12 +33,7 @@ const createClientContext = (theme?: string): Record<string, string> => {
  */
 const LoadingOverlay = ({ className }: { className?: string }) => {
   return (
-    <div
-      className={cn(
-        embeddable.loadingOverlay,
-        className
-      )}
-    >
+    <div className={cn(embeddable.loadingOverlay, className)}>
       <div className="embeddable-spinner" />
       <div>Loading your dashboard</div>
     </div>
@@ -69,22 +64,27 @@ export default function Embeddable({
 
   const handleComponentsLoad = useCallback(() => {
     setLoadedEmbiddableKey(embeddableInstanceKey);
-    //  set a loading state to false
-    setLoading(false);
   }, [embeddableInstanceKey]);
+  const handlecustomCanvasReady = useCallback(() => {
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     const element = ref.current;
     if (element) {
-      element.addEventListener("customCanvasReady", handleComponentsLoad);
+      element.addEventListener("componentsLoad", handleComponentsLoad);
+      element.addEventListener("customCanvasReady", handlecustomCanvasReady);
 
       return () => {
-        element.removeEventListener("customCanvasReady", handleComponentsLoad);
+        element.removeEventListener("componentsLoad", handleComponentsLoad);
+        element.removeEventListener(
+          "customCanvasReady",
+          handlecustomCanvasReady
+        );
       };
     }
-  }, [handleComponentsLoad]);
-  
-  if (!token || loading) {
+  }, [handleComponentsLoad, handlecustomCanvasReady]);
+  if (!token) {
     return (
       <div className="relative">
         <LoadingOverlay className="flex" />
@@ -107,7 +107,7 @@ export default function Embeddable({
       {/* Loading overlay - shown when components are not loaded */}
       <LoadingOverlay
         className={
-          areComponentsLoaded || !tokenLoading || isScriptLoaded
+          areComponentsLoaded || !tokenLoading || isScriptLoaded || !loading
             ? "hidden"
             : "flex"
         }
