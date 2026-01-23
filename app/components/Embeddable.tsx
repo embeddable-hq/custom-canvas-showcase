@@ -107,9 +107,9 @@ export default function Embeddable({
       {/* Loading overlay - shown when components are not loaded */}
       <LoadingOverlay
         className={
-          !isLoading
-            ? "hidden"
-            : "flex"
+          isLoading
+            ? "flex"
+            : "hidden"
         }
       />
 
@@ -118,9 +118,9 @@ export default function Embeddable({
         key={embeddableInstanceKey}
         className={cn(
           "w-full h-full",
-          !isLoading
-            ? "block"
-            : "hidden"
+          isLoading
+            ? "hidden"
+            : "block"
         )}
       >
         {React.createElement("em-beddable", {
