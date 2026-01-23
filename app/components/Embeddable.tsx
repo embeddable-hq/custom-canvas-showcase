@@ -101,7 +101,7 @@ export default function Embeddable({
   }
 
   const clientContext = createClientContext(theme);
-  const isLoading = !areComponentsLoaded && tokenLoading && !isScriptLoaded && loading;
+  const isLoading = !areComponentsLoaded || tokenLoading || !isScriptLoaded || loading;
   return (
     <div className="relative w-full h-full min-h-[400px] py-4">
       {/* Loading overlay - shown when components are not loaded */}
