@@ -10,6 +10,8 @@ A Next.js demo application that helps you learn how to embed and work with the *
 - Permissions drive whether the selected dashboard is writable, read-only, or hidden for the current user.
 - Theme selections are saved in session storage and passed as `client-context` to the `<embeddable>` tag.
 
+Testing syed
+
 ## Prerequisites
 
 - Node.js 20+ (Next.js 16)
