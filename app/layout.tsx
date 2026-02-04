@@ -36,11 +36,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link
+          rel="preconnect"
+          href="https://static-data.eu.embeddable.com"
+          crossOrigin="anonymous"
+        />
         {/* GTM script in head */}
-        <Script
-          id="gtm-head"
-          strategy="beforeInteractive" 
-        >{`
+        <Script id="gtm-head" strategy="beforeInteractive">{`
           (function(w,d,s,l,i){
             w[l]=w[l]||[];
             w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
