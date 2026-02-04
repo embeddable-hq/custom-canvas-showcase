@@ -17,6 +17,8 @@ A Next.js demo application that helps you learn how to embed and work with the *
 
 ## Environment variables
 
+# Syed testing PROD EU - rebuild
+
 Create `.env.local` with your platform values:
 
 ```

@@ -1,6 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
-const useGetToken = (customCanvasState: string, userEmail: string, customCanvasReadOnly?: boolean) => {
+const useGetToken = (
+  customCanvasState: string,
+  userEmail: string,
+  customCanvasReadOnly?: boolean
+) => {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,16 +30,21 @@ const useGetToken = (customCanvasState: string, userEmail: string, customCanvasR
           return;
         }
 
-        const response = await fetch('/api/token', {
-          method: 'POST',
+        const response = await fetch("/api/token", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({ customCanvasState, userEmail, customCanvasReadOnly }),
+          body: JSON.stringify({
+            customCanvasState,
+            userEmail: "syed@embeddable.de",
+            customCanvasReadOnly,
+          }),
           signal: abortController.signal,
         });
-        
+
         if (!response.ok) {
+          console.error("Failed to get token:", response.statusText);
           throw new Error(`Failed to get token: ${response.statusText}`);
         }
 
@@ -43,10 +52,10 @@ const useGetToken = (customCanvasState: string, userEmail: string, customCanvasR
         const tokenValue = data.token || data.data?.token || data;
         setToken(tokenValue);
       } catch (err) {
-        if (err instanceof Error && err.name === 'AbortError') {
+        if (err instanceof Error && err.name === "AbortError") {
           return;
         }
-        setError(err instanceof Error ? err.message : 'Failed to get token');
+        setError(err instanceof Error ? err.message : "Failed to get token");
       } finally {
         if (!abortController.signal.aborted) {
           setLoading(false);
@@ -66,4 +75,3 @@ const useGetToken = (customCanvasState: string, userEmail: string, customCanvasR
 };
 
 export default useGetToken;
-
