@@ -47,11 +47,12 @@ export async function POST(request: Request) {
         customCanvasReadOnly: customCanvasReadOnly ?? false,
         expiryInSeconds: TOKEN_EXPIRY_SECONDS,
         securityContext: {},
-        user: userEmail,
+        user: 'syed@embedded.de',
       }),
     });
 
     if (!response.ok) {
+      console.error("Failed to get token:", response.statusText);
       return NextResponse.json(
         { error: `Failed to get token: ${response.statusText}` },
         { status: response.status }
