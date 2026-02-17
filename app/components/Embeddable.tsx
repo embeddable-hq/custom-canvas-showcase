@@ -1,17 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import useGetToken from "../hooks/useGetToken";
-import useEmbeddableScriptTag from "../hooks/useEmbeddableScriptTag";
 import { envConfig } from "@/utils/constants";
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
 import { cn } from "../lib/utils";
 import { embeddable } from "../lib/tokens";
+import { useEmbeddable } from "@embeddable.com/em-beddable-react";
+import { EmbeddableComponent } from "@embeddable.com/em-beddable-react";
 
 interface EmbeddableProps {
   customCanvasState: string;
@@ -20,17 +15,10 @@ interface EmbeddableProps {
   theme?: string;
 }
 
-/**
- * Pure function to create client context object from theme
- */
 const createClientContext = (theme?: string): Record<string, string> => {
   return theme ? { theme } : {};
 };
 
-/**
- * Loading overlay component for embeddable dashboard
- * Displays a spinner and loading message
- */
 const LoadingOverlay = ({ className }: { className?: string }) => {
   return (
     <div className={cn(embeddable.loadingOverlay, className)}>
@@ -40,51 +28,107 @@ const LoadingOverlay = ({ className }: { className?: string }) => {
   );
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Variant 1: useEmbeddable hook (active)
+// Gives full control over the container element and loading/error state.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Inner component that mounts the dashboard for a given token.
+ * Keyed by `token` in the parent so React remounts it on token change,
+ * which naturally resets all state without calling setState inside an effect.
+ */
+// function EmbeddableDashboard({
+//   token,
+//   theme,
+// }: {
+//   token: string;
+//   theme?: string;
+// }) {
+//   const { containerRef, loaded, canvasReady, error } = useEmbeddable({
+//     scriptUrl: envConfig.embeddableScriptUrl,
+//     region: "us",
+//     token,
+//     baseUrl: envConfig.embeddableBaseUrl || undefined,
+//     clientContext: createClientContext(theme),
+//   });
+//
+//   if (error) {
+//     return (
+//       <div className="flex items-center justify-center h-full min-h-[400px]">
+//         <div className="text-red-500">Error: {error.errorMessage}</div>
+//       </div>
+//     );
+//   }
+//
+//   const isLoading = !loaded || !canvasReady;
+//
+//   return (
+//     <>
+//       <LoadingOverlay className={isLoading ? "flex" : "hidden"} />
+//       <div
+//         ref={containerRef}
+//         className={cn("w-full h-full", isLoading ? "hidden" : "block")}
+//       />
+//     </>
+//   );
+// }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Variant 2: EmbeddableComponent (commented out)
+// Declarative approach — the component manages its own container element.
+// You handle loading/error state via callbacks.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function EmbeddableDashboard({
+  token,
+  theme,
+}: {
+  token: string;
+  theme?: string;
+}) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  return (
+    <>
+      {loading && <LoadingOverlay className="flex" />}
+      {error && (
+        <div className="flex items-center justify-center h-full min-h-[400px]">
+          <div className="text-red-500">Error: {error}</div>
+        </div>
+      )}
+      <EmbeddableComponent
+        // @ts-expect-error — internal option: custom script URL for dev environment
+        scriptUrl={envConfig.embeddableScriptUrl}
+        region="us"
+        token={token}
+        baseUrl={envConfig.embeddableBaseUrl || undefined}
+        clientContext={createClientContext(theme)}
+        onCustomCanvasReady={() => setLoading(false)}
+        onError={(err) => {
+          setError(err.errorMessage);
+          setLoading(false);
+        }}
+        className={cn("w-full h-full", loading ? "hidden" : "block")}
+      />
+    </>
+  );
+}
+
 export default function Embeddable({
   customCanvasState,
   userEmail,
   customCanvasReadOnly,
   theme,
 }: EmbeddableProps) {
-  const [isScriptLoaded, scriptError] = useEmbeddableScriptTag();
-  const [loadedEmbiddableKey, setLoadedEmbiddableKey] = useState<string>("");
-  const [loading, setLoading] = useState(true);
   const [token, tokenError, tokenLoading] = useGetToken(
     customCanvasState,
     userEmail,
     customCanvasReadOnly
   );
-  const ref = useRef<HTMLElement>(null);
 
-  // Create a unique key based on token to force recreation
-  const embeddableInstanceKey = useMemo(() => `${token}`, [token]);
-
-  // Derive loading state from whether current key matches loaded key
-  const areComponentsLoaded = loadedEmbiddableKey === embeddableInstanceKey;
-
-  const handleComponentsLoad = useCallback(() => {
-    setLoadedEmbiddableKey(embeddableInstanceKey);
-  }, [embeddableInstanceKey]);
-  const handlecustomCanvasReady = useCallback(() => {
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (element) {
-      element.addEventListener("componentsLoad", handleComponentsLoad);
-      element.addEventListener("customCanvasReady", handlecustomCanvasReady);
-
-      return () => {
-        element.removeEventListener("componentsLoad", handleComponentsLoad);
-        element.removeEventListener(
-          "customCanvasReady",
-          handlecustomCanvasReady
-        );
-      };
-    }
-  }, [handleComponentsLoad, handlecustomCanvasReady]);
-  if (!token) {
+  if (!token || tokenLoading) {
     return (
       <div className="relative">
         <LoadingOverlay className="flex" />
@@ -92,44 +136,17 @@ export default function Embeddable({
     );
   }
 
-  if (tokenError || scriptError) {
+  if (tokenError) {
     return (
       <div className="flex items-center justify-center h-full min-h-[400px]">
-        <div className="text-red-500">Error: {tokenError || scriptError}</div>
+        <div className="text-red-500">Error: {tokenError}</div>
       </div>
     );
   }
 
-  const clientContext = createClientContext(theme);
-  const isLoading = !areComponentsLoaded || tokenLoading || !isScriptLoaded || loading;
   return (
     <div className="relative w-full h-full min-h-[400px] py-4">
-      {/* Loading overlay - shown when components are not loaded */}
-      <LoadingOverlay
-        className={
-          isLoading
-            ? "flex"
-            : "hidden"
-        }
-      />
-
-      {/* Embeddable - always in DOM, visible when components are loaded */}
-      <div
-        key={embeddableInstanceKey}
-        className={cn(
-          "w-full h-full",
-          isLoading
-            ? "hidden"
-            : "block"
-        )}
-      >
-        {React.createElement("em-beddable", {
-          ref,
-          token,
-          "base-url": envConfig.embeddableBaseUrl || "",
-          "client-context": JSON.stringify(clientContext),
-        })}
-      </div>
+      <EmbeddableDashboard key={token} token={token} theme={theme} />
     </div>
   );
 }
